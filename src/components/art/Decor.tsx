@@ -105,13 +105,18 @@ export function LeafBlob({ className }: { className?: string }) {
 
 /* ------------------------------------------------- generated card artwork */
 
+/**
+ * Sky/sea/sun triples rather than free colour sets: the sea stays in the ocean
+ * family on every seed, so a card always reads as a sunset over water instead
+ * of an arbitrary wash.
+ */
 const PALETTES = [
-  ['#0F423F', '#1E9C90', '#7CD3C4'],
-  ['#145651', '#34B5A6', '#FBE3B6'],
-  ['#0A302E', '#157F76', '#F4BE63'],
-  ['#1E9C90', '#F28E76', '#FBE3B6'],
-  ['#2A5F4A', '#3F8A66', '#A8E5DA'],
-  ['#0F423F', '#E9A23B', '#F7B09D'],
+  { deep: '#0F423F', mid: '#35A9A0', warm: '#F4BE63' },
+  { deep: '#0A302E', mid: '#1E9C90', warm: '#F7B09D' },
+  { deep: '#06211F', mid: '#157F76', warm: '#FBE3B6' },
+  { deep: '#14515A', mid: '#2AA396', warm: '#F28E76' },
+  { deep: '#2A5F4A', mid: '#3F8A66', warm: '#FFD79A' },
+  { deep: '#0A302E', mid: '#1A7C78', warm: '#F9C7A8' },
 ]
 
 /**
@@ -121,50 +126,52 @@ const PALETTES = [
  */
 export function GeneratedScene({ seed, className }: { seed: string; className?: string }) {
   const unit = seededUnit(seed)
-  const palette = PALETTES[Math.floor(unit * PALETTES.length) % PALETTES.length]
-  const [deep, mid, warm] = palette
-  const sunX = 60 + unit * 200
-  const horizon = 150 + unit * 30
+  const { deep, mid, warm } = PALETTES[Math.floor(unit * PALETTES.length) % PALETTES.length]
+  const sunX = 70 + unit * 190
+  const horizon = 148 + unit * 26
   const id = seed.replace(/[^a-zA-Z0-9]/g, '')
 
   return (
     <svg viewBox="0 0 320 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true" className={className}>
       <defs>
         <linearGradient id={`sky-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={warm} stopOpacity="0.85" />
-          <stop offset="55%" stopColor={mid} stopOpacity="0.75" />
-          <stop offset="100%" stopColor={deep} />
+          <stop offset="0%" stopColor={deep} />
+          <stop offset="46%" stopColor={mid} />
+          <stop offset="100%" stopColor={warm} />
         </linearGradient>
         <radialGradient id={`glow-${id}`} cx="50%" cy="50%">
-          <stop offset="0%" stopColor="#FFF3D6" stopOpacity="0.95" />
-          <stop offset="70%" stopColor={warm} stopOpacity="0.25" />
+          <stop offset="0%" stopColor="#FFF6E2" stopOpacity="0.9" />
+          <stop offset="45%" stopColor={warm} stopOpacity="0.45" />
           <stop offset="100%" stopColor={warm} stopOpacity="0" />
         </radialGradient>
         <linearGradient id={`sea-${id}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={mid} />
+          <stop offset="70%" stopColor={deep} />
           <stop offset="100%" stopColor={deep} />
         </linearGradient>
       </defs>
 
       <rect width="320" height="240" fill={`url(#sky-${id})`} />
-      <circle cx={sunX} cy={horizon - 46} r="72" fill={`url(#glow-${id})`} />
-      <circle cx={sunX} cy={horizon - 46} r="21" fill="#FFF0CE" opacity="0.92" />
+      <circle cx={sunX} cy={horizon - 40} r="78" fill={`url(#glow-${id})`} />
+      <circle cx={sunX} cy={horizon - 40} r="20" fill="#FFF3D6" opacity="0.92" />
 
       <path d={`M0 ${horizon}h320v240H0Z`} fill={`url(#sea-${id})`} />
+      <ellipse cx={sunX} cy={horizon + 14} rx="46" ry="6" fill="#FFE9B8" opacity="0.28" />
+      <ellipse cx={sunX} cy={horizon + 32} rx="30" ry="4" fill="#FFE9B8" opacity="0.18" />
       {[0, 1, 2, 3].map((i) => (
         <path
           key={i}
-          d={`M0 ${horizon + 16 + i * 18}c40 0 40-7 80-7s40 7 80 7 40-7 80-7 40 7 80 7`}
-          stroke="#FFFFFF"
-          strokeOpacity={0.16 - i * 0.03}
+          d={`M0 ${horizon + 22 + i * 19}c40 0 40-7 80-7s40 7 80 7 40-7 80-7 40 7 80 7`}
+          stroke="#CFEDE6"
+          strokeOpacity={0.18 - i * 0.033}
           strokeWidth="2"
           fill="none"
         />
       ))}
 
-      <path d={`M0 ${horizon + 88}c60-12 120-4 180 6s90 8 140-4v150H0Z`} fill="#F8F1E8" opacity="0.9" />
+      <path d={`M0 ${horizon + 92}c60-12 120-4 180 6s90 8 140-4v150H0Z`} fill="#F8F1E8" opacity="0.92" />
 
-      <g transform={`translate(${18 + unit * 24} ${horizon + 70}) scale(${0.42 + unit * 0.12})`} opacity="0.85">
+      <g transform={`translate(${16 + unit * 26} ${horizon + 74}) scale(${0.4 + unit * 0.12})`} opacity="0.9">
         <path d="M40 180C40 110 36 60 20 6" stroke={deep} strokeWidth="7" strokeLinecap="round" fill="none" />
         {[0, 1, 2, 3, 4].map((i) => (
           <path
