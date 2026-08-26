@@ -1,0 +1,29 @@
+"$schema" = "./node_modules/wrangler/config-schema.json"
+name = "ola-serena"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-08-26"
+compatibility_flags = ["nodejs_compat"]
+
+# --- Local dev + production ---
+[[kv_namespaces]]
+binding = "CONTENT"
+id = "09e7faead934494c8e48ffb806f0ed3e"
+
+[vars]
+SITE_NAME = "Ola Serena"
+
+# --- Preview deployments ---
+[[env.preview.kv_namespaces]]
+binding = "CONTENT"
+id = "e21d3f61654b4a11986a7ac04da9f018"
+
+[env.preview.vars]
+SITE_NAME = "Ola Serena (preview)"
+
+# --- Production deployments ---
+[[env.production.kv_namespaces]]
+binding = "CONTENT"
+id = "09e7faead934494c8e48ffb806f0ed3e"
+
+[env.production.vars]
+SITE_NAME = "Ola Serena"

@@ -1,0 +1,9 @@
+{
+  "name": "Ola Serena · Massage & Beach Spa",
+  "short_name": "Ola Serena",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FDFAF6",
+  "theme_color": "#0A302E",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

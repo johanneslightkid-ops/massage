@@ -1,0 +1,208 @@
+@import 'tailwindcss';
+
+@theme {
+  /* ---- palette: sand, ocean, lagoon, coral, sun, palm ---- */
+  --color-sand-50: #fdfaf6;
+  --color-sand-100: #f8f1e8;
+  --color-sand-200: #efe2d2;
+  --color-sand-300: #e2cdb4;
+  --color-sand-400: #cdb193;
+
+  --color-ocean-950: #06211f;
+  --color-ocean-900: #0a302e;
+  --color-ocean-800: #0f423f;
+  --color-ocean-700: #145651;
+  --color-ocean-600: #196a63;
+
+  --color-lagoon-600: #157f76;
+  --color-lagoon-500: #1e9c90;
+  --color-lagoon-400: #34b5a6;
+  --color-lagoon-300: #5ecabb;
+
+  --color-seafoam-300: #7cd3c4;
+  --color-seafoam-200: #a8e5da;
+  --color-seafoam-100: #d6f2ec;
+  --color-seafoam-50: #edfaf7;
+
+  --color-coral-600: #c9553f;
+  --color-coral-500: #e2705a;
+  --color-coral-400: #f28e76;
+  --color-coral-300: #f7b09d;
+  --color-coral-100: #fce4db;
+
+  --color-sun-600: #d18a25;
+  --color-sun-500: #e9a23b;
+  --color-sun-400: #f4be63;
+  --color-sun-200: #fbe3b6;
+
+  --color-palm-700: #2a5f4a;
+  --color-palm-500: #3f8a66;
+  --color-palm-300: #86bda2;
+
+  --color-hibiscus-500: #d0526b;
+
+  --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.75rem;
+
+  --shadow-soft: 0 18px 50px -28px rgb(6 33 31 / 0.45);
+  --shadow-lift: 0 30px 70px -35px rgb(6 33 31 / 0.55);
+  --shadow-glow: 0 0 60px -12px rgb(52 181 166 / 0.45);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-float: float 9s var(--ease-out-soft) infinite;
+  --animate-sway: sway 11s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-rise: rise 0.7s var(--ease-out-soft) both;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) }
+  50% { transform: translateY(-14px) }
+}
+@keyframes sway {
+  0%, 100% { transform: rotate(-2.5deg) }
+  50% { transform: rotate(2.5deg) }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0 }
+  to { background-position: 200% 0 }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --tabbar-h: 4.5rem;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-sand-50);
+    color: var(--color-ocean-900);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: var(--color-seafoam-200);
+    color: var(--color-ocean-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lagoon-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  input, textarea, select, button { font: inherit; color: inherit; }
+
+  /* iOS refuses to zoom-lock below 16px */
+  @supports (-webkit-touch-callout: none) {
+    input, textarea, select { font-size: max(16px, 1em); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility edge-fade {
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+}
+
+@utility pad-safe {
+  padding-bottom: calc(var(--safe-b) + var(--tabbar-h) + 1rem);
+}
+
+/* Fine paper grain — keeps the big flat color fields from looking digital. */
+@utility grain {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+}
+
+@utility text-balance-tight {
+  text-wrap: balance;
+  letter-spacing: -0.03em;
+}
+
+@utility script {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+@utility glass {
+  background: color-mix(in srgb, var(--color-sand-50) 90%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility glass-dark {
+  background: color-mix(in srgb, var(--color-ocean-950) 78%, transparent);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+@utility hairline {
+  border: 1px solid color-mix(in srgb, var(--color-ocean-900) 10%, transparent);
+}
+
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-sand-100) 25%,
+    var(--color-sand-200) 37%,
+    var(--color-sand-100) 63%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
