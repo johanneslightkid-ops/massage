@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { useContent } from '@/lib/content-store'
+import { faqSchema, useJsonLd, useSeo } from '@/lib/seo'
 import { cn, sortByOrder } from '@/lib/utils'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
@@ -9,7 +10,15 @@ import { PageHeader } from '@/components/sections/PageHeader'
 
 export function Treatments() {
   const { content } = useContent()
-  const currency = content.site.currency
+  const site = content.site
+  const currency = site.currency
+
+  useSeo({
+    path: '/treatments',
+    title: `Massage treatments & prices · ${site.brandName}, ${site.neighborhood}`,
+    description: `Full body, deep tissue, hot stone, couples, prenatal and reductive massage in ${site.neighborhood}, ${site.city} — prices per person, in the studio, on the beach or in your hotel room.`,
+  })
+  useJsonLd([faqSchema(sortByOrder(content.faqs))])
   const services = useMemo(() => sortByOrder(content.services), [content.services])
   const packages = sortByOrder(content.packages)
 

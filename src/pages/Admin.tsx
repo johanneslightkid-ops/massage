@@ -25,6 +25,7 @@ import { collectionSchemas } from '@shared/schema'
 import type { CollectionKey, SiteContent } from '@shared/types'
 import { api } from '@/lib/api'
 import { useContent } from '@/lib/content-store'
+import { useSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import { useSetMobileNav } from '@/components/layout/mobile-nav'
 import { Login } from '@/components/admin/Login'
@@ -64,6 +65,7 @@ const staticSections: AdminSection[] = [
 
 export function Admin() {
   const { refresh } = useContent()
+  useSeo({ path: '/admin', title: 'Admin', description: '', noindex: true })
   const [checking, setChecking] = useState(true)
   const [authed, setAuthed] = useState(false)
   const [usingDefault, setUsingDefault] = useState(false)

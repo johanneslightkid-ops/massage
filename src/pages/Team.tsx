@@ -1,5 +1,6 @@
 import { Globe, ShieldCheck, Sparkles } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { useSeo } from '@/lib/seo'
 import { sortByOrder } from '@/lib/utils'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
@@ -12,6 +13,12 @@ export function Team() {
   const { content } = useContent()
   const team = sortByOrder(content.team)
   const site = content.site
+
+  useSeo({
+    path: '/team',
+    title: `Our therapists · ${site.brandName}, ${site.neighborhood}`,
+    description: `Meet the certified Dominican therapists behind ${site.brandName} — who they are, what they specialise in, and exactly how a session works.`,
+  })
 
   const languages = Array.from(new Set(team.flatMap((person) => person.languages)))
 

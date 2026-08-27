@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CalendarDays, Check, Clock, Loader2, MessageCircle, Users } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { faqSchema, useJsonLd, useSeo } from '@/lib/seo'
 import { api } from '@/lib/api'
 import { bookingMessage, cn, formatPrice, sortByOrder, whatsappLink } from '@/lib/utils'
 import { Container, Section } from '@/components/ui/Section'
@@ -64,6 +65,13 @@ export function Book() {
   const services = useMemo(() => sortByOrder(content.services), [content.services])
   const venues = useMemo(() => sortByOrder(content.venues), [content.venues])
   const packages = useMemo(() => sortByOrder(content.packages), [content.packages])
+
+  useSeo({
+    path: '/book',
+    title: `Reserve a massage · ${site.brandName}, ${site.neighborhood}`,
+    description: `Reserve a massage in ${site.neighborhood}, ${site.city} — studio, beach or your hotel room. The form opens WhatsApp with your details already filled in.`,
+  })
+  useJsonLd([faqSchema(sortByOrder(content.faqs))])
 
   const [params] = useSearchParams()
   const preset = params.get('service') ?? ''

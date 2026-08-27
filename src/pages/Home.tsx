@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Compass } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { faqSchema, localBusinessSchema, useJsonLd, useSeo } from '@/lib/seo'
 import { sortByOrder } from '@/lib/utils'
 import { Hero } from '@/components/sections/Hero'
 import {
@@ -29,7 +30,23 @@ const railItem = 'w-[82vw] shrink-0 snap-center sm:w-auto'
 
 export function Home() {
   const { content } = useContent()
-  const currency = content.site.currency
+  const site = content.site
+  const currency = site.currency
+
+  useSeo({
+    path: '/',
+    title: `${site.brandName} · Massage in ${site.neighborhood}, ${site.city}`,
+    description: `${site.tagline} Studio, beach and hotel-room massage in ${site.neighborhood}. Reserve on WhatsApp.`,
+  })
+  useJsonLd([
+    localBusinessSchema(
+      site,
+      sortByOrder(content.services),
+      content.payments.filter((p) => p.enabled).map((p) => p.name),
+      typeof window === 'undefined' ? '' : window.location.origin,
+    ),
+    faqSchema(sortByOrder(content.faqs)),
+  ])
 
   const featured = sortByOrder(content.services).filter((service) => service.featured).slice(0, 6)
   const team = sortByOrder(content.team).slice(0, 3)

@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { PalmFrond } from '@/components/art/Decor'
+import { useSeo } from '@/lib/seo'
 
 export function NotFound() {
+  useSeo({ path: '/404', title: 'Page not found', description: '', noindex: true })
+
   return (
     <section className="grain relative grid min-h-[70svh] place-items-center overflow-hidden bg-ocean-900 px-6 text-center text-sand-50">
       <PalmFrond className="pointer-events-none absolute -top-10 -left-16 h-80 w-60 animate-sway text-ocean-950/40" />

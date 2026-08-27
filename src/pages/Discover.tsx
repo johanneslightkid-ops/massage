@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { MapPin, Search, Sparkles, X } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { useSeo } from '@/lib/seo'
 import { cn, sortByOrder } from '@/lib/utils'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
@@ -14,7 +15,14 @@ const ORDER = ['Beach', 'Eat & Drink', 'Excursion', 'Nightlife', 'Shopping', 'Es
 
 export function Discover() {
   const { content } = useContent()
+  const site = content.site
   const spots = useMemo(() => sortByOrder(content.discover), [content.discover])
+
+  useSeo({
+    path: '/discover',
+    title: `What to do in ${site.neighborhood} — a local guide · ${site.brandName}`,
+    description: `Beaches, restaurants, excursions and practical tips for ${site.neighborhood} and ${site.city}, written by five women who live and work on this beach.`,
+  })
 
   const categories = useMemo(() => {
     const present = new Set(spots.map((spot) => spot.category))

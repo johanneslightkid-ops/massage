@@ -52,6 +52,8 @@ Other scripts:
 ```bash
 npm run typecheck       # tsc --noEmit
 npm run test:e2e        # full admin → KV → public site round trip (needs cf:dev running)
+npm run test:seo        # titles, canonicals, robots and structured data (needs cf:dev running)
+npm run og              # regenerate the social link-preview image
 npm run cf:deploy       # build + deploy to Cloudflare Pages
 ```
 
@@ -152,6 +154,41 @@ checkout.
 
 ---
 
+## Being found
+
+Tourists find a business like this by searching from a phone in a hotel room, or by
+following a link someone pasted into WhatsApp. Both paths are handled.
+
+**Per route.** Each page sets its own `<title>`, description and canonical URL
+(`src/lib/seo.ts`). `/admin` and the 404 are `noindex, nofollow`.
+
+**Structured data, built from KV.** The home page emits a `HealthAndBeautyBusiness` /
+`DaySpa` block — address, area served, languages, payment methods, price range, and the
+full treatment catalogue with prices — plus `FAQPage` from the FAQ collection. It is
+generated from the live content, so editing the address or adding a treatment in the admin
+updates what Google sees. Opening hours are free text in the CMS, so the generator only
+emits an `OpeningHoursSpecification` when both the days and the times parse cleanly, and
+silently skips lines like "Until 22:00, last booking 20:30" rather than guessing.
+
+There is deliberately **no `aggregateRating` or `Review` markup**. Self-serving review
+markup on your own `LocalBusiness` is not eligible for rich results anyway, and emitting it
+from the placeholder testimonials would publish invented star ratings.
+
+**Link previews.** `public/og.jpg` (1200×630) is what WhatsApp, Facebook and iMessage show.
+Those crawlers do not run JavaScript, so the Open Graph tags live in `index.html`. Re-render
+the card after changing the brand:
+
+```bash
+npm run og                                   # uses the defaults
+OG_BRAND="Your name" OG_TAG="..." npm run og # or override them
+```
+
+**`sitemap.xml` and `robots.txt`** are Pages Functions rather than static files, so the URLs
+inside them always carry whatever domain the site is served from — preview deployment,
+`pages.dev` or a custom domain — with nothing to keep in sync.
+
+---
+
 ## Deploying
 
 The KV namespaces already exist and are wired up in `wrangler.toml`:
@@ -162,7 +199,7 @@ The KV namespaces already exist and are wired up in `wrangler.toml`:
 | `CONTENT` | preview | `e21d3f61654b4a11986a7ac04da9f018` |
 
 ```bash
-npx wrangler login
+npx wrangler login      # opens a browser; must be run on your own machine
 npm run cf:deploy
 ```
 
@@ -182,6 +219,8 @@ npx wrangler kv namespace create massage-site-content-preview
 
 ```
 functions/api/[[route]].ts   the entire API — one catch-all Pages Function
+functions/sitemap.xml.ts     sitemap generated against the live origin
+functions/robots.txt.ts      robots.txt, likewise
 shared/types.ts              content model, used by the app and the Function
 shared/seed.ts               the starting content (all of it editable at /admin)
 shared/schema.ts             field descriptors that generate the admin forms
@@ -190,8 +229,10 @@ src/pages/                   Home, Treatments, Discover, Team, Book, Admin, NotF
 src/components/sections/     hero, cards and the reusable page blocks
 src/components/admin/        login, generated forms, collection editor, bookings
 src/components/art/          SVG palms, waves, motifs, generated scenes
-src/lib/                     API client, content store, helpers
+src/lib/                     API client, content store, SEO helpers
 scripts/e2e.mjs              end-to-end test of the admin → KV → site round trip
+scripts/seo-check.mjs        asserts titles, canonicals and structured data
+scripts/make-og.mjs          renders public/og.jpg, the link-preview card
 ```
 
 ---
