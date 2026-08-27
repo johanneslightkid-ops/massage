@@ -189,6 +189,20 @@ inside them always carry whatever domain the site is served from — preview dep
 
 ---
 
+## Weight
+
+The home page is 6 requests and ~168 KB over the wire (145 KB JS, 12 KB CSS), with routes
+past the home page code-split and loaded on demand.
+
+Fonts are fetched **without blocking the first paint** — preloaded, then attached via
+`media="print"` flipped to `all` on load, with a `<noscript>` fallback. A guest on a hotel
+connection sees the page in the fallback face immediately and the real one swaps in when it
+arrives. Measured on a throttled mobile profile with the font server unreachable, this moved
+first contentful paint from **12.9 s to 0.26 s** — with the font server reachable the faces
+still load and apply normally.
+
+---
+
 ## Deploying
 
 The KV namespaces already exist and are wired up in `wrangler.toml`:
