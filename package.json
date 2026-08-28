@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "cf:dev": "npm run build && wrangler pages dev",
     "cf:deploy": "npm run build && wrangler pages deploy",
+    "seed": "node scripts/seed-kv.mjs",
+    "seed:preview": "node scripts/seed-kv.mjs preview",
     "test:e2e": "node scripts/e2e.mjs",
     "test:seo": "node scripts/seo-check.mjs",
     "og": "node scripts/make-og.mjs"
