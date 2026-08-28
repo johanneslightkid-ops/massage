@@ -2,7 +2,7 @@ import { seedContent } from './seed'
 import type { Booking, CollectionKey, SiteContent } from './types'
 
 export const KV_KEYS = {
-  content: 'content:v1',
+  content: (lang: string = 'en') => `content:${lang}:v1`,
   password: 'auth:password',
   session: (token: string) => `session:${token}`,
   booking: (id: string) => `booking:${id}`,
@@ -13,7 +13,7 @@ export const SESSION_COOKIE = 'os_session'
 export const SESSION_TTL_SECONDS = 60 * 60 * 12
 export const DEFAULT_PASSWORD = 'massage'
 
-const PBKDF2_ITERATIONS = 150_000
+const PBKDF2_ITERATIONS = 100_000
 const encoder = new TextEncoder()
 
 /* ------------------------------------------------------------------ crypto */
@@ -74,10 +74,10 @@ export function randomToken(): string {
  * Reads content from KV, seeding it on first run. Unknown keys from an older
  * deployment are filled in from the seed so a schema addition never 500s.
  */
-export async function readContent(kv: KVNamespace): Promise<SiteContent> {
-  const raw = await kv.get(KV_KEYS.content, 'json')
+export async function readContent(kv: KVNamespace, lang: string = 'en'): Promise<SiteContent> {
+  const raw = await kv.get(KV_KEYS.content(lang), 'json')
   if (!raw) {
-    await kv.put(KV_KEYS.content, JSON.stringify(seedContent))
+    await kv.put(KV_KEYS.content(lang), JSON.stringify(seedContent))
     return structuredClone(seedContent)
   }
   return mergeWithSeed(raw as Partial<SiteContent>)
@@ -92,8 +92,8 @@ export function mergeWithSeed(stored: Partial<SiteContent>): SiteContent {
   }
 }
 
-export async function writeContent(kv: KVNamespace, content: SiteContent): Promise<void> {
-  await kv.put(KV_KEYS.content, JSON.stringify(content))
+export async function writeContent(kv: KVNamespace, content: SiteContent, lang: string = 'en'): Promise<void> {
+  await kv.put(KV_KEYS.content(lang), JSON.stringify(content))
 }
 
 export const COLLECTION_KEYS: CollectionKey[] = [

@@ -29,7 +29,7 @@ export interface AdminSession {
 }
 
 export const api = {
-  getContent: () => request<SiteContent>('/content'),
+  getContent: (lang: string = 'en') => request<SiteContent>(`/content?lang=${lang}`),
 
   createBooking: (payload: Record<string, string>) =>
     request<{ ok: true; id: string }>('/bookings', { method: 'POST', body: JSON.stringify(payload) }),
@@ -44,13 +44,13 @@ export const api = {
 
   logout: () => request<{ ok: true }>('/admin/logout', { method: 'POST' }),
 
-  adminContent: () => request<SiteContent>('/admin/content'),
+  adminContent: (lang: string = 'en') => request<SiteContent>(`/admin/content?lang=${lang}`),
 
-  saveSettings: (settings: Partial<SiteSettings>) =>
-    request<{ ok: true }>('/admin/settings', { method: 'PUT', body: JSON.stringify(settings) }),
+  saveSettings: (settings: Partial<SiteSettings>, lang: string = 'en') =>
+    request<{ ok: true }>(`/admin/settings?lang=${lang}`, { method: 'PUT', body: JSON.stringify(settings) }),
 
-  saveCollection: (key: CollectionKey, rows: unknown[]) =>
-    request<{ ok: true; count: number }>(`/admin/collection/${key}`, {
+  saveCollection: (key: CollectionKey, rows: unknown[], lang: string = 'en') =>
+    request<{ ok: true; count: number }>(`/admin/collection/${key}?lang=${lang}`, {
       method: 'PUT',
       body: JSON.stringify(rows),
     }),

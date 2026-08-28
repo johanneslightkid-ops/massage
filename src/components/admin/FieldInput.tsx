@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Upload } from 'lucide-react'
 import type { Field } from '@shared/schema'
 import { cn } from '@/lib/utils'
 
@@ -219,6 +219,46 @@ function Switch({ value, onChange, label }: { value: boolean; onChange: (next: b
 
 /* ------------------------------------------------------------------ entry */
 
+async function processImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onload = () => {
+        const MAX_SIZE = 800
+        let width = img.width
+        let height = img.height
+
+        if (width > height) {
+          if (width > MAX_SIZE) {
+            height = Math.round((height * MAX_SIZE) / width)
+            width = MAX_SIZE
+          }
+        } else {
+          if (height > MAX_SIZE) {
+            width = Math.round((width * MAX_SIZE) / height)
+            height = MAX_SIZE
+          }
+        }
+
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+
+        const ctx = canvas.getContext('2d')
+        if (!ctx) return reject(new Error('No canvas context'))
+        
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL('image/webp', 0.8))
+      }
+      img.onerror = () => reject(new Error('Image load failed'))
+      img.src = e.target?.result as string
+    }
+    reader.onerror = () => reject(new Error('File read failed'))
+    reader.readAsDataURL(file)
+  })
+}
+
 export function FieldInput({
   field,
   value,
@@ -291,13 +331,35 @@ export function FieldInput({
       case 'image':
         return (
           <div className="space-y-3">
-            <input
-              type="url"
-              value={String(value ?? '')}
-              placeholder="https://…"
-              onChange={(event) => onChange(event.target.value)}
-              className={inputBase}
-            />
+            <div className="flex gap-2">
+              <input
+                type="url"
+                value={String(value ?? '')}
+                placeholder="https://…"
+                onChange={(event) => onChange(event.target.value)}
+                className={cn(inputBase, 'flex-1')}
+              />
+              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-ocean-900 px-5 text-sand-50 transition-colors hover:bg-ocean-800">
+                <span className="sr-only">Upload image</span>
+                <Upload className="size-4" />
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  className="hidden" 
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0]
+                    if (!file) return
+                    try {
+                      const base64 = await processImage(file)
+                      onChange(base64)
+                    } catch (err) {
+                      console.error(err)
+                      alert('Failed to process image')
+                    }
+                  }} 
+                />
+              </label>
+            </div>
             {typeof value === 'string' && value.trim() !== '' && (
               <img
                 src={value}

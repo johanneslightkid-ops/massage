@@ -8,12 +8,18 @@ interface ContentState {
   content: SiteContent
   loading: boolean
   error: string | null
+  lang: string
+  setLang: (lang: string) => void
   refresh: () => Promise<void>
 }
 
 const ContentContext = createContext<ContentState | null>(null)
 
 export function ContentProvider({ children }: { children: ReactNode }) {
+  const [lang, setLangState] = useState(() => {
+    return new URLSearchParams(window.location.search).get('lang') || 'en'
+  })
+  
   // Seed acts as the instant first paint; KV content replaces it a moment later.
   const [content, setContent] = useState<SiteContent>(seedContent)
   const [loading, setLoading] = useState(true)
@@ -21,7 +27,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
   const refresh = useCallback(async () => {
     try {
-      const fresh = await api.getContent()
+      const fresh = await api.getContent(lang)
       setContent(fresh)
       setError(null)
     } catch (cause) {
@@ -29,6 +35,13 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false)
     }
+  }, [lang])
+
+  const setLang = useCallback((nextLang: string) => {
+    setLangState(nextLang)
+    const url = new URL(window.location.href)
+    url.searchParams.set('lang', nextLang)
+    window.history.pushState({}, '', url)
   }, [])
 
   useEffect(() => {
@@ -36,8 +49,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   }, [refresh])
 
   const value = useMemo<ContentState>(
-    () => ({ content, loading, error, refresh }),
-    [content, loading, error, refresh],
+    () => ({ content, loading, error, lang, setLang, refresh }),
+    [content, loading, error, lang, setLang, refresh],
   )
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

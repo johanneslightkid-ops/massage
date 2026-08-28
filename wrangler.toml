@@ -10,7 +10,7 @@ compatibility_flags = ["nodejs_compat"]
 # --- Local dev + production ---
 [[kv_namespaces]]
 binding = "CONTENT"
-id = "09e7faead934494c8e48ffb806f0ed3e"
+id = "1c21691d43504700aeddfc7095ef3a4d"
 
 [vars]
 SITE_NAME = "Ola Serena"
@@ -18,7 +18,7 @@ SITE_NAME = "Ola Serena"
 # --- Preview deployments ---
 [[env.preview.kv_namespaces]]
 binding = "CONTENT"
-id = "e21d3f61654b4a11986a7ac04da9f018"
+id = "ac1b24881dee4d13b6a175e4606d9575"
 
 [env.preview.vars]
 SITE_NAME = "Ola Serena (preview)"
@@ -26,7 +26,7 @@ SITE_NAME = "Ola Serena (preview)"
 # --- Production deployments ---
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
-id = "09e7faead934494c8e48ffb806f0ed3e"
+id = "1c21691d43504700aeddfc7095ef3a4d"
 
 [env.production.vars]
 SITE_NAME = "Ola Serena"
