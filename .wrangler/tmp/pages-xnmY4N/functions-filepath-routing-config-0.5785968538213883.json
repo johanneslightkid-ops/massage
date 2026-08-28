@@ -1,0 +1,29 @@
+{
+  "routes": [
+    {
+      "routePath": "/api/:route*",
+      "mountPath": "/api",
+      "method": "",
+      "module": [
+        "api/[[route]].ts:onRequest"
+      ]
+    },
+    {
+      "routePath": "/robots.txt",
+      "mountPath": "/",
+      "method": "GET",
+      "module": [
+        "robots.txt.ts:onRequestGet"
+      ]
+    },
+    {
+      "routePath": "/sitemap.xml",
+      "mountPath": "/",
+      "method": "GET",
+      "module": [
+        "sitemap.xml.ts:onRequestGet"
+      ]
+    }
+  ],
+  "baseURL": "/"
+}
