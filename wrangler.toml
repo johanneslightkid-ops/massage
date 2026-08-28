@@ -1,3 +1,6 @@
+[ai]
+binding = "AI"
+
 "$schema" = "./node_modules/wrangler/config-schema.json"
 name = "ola-serena"
 pages_build_output_dir = "./dist"
