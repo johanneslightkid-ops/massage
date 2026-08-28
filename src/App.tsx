@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ContentProvider } from './lib/content-store'
+import { LanguageProvider } from './lib/translations/LanguageProvider'
 import { MobileNavProvider } from './components/layout/mobile-nav'
 import { Layout } from './components/layout/Layout'
 import { Home } from './pages/Home'
@@ -16,63 +17,65 @@ const NotFound = lazy(() => import('./pages/NotFound').then((m) => ({ default: m
 export function App() {
   return (
     <BrowserRouter>
-      <ContentProvider>
-        <MobileNavProvider>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route
-                path="treatments"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <Treatments />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="discover"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <Discover />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="team"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <Team />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="book"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <Book />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="admin"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <Admin />
-                  </Suspense>
-                }
-              />
-              <Route
-                path="*"
-                element={
-                  <Suspense fallback={<PageFallback />}>
-                    <NotFound />
-                  </Suspense>
-                }
-              />
-            </Route>
-          </Routes>
-        </MobileNavProvider>
-      </ContentProvider>
+      <LanguageProvider>
+        <ContentProvider>
+          <MobileNavProvider>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route
+                  path="treatments"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Treatments />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="discover"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Discover />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="team"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Team />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="book"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Book />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="admin"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Admin />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="*"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <NotFound />
+                    </Suspense>
+                  }
+                />
+              </Route>
+            </Routes>
+          </MobileNavProvider>
+        </ContentProvider>
+      </LanguageProvider>
     </BrowserRouter>
   )
 }
