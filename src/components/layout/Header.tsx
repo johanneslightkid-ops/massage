@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
-import { Menu, X, MessageCircle, MapPin, Clock } from 'lucide-react'
+import { Menu, X, MessageCircle, MapPin, Clock, Globe } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
 import { cn, whatsappLink } from '@/lib/utils'
 import { Motif } from '@/components/art/Motif'
+import { LanguageToggle } from '@/components/ui/LanguageToggle'
 
 export const publicNav = [
   { to: '/', label: 'Home' },
@@ -111,6 +112,8 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
+            <LanguageToggle variant="icon" />
+            
             <a
               href={whatsappLink(site)}
               target="_blank"
@@ -195,6 +198,11 @@ export function Header() {
                     <Clock className="mt-0.5 size-4 shrink-0 text-lagoon-600" />
                     <span>{site.hours[0]?.value ?? ''}</span>
                   </p>
+                </div>
+
+                {/* Language selector in mobile menu */}
+                <div className="mt-4 flex items-center justify-center">
+                  <LanguageToggle variant="inline" />
                 </div>
 
                 <a
