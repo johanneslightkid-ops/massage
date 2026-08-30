@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Globe } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useLanguage } from '@/lib/translations/LanguageProvider';
