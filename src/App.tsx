@@ -18,8 +18,8 @@ export function App() {
   return (
     <BrowserRouter>
       <LanguageProvider>
-        <ContentProvider>
-          <MobileNavProvider>
+        <MobileNavProvider>
+          <ContentProvider>
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<Home />} />
@@ -73,8 +73,8 @@ export function App() {
                 />
               </Route>
             </Routes>
-          </MobileNavProvider>
-        </ContentProvider>
+          </ContentProvider>
+        </MobileNavProvider>
       </LanguageProvider>
     </BrowserRouter>
   )
