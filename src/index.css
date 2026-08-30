@@ -1,79 +1,105 @@
 @import 'tailwindcss';
 
+/*
+ * Ola Serena — tropical light palette
+ * ------------------------------------------------------------------
+ * White is the main canvas. Layered with lush jungle greens, crystal
+ * sea blues, sandy golden yellows and flamingo pinks — all in gentle,
+ * washed-out tints so the site feels breezy, sun-lit, coastal.
+ */
+
 @theme {
-  /* ---- palette: sand, ocean, lagoon, coral, sun, palm ---- */
-  --color-sand-50: #fdfaf6;
-  --color-sand-100: #f8f1e8;
-  --color-sand-200: #efe2d2;
-  --color-sand-300: #e2cdb4;
-  --color-sand-400: #cdb193;
+  /* ---------- Sand (paper white → warm golden) ---------- */
+  --color-sand-50:  #ffffff;
+  --color-sand-100: #fdf9f2;
+  --color-sand-200: #f8efdb;
+  --color-sand-300: #f1e0bd;
+  --color-sand-400: #e6c98d;
+  --color-sand-500: #d6ab5c;
 
-  --color-ocean-950: #06211f;
-  --color-ocean-900: #0a302e;
-  --color-ocean-800: #0f423f;
-  --color-ocean-700: #145651;
-  --color-ocean-600: #196a63;
+  /* ---------- Ocean (crystal sea blue) ---------- */
+  --color-ocean-950: #062b3a;
+  --color-ocean-900: #0b4a63;
+  --color-ocean-800: #0f6a8a;
+  --color-ocean-700: #1489b0;
+  --color-ocean-600: #29a4cc;
 
-  --color-lagoon-600: #157f76;
-  --color-lagoon-500: #1e9c90;
-  --color-lagoon-400: #34b5a6;
-  --color-lagoon-300: #5ecabb;
+  /* ---------- Lagoon (turquoise crystal) ---------- */
+  --color-lagoon-700: #0a8b9a;
+  --color-lagoon-600: #13a8b8;
+  --color-lagoon-500: #35c2d1;
+  --color-lagoon-400: #6ed7e0;
+  --color-lagoon-300: #9de5eb;
 
-  --color-seafoam-300: #7cd3c4;
-  --color-seafoam-200: #a8e5da;
-  --color-seafoam-100: #d6f2ec;
-  --color-seafoam-50: #edfaf7;
+  /* ---------- Seafoam (misted lagoon) ---------- */
+  --color-seafoam-300: #bfeef1;
+  --color-seafoam-200: #d8f5f5;
+  --color-seafoam-100: #eafbfa;
+  --color-seafoam-50:  #f5fdfc;
 
-  --color-coral-600: #c9553f;
-  --color-coral-500: #e2705a;
-  --color-coral-400: #f28e76;
-  --color-coral-300: #f7b09d;
-  --color-coral-100: #fce4db;
+  /* ---------- Palm (lush jungle greens) ---------- */
+  --color-palm-900: #14522f;
+  --color-palm-700: #1f7a44;
+  --color-palm-600: #2b9a58;
+  --color-palm-500: #4bb578;
+  --color-palm-400: #7bd0a1;
+  --color-palm-300: #a9e2c1;
+  --color-palm-200: #cfeedd;
+  --color-palm-100: #e6f6ec;
 
-  --color-sun-600: #d18a25;
-  --color-sun-500: #e9a23b;
-  --color-sun-400: #f4be63;
-  --color-sun-200: #fbe3b6;
+  /* ---------- Flamingo (soft pink → hot coral) ---------- */
+  --color-flamingo-600: #e74e83;
+  --color-flamingo-500: #f27aa1;
+  --color-flamingo-400: #f9a2be;
+  --color-flamingo-300: #fdc2d3;
+  --color-flamingo-200: #ffdbe6;
+  --color-flamingo-100: #fff0f5;
 
-  --color-palm-700: #2a5f4a;
-  --color-palm-500: #3f8a66;
-  --color-palm-300: #86bda2;
+  /* ---------- Coral (warm reef accents) ---------- */
+  --color-coral-600: #e35b3b;
+  --color-coral-500: #f2795a;
+  --color-coral-400: #f79a80;
+  --color-coral-300: #fbc2b0;
+  --color-coral-100: #ffe4da;
 
-  --color-hibiscus-500: #d0526b;
+  /* ---------- Sun (sandy golden yellows) ---------- */
+  --color-sun-600: #e4a325;
+  --color-sun-500: #f2ba46;
+  --color-sun-400: #fbcf6d;
+  --color-sun-300: #fde09a;
+  --color-sun-200: #fdedc4;
+  --color-sun-100: #fef7e3;
+
+  /* Legacy alias — coral used broadly earlier, keep hibiscus available */
+  --color-hibiscus-500: #ea5a86;
 
   --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
-  --font-sans: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans:    'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --radius-4xl: 2rem;
   --radius-5xl: 2.75rem;
 
-  --shadow-soft: 0 18px 50px -28px rgb(6 33 31 / 0.45);
-  --shadow-lift: 0 30px 70px -35px rgb(6 33 31 / 0.55);
-  --shadow-glow: 0 0 60px -12px rgb(52 181 166 / 0.45);
+  --shadow-soft: 0 18px 42px -28px rgb(11 74 99 / 0.28);
+  --shadow-lift: 0 36px 82px -44px rgb(11 74 99 / 0.38);
+  --shadow-glow: 0 0 60px -12px rgb(53 194 209 / 0.5);
+  --shadow-pink: 0 0 60px -18px rgb(242 122 161 / 0.55);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --animate-float: float 9s var(--ease-out-soft) infinite;
-  --animate-sway: sway 11s ease-in-out infinite;
+  --animate-float:   float 9s var(--ease-out-soft) infinite;
+  --animate-sway:    sway  11s ease-in-out infinite;
   --animate-shimmer: shimmer 2.4s linear infinite;
-  --animate-rise: rise 0.7s var(--ease-out-soft) both;
+  --animate-rise:    rise 0.7s var(--ease-out-soft) both;
+  --animate-drift:   drift 14s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) }
-  50% { transform: translateY(-14px) }
-}
-@keyframes sway {
-  0%, 100% { transform: rotate(-2.5deg) }
-  50% { transform: rotate(2.5deg) }
-}
-@keyframes shimmer {
-  from { background-position: -200% 0 }
-  to { background-position: 200% 0 }
-}
-@keyframes rise {
-  from { opacity: 0; transform: translateY(18px) }
-  to { opacity: 1; transform: translateY(0) }
+@keyframes float   { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
+@keyframes sway    { 0%,100% { transform: rotate(-2.5deg) } 50% { transform: rotate(2.5deg) } }
+@keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+@keyframes rise    { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) }
+  50%      { transform: translate3d(12px, -8px, 0) }
 }
 
 @layer base {
@@ -81,11 +107,16 @@
     color-scheme: light;
     --safe-b: env(safe-area-inset-bottom, 0px);
     --tabbar-h: 4.5rem;
+
+    /* Ambient page wash — very light tropical gradient behind everything */
+    --page-wash:
+      radial-gradient(1200px 620px at 8% -8%,  #eafbfa 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, #fff0f5 0%, transparent 60%),
+      radial-gradient(800px 500px at 50% 100%, #fef7e3 0%, transparent 60%),
+      linear-gradient(180deg, #ffffff 0%, #fdfcf7 100%);
   }
 
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
+  * { -webkit-tap-highlight-color: transparent; }
 
   html {
     scroll-behavior: smooth;
@@ -93,7 +124,8 @@
   }
 
   body {
-    background-color: var(--color-sand-50);
+    background: var(--page-wash);
+    background-attachment: fixed;
     color: var(--color-ocean-900);
     font-family: var(--font-sans);
     font-weight: 400;
@@ -109,12 +141,13 @@
     font-weight: 500;
     letter-spacing: -0.02em;
     text-wrap: balance;
+    color: var(--color-ocean-950);
   }
 
   p { text-wrap: pretty; }
 
   ::selection {
-    background: var(--color-seafoam-200);
+    background: var(--color-flamingo-200);
     color: var(--color-ocean-950);
   }
 
@@ -126,7 +159,6 @@
 
   input, textarea, select, button { font: inherit; color: inherit; }
 
-  /* iOS refuses to zoom-lock below 16px */
   @supports (-webkit-touch-callout: none) {
     input, textarea, select { font-size: max(16px, 1em); }
   }
@@ -154,7 +186,7 @@
   padding-bottom: calc(var(--safe-b) + var(--tabbar-h) + 1rem);
 }
 
-/* Fine paper grain — keeps the big flat color fields from looking digital. */
+/* Fine paper grain — keeps flat colour fields from looking digital */
 @utility grain {
   position: relative;
   &::after {
@@ -162,9 +194,23 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.28;
     mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+}
+
+/* Watermark tropical scatter — sea stars, corals, palm silhouettes */
+@utility tropical-scatter {
+  position: relative;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.10;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%23f27aa1' stroke-width='1.4'%3E%3Cpath d='M60 60 l6 -18 l6 18 l18 6 l-18 6 l-6 18 l-6 -18 l-18 -6 z'/%3E%3Ccircle cx='250' cy='70' r='14'/%3E%3Cpath d='M250 56 v28 M236 70 h28 M240 60 l20 20 M260 60 l-20 20'/%3E%3C/g%3E%3Cg fill='none' stroke='%234bb578' stroke-width='1.4'%3E%3Cpath d='M40 240 q30 -60 60 -20 q30 40 60 -30 q30 -70 60 -10' /%3E%3C/g%3E%3Cg fill='none' stroke='%2335c2d1' stroke-width='1.4'%3E%3Cpath d='M180 250 c 20 -12 40 -12 60 0 c 20 -12 20 12 0 24 c -20 12 -40 12 -60 0 c -20 -12 -20 -24 0 -24 z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 320px 320px;
   }
 }
 
@@ -181,9 +227,20 @@
 }
 
 @utility glass {
-  background: color-mix(in srgb, var(--color-sand-50) 90%, transparent);
+  background: color-mix(in srgb, #ffffff 78%, transparent);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid color-mix(in srgb, var(--color-lagoon-500) 14%, transparent);
+}
+
+@utility glass-tinted {
+  background: linear-gradient(140deg,
+    color-mix(in srgb, var(--color-seafoam-100) 92%, transparent) 0%,
+    color-mix(in srgb, var(--color-flamingo-100) 88%, transparent) 55%,
+    color-mix(in srgb, var(--color-sun-100)      95%, transparent) 100%);
   backdrop-filter: blur(18px) saturate(140%);
   -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.6);
 }
 
 @utility glass-dark {
@@ -193,7 +250,7 @@
 }
 
 @utility hairline {
-  border: 1px solid color-mix(in srgb, var(--color-ocean-900) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-ocean-900) 8%, transparent);
 }
 
 @utility skeleton {
@@ -205,4 +262,18 @@
   );
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
+}
+
+@utility tropical-gradient {
+  background: linear-gradient(135deg,
+    var(--color-lagoon-500) 0%,
+    var(--color-palm-500)   45%,
+    var(--color-flamingo-400) 100%);
+}
+
+@utility sunset-gradient {
+  background: linear-gradient(135deg,
+    var(--color-sun-400) 0%,
+    var(--color-flamingo-400) 60%,
+    var(--color-flamingo-500) 100%);
 }

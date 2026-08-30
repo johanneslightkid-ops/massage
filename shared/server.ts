@@ -1,5 +1,11 @@
 import { seedContent } from './seed'
+import { seedContentEs } from './seed-es'
 import type { Booking, CollectionKey, SiteContent } from './types'
+
+/** Returns the appropriate seed for a given language (en fallback). */
+export function seedFor(lang: string): SiteContent {
+  return lang === 'es' ? seedContentEs : seedContent
+}
 
 export const KV_KEYS = {
   content: (lang: string = 'en') => `content:${lang}:v1`,
@@ -75,16 +81,17 @@ export function randomToken(): string {
  * deployment are filled in from the seed so a schema addition never 500s.
  */
 export async function readContent(kv: KVNamespace, lang: string = 'en'): Promise<SiteContent> {
+  const seed = seedFor(lang)
   const raw = await kv.get(KV_KEYS.content(lang), 'json')
   if (!raw) {
-    await kv.put(KV_KEYS.content(lang), JSON.stringify(seedContent))
-    return structuredClone(seedContent)
+    await kv.put(KV_KEYS.content(lang), JSON.stringify(seed))
+    return structuredClone(seed)
   }
-  return mergeWithSeed(raw as Partial<SiteContent>)
+  return mergeWithSeed(raw as Partial<SiteContent>, lang)
 }
 
-export function mergeWithSeed(stored: Partial<SiteContent>): SiteContent {
-  const base = structuredClone(seedContent)
+export function mergeWithSeed(stored: Partial<SiteContent>, lang: string = 'en'): SiteContent {
+  const base = structuredClone(seedFor(lang))
   return {
     ...base,
     ...stored,

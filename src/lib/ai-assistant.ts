@@ -1,6 +1,4 @@
-import { Mic, MicOff, Loader2, Send, Volume2, VolumeX } from 'lucide-react';
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { api } from '../api';
 import type { SiteContent, CollectionKey } from '@shared/types';
 
 export interface AIMessage {
@@ -8,12 +6,15 @@ export interface AIMessage {
   role: 'user' | 'assistant' | 'system';
   content: string;
   timestamp: number;
-  action?: {
-    type: 'create' | 'update' | 'delete' | 'translate' | 'settings';
-    collection?: CollectionKey;
-    data?: unknown;
-  };
+  action?: AdminAction;
 }
+
+export type AdminAction =
+  | { kind: 'update_setting'; field: string; value: string }
+  | { kind: 'add_treatment'; name: string; description?: string; price?: number; minutes?: number }
+  | { kind: 'add_faq'; question: string; answer: string }
+  | { kind: 'none' }
+  | { kind: string; [k: string]: unknown }
 
 export interface AIAssistantState {
   isListening: boolean;
@@ -160,49 +161,52 @@ export function useAIAssistant({ onContentChange, currentLanguage = 'en' }: UseA
 
   const processVoiceInput = useCallback(async (transcript: string) => {
     if (!transcript.trim()) return;
-    
+
     addMessage('user', transcript);
     setState((prev) => ({ ...prev, isProcessing: true, error: null }));
 
     try {
-      // Call Cloudflare AI or Google AI API for processing
-      const response = await fetch('/api/ai/process', {
+      const history = [...state.messages, { role: 'user', content: transcript }]
+        .filter((m) => m.role !== 'system')
+        .map((m) => ({ role: m.role === 'user' ? 'user' as const : 'assistant' as const, content: m.content }))
+
+      const response = await fetch('/api/ai/chat', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          input: transcript,
-          language: currentLanguage,
-          context: 'admin',
-        }),
+        body: JSON.stringify({ messages: history, language: currentLanguage }),
         signal: abortControllerRef.current?.signal,
       });
 
-      if (!response.ok) {
-        throw new Error('AI processing failed');
-      }
+      if (!response.ok) throw new Error('AI processing failed');
+      const result = await response.json() as { reply?: string };
+      const rawReply = result.reply ?? '';
 
-      const result = await response.json();
-      
-      addMessage('assistant', result.response, result.action);
-      speak(result.response);
+      // Extract <action>{...}</action>
+      let action: AdminAction | undefined;
+      const m = rawReply.match(/<action>([\s\S]*?)<\/action>/i);
+      const spoken = rawReply.replace(/<action>[\s\S]*?<\/action>/i, '').trim();
+      if (m) { try { action = JSON.parse(m[1]) as AdminAction } catch { /* ignore */ } }
 
-      // If there's an action to perform on content
-      if (result.action && onContentChange) {
-        await onContentChange(result.action.data as Partial<SiteContent>);
+      addMessage('assistant', spoken, action);
+      speak(spoken);
+
+      if (action && action.kind !== 'none' && onContentChange) {
+        await onContentChange({ __aiAction: action } as unknown as Partial<SiteContent>);
       }
     } catch (error) {
       console.error('AI processing error:', error);
       const errorMessage = currentLanguage === 'es'
         ? 'Lo siento, no pude procesar tu solicitud. Por favor, inténtalo de nuevo.'
-        : 'Sorry, I couldn\'t process your request. Please try again.';
-      
+        : "Sorry, I couldn't process your request. Please try again.";
+
       addMessage('assistant', errorMessage);
       speak(errorMessage);
       setState((prev) => ({ ...prev, error: errorMessage }));
     } finally {
       setState((prev) => ({ ...prev, isProcessing: false }));
     }
-  }, [currentLanguage, onContentChange, addMessage, speak]);
+  }, [currentLanguage, onContentChange, addMessage, speak, state.messages]);
 
   const sendTextMessage = useCallback(async (text: string) => {
     await processVoiceInput(text);

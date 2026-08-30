@@ -1,11 +1,12 @@
-[ai]
-binding = "AI"
-
 "$schema" = "./node_modules/wrangler/config-schema.json"
 name = "ola-serena"
 pages_build_output_dir = "./dist"
 compatibility_date = "2026-08-26"
 compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare Workers AI (free tier) — llama-3.1 + whisper + melotts
+[ai]
+binding = "AI"
 
 # --- Local dev + production ---
 [[kv_namespaces]]
@@ -14,6 +15,12 @@ id = "78cfcbe1fc734caea63722f90580297e"
 
 [vars]
 SITE_NAME = "Ola Serena"
+CLOUDINARY_CLOUD_NAME = "dkxlhxpe4"
+CLOUDINARY_API_KEY = "746182347753155"
+
+# CLOUDINARY_API_SECRET is set as a secret (never in source):
+#   npx wrangler pages secret put CLOUDINARY_API_SECRET
+# For this project, the current secret value is stored server-side only.
 
 # --- Preview deployments ---
 [[env.preview.kv_namespaces]]
@@ -22,6 +29,8 @@ id = "78cfcbe1fc734caea63722f90580297e"
 
 [env.preview.vars]
 SITE_NAME = "Ola Serena (preview)"
+CLOUDINARY_CLOUD_NAME = "dkxlhxpe4"
+CLOUDINARY_API_KEY = "746182347753155"
 
 # --- Production deployments ---
 [[env.production.kv_namespaces]]
@@ -30,3 +39,5 @@ id = "78cfcbe1fc734caea63722f90580297e"
 
 [env.production.vars]
 SITE_NAME = "Ola Serena"
+CLOUDINARY_CLOUD_NAME = "dkxlhxpe4"
+CLOUDINARY_API_KEY = "746182347753155"

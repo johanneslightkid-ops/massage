@@ -259,6 +259,45 @@ async function processImage(file: File): Promise<string> {
   })
 }
 
+/**
+ * Uploads an image to Cloudinary using a signed upload (server-issued signature).
+ * Falls back to a local resized WebP data-URL if Cloudinary isn't configured.
+ */
+async function uploadToCloudinaryOrFallback(file: File): Promise<string> {
+  try {
+    const cfgRes = await fetch('/api/uploads/config', { credentials: 'include' })
+    const cfg = (await cfgRes.json()) as { configured: boolean }
+    if (!cfg.configured) return processImage(file)
+
+    const signRes = await fetch('/api/uploads/sign', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ folder: 'ola-serena' }),
+    })
+    if (!signRes.ok) throw new Error(await signRes.text())
+    const sig = (await signRes.json()) as {
+      cloudName: string; apiKey: string; timestamp: number; signature: string; folder: string; uploadUrl: string
+    }
+
+    const form = new FormData()
+    form.append('file', file)
+    form.append('api_key', sig.apiKey)
+    form.append('timestamp', String(sig.timestamp))
+    form.append('signature', sig.signature)
+    form.append('folder', sig.folder)
+
+    const up = await fetch(sig.uploadUrl, { method: 'POST', body: form })
+    const body = (await up.json()) as { secure_url?: string; error?: { message?: string } }
+    if (!up.ok || !body.secure_url) throw new Error(body.error?.message ?? 'Cloudinary upload failed')
+    return body.secure_url
+  } catch (err) {
+    // Silent fallback keeps the admin usable even if the endpoint is unreachable.
+    console.warn('Cloudinary unavailable, falling back to inline WebP:', err)
+    return processImage(file)
+  }
+}
+
 export function FieldInput({
   field,
   value,
@@ -339,24 +378,25 @@ export function FieldInput({
                 onChange={(event) => onChange(event.target.value)}
                 className={cn(inputBase, 'flex-1')}
               />
-              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-ocean-900 px-5 text-sand-50 transition-colors hover:bg-ocean-800">
+              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-white transition-colors hover:from-lagoon-600 hover:to-palm-600" title="Upload from device">
                 <span className="sr-only">Upload image</span>
                 <Upload className="size-4" />
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="hidden" 
+                <input
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  className="hidden"
                   onChange={async (e) => {
                     const file = e.target.files?.[0]
                     if (!file) return
                     try {
-                      const base64 = await processImage(file)
-                      onChange(base64)
+                      const url = await uploadToCloudinaryOrFallback(file)
+                      onChange(url)
                     } catch (err) {
                       console.error(err)
-                      alert('Failed to process image')
+                      alert('Failed to upload image: ' + (err instanceof Error ? err.message : String(err)))
                     }
-                  }} 
+                  }}
                 />
               </label>
             </div>
