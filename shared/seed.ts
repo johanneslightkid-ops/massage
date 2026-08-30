@@ -7,7 +7,7 @@ import type { SiteContent } from './types'
  */
 export const seedContent: SiteContent = {
   site: {
-    brandName: 'Ola Serena',
+    brandName: 'Massage Playero',
     brandMark: 'Massage & Beach Spa · Bávaro',
     tagline: 'Unhurried massage in Los Corales — in our studio, on the sand, or in your room.',
 
@@ -53,9 +53,12 @@ export const seedContent: SiteContent = {
     announcementText: 'Same-day appointments are usually possible — message us on WhatsApp and we answer in minutes.',
 
     currency: 'USD',
-    hotelSurcharge: 'Hotel and villa visits: +$10 inside Bávaro / El Cortecito, +$20 for Cap Cana, Uvero Alto and Punta Cana Village.',
-    beachNote: 'Beach massages happen under our shade tent on Los Corales beach — towels, sheets and music included.',
-    cancellationPolicy: 'Plans change on holiday. Cancel or move your appointment free of charge up to 3 hours before.',
+    hotelSurcharge:
+      'Hotel and villa visits: +$10 inside Bávaro / El Cortecito, +$20 for Cap Cana, Uvero Alto and Punta Cana Village.',
+    beachNote:
+      'Beach massages happen under our shade tent on Los Corales beach — towels, sheets and music included.',
+    cancellationPolicy:
+      'Plans change on holiday. Cancel or move your appointment free of charge up to 3 hours before.',
   },
 
   venues: [
@@ -99,7 +102,11 @@ export const seedContent: SiteContent = {
       tagline: 'The classic — head to toe, slow and warm',
       description:
         'Long, flowing Swedish strokes over the whole body with warm coconut or almond oil. Pressure stays gentle to medium; the goal is to switch your nervous system off after a travel day or a long week.',
-      benefits: ['Melts travel and flight tension', 'Helps you sleep through the night', 'Calms sunburnt, tight skin'],
+      benefits: [
+        'Melts travel and flight tension',
+        'Helps you sleep through the night',
+        'Calms sunburnt, tight skin',
+      ],
       durations: [
         { minutes: 60, price: 50 },
         { minutes: 90, price: 70 },
@@ -118,7 +125,11 @@ export const seedContent: SiteContent = {
       tagline: 'For knots that came with you from home',
       description:
         'Firm, focused work through the deeper layers of muscle — forearms, elbows and slow sustained pressure on the areas you point at. We check in on pressure constantly; it should feel like relief, never like fighting.',
-      benefits: ['Releases neck, shoulder and lower-back knots', 'Great after surfing, padel or the gym', 'Restores range of movement'],
+      benefits: [
+        'Releases neck, shoulder and lower-back knots',
+        'Great after surfing, padel or the gym',
+        'Restores range of movement',
+      ],
       durations: [
         { minutes: 60, price: 60 },
         { minutes: 90, price: 80 },
@@ -137,7 +148,11 @@ export const seedContent: SiteContent = {
       tagline: 'Warm volcanic basalt along the spine',
       description:
         'Smooth heated stones are placed along the back and used as an extension of our hands. The heat opens the muscle before we ever press hard, so deep tension lets go without discomfort.',
-      benefits: ['Deep warmth without deep pressure', 'Wonderful for cold-weather travellers', 'Very grounding before bed'],
+      benefits: [
+        'Deep warmth without deep pressure',
+        'Wonderful for cold-weather travellers',
+        'Very grounding before bed',
+      ],
       durations: [
         { minutes: 60, price: 65 },
         { minutes: 90, price: 85 },
@@ -156,7 +171,11 @@ export const seedContent: SiteContent = {
       tagline: 'Island oils, chosen by how you feel',
       description:
         'You pick the blend when we arrive — mandarin and vetiver to unwind, mint and eucalyptus to wake up, or plain warm coconut oil pressed here on the island. Gentle full-body work with extra time on scalp and feet.',
-      benefits: ['Choose your own scent', 'Leaves skin soft after sun and salt', 'Long scalp and foot finish'],
+      benefits: [
+        'Choose your own scent',
+        'Leaves skin soft after sun and salt',
+        'Long scalp and foot finish',
+      ],
       durations: [
         { minutes: 60, price: 55 },
         { minutes: 90, price: 75 },
@@ -175,7 +194,11 @@ export const seedContent: SiteContent = {
       tagline: 'Two therapists, two tables, side by side',
       description:
         'Two of us arrive together and work at the same time, in the same room or under the same beach tent. The most-requested thing we do for honeymoons and anniversaries — finish with sparkling water and a fruit plate.',
-      benefits: ['Same room, same hour', 'Perfect for honeymoons', 'Each person picks their own pressure'],
+      benefits: [
+        'Same room, same hour',
+        'Perfect for honeymoons',
+        'Each person picks their own pressure',
+      ],
       durations: [
         { minutes: 60, price: 95 },
         { minutes: 90, price: 135 },
@@ -194,7 +217,11 @@ export const seedContent: SiteContent = {
       tagline: 'Two therapists, one very lucky body',
       description:
         'Two therapists working in mirrored rhythm over one person. The brain gives up trying to track it after about ninety seconds — which is exactly the point. Our most indulgent hour.',
-      benefits: ['Twice the work in the same hour', 'Extraordinarily deep switch-off', 'A real occasion treatment'],
+      benefits: [
+        'Twice the work in the same hour',
+        'Extraordinarily deep switch-off',
+        'A real occasion treatment',
+      ],
       durations: [
         { minutes: 60, price: 95 },
         { minutes: 90, price: 130 },
@@ -213,7 +240,11 @@ export const seedContent: SiteContent = {
       tagline: 'Short, targeted, straight to the point',
       description:
         'All the time spent where it actually hurts. Ideal between excursions, after a long flight, or as a quick reset before dinner.',
-      benefits: ['Fits into any afternoon', 'Focused on desk and travel tension', 'No oil in the hair if you ask'],
+      benefits: [
+        'Fits into any afternoon',
+        'Focused on desk and travel tension',
+        'No oil in the hair if you ask',
+      ],
       durations: [
         { minutes: 30, price: 35 },
         { minutes: 45, price: 45 },
@@ -232,7 +263,11 @@ export const seedContent: SiteContent = {
       tagline: 'For feet that walked all of Bávaro',
       description:
         'Pressure-point work through the soles, arches and calves, finishing with a cooling mint balm. Hot sand, flip flops and excursion days are hard on feet — this fixes them.',
-      benefits: ['Relieves swollen, tired feet', 'Improves circulation after flights', 'Can be done fully clothed'],
+      benefits: [
+        'Relieves swollen, tired feet',
+        'Improves circulation after flights',
+        'Can be done fully clothed',
+      ],
       durations: [
         { minutes: 30, price: 30 },
         { minutes: 45, price: 40 },
@@ -251,7 +286,11 @@ export const seedContent: SiteContent = {
       tagline: 'Light, rhythmic, de-puffing',
       description:
         'Very light rhythmic strokes that follow the lymphatic pathways to move retained fluid. Popular after long-haul flights, in late pregnancy, and as part of a post-surgery recovery plan.',
-      benefits: ['Reduces swelling and heaviness', 'Gentle enough for every day', 'Post-flight and post-op friendly'],
+      benefits: [
+        'Reduces swelling and heaviness',
+        'Gentle enough for every day',
+        'Post-flight and post-op friendly',
+      ],
       durations: [
         { minutes: 60, price: 65 },
         { minutes: 90, price: 90 },
@@ -270,7 +309,11 @@ export const seedContent: SiteContent = {
       tagline: 'The Dominican classic — firm and vigorous',
       description:
         'Strong kneading, wooden tools and rapid percussion over hips, legs and abdomen, the way it is done in salons all over the country. Firm by design — tell us your limit and we will stay under it.',
-      benefits: ['Stimulating and energising', 'Often booked as a course of 5', 'Combines well with drainage'],
+      benefits: [
+        'Stimulating and energising',
+        'Often booked as a course of 5',
+        'Combines well with drainage',
+      ],
       durations: [
         { minutes: 45, price: 55 },
         { minutes: 60, price: 65 },
@@ -289,7 +332,11 @@ export const seedContent: SiteContent = {
       tagline: 'Side-lying, cushioned, completely safe',
       description:
         'Second and third trimester work done side-lying with body cushions, focused on lower back, hips and swollen ankles. Two of our therapists hold specific prenatal certification.',
-      benefits: ['Relieves lower back and hip load', 'Eases swollen feet and ankles', 'Certified prenatal therapists'],
+      benefits: [
+        'Relieves lower back and hip load',
+        'Eases swollen feet and ankles',
+        'Certified prenatal therapists',
+      ],
       durations: [{ minutes: 60, price: 60 }],
       category: 'Therapeutic',
       icon: 'heart',
@@ -305,7 +352,11 @@ export const seedContent: SiteContent = {
       tagline: 'When the Caribbean got you on day one',
       description:
         'Cool aloe harvested locally, cucumber and chilled towels applied with feather-light strokes — no deep pressure anywhere. Bring this one to your room on the evening you overdid the sun.',
-      benefits: ['Cools and calms burnt skin', 'Zero-pressure, feather light', 'Rehydrates after sun and salt'],
+      benefits: [
+        'Cools and calms burnt skin',
+        'Zero-pressure, feather light',
+        'Rehydrates after sun and salt',
+      ],
       durations: [{ minutes: 45, price: 50 }],
       category: 'Skin',
       icon: 'sun',
@@ -321,7 +372,11 @@ export const seedContent: SiteContent = {
       tagline: 'Exfoliate, rinse, then a full hour of massage',
       description:
         'Dominican coffee grounds, raw sugar and coconut oil scrubbed over the whole body, rinsed off, then sixty minutes of relaxing massage on brand-new skin. Ninety minutes total.',
-      benefits: ['Skin like the first day of holiday', 'Scrub plus a full-hour massage', 'Made with local coffee and cacao'],
+      benefits: [
+        'Skin like the first day of holiday',
+        'Scrub plus a full-hour massage',
+        'Made with local coffee and cacao',
+      ],
       durations: [{ minutes: 90, price: 85 }],
       category: 'Skin',
       icon: 'leaf',
@@ -338,7 +393,12 @@ export const seedContent: SiteContent = {
       name: 'Honeymoon Sunset',
       description:
         'Two therapists, two tables under our tent on Los Corales beach as the light goes gold, then cold sparkling water and a plate of local fruit.',
-      includes: ['90 min couples massage on the beach', 'Sunset time slot held for you', 'Flower petals & fruit plate', 'Photo of the setup if you want one'],
+      includes: [
+        '90 min couples massage on the beach',
+        'Sunset time slot held for you',
+        'Flower petals & fruit plate',
+        'Photo of the setup if you want one',
+      ],
       price: 160,
       duration: '90 min · for two',
       badge: 'Most requested',
@@ -349,7 +409,12 @@ export const seedContent: SiteContent = {
       name: 'The Whole Week',
       description:
         'Four sessions across your stay, mixed however you like — deep tissue after the excursion day, relaxing before the flight home.',
-      includes: ['4 × 60 min sessions', 'Mix any treatments you like', 'Same therapist each time if you prefer', 'Save $40 against single prices'],
+      includes: [
+        '4 × 60 min sessions',
+        'Mix any treatments you like',
+        'Same therapist each time if you prefer',
+        'Save $40 against single prices',
+      ],
       price: 170,
       duration: '4 × 60 min',
       badge: 'Best value',
@@ -360,7 +425,12 @@ export const seedContent: SiteContent = {
       name: 'Arrival Reset',
       description:
         'The one to book for the evening you land. Lymphatic drainage for flight swelling, then reflexology for the feet, in your room.',
-      includes: ['60 min lymphatic drainage', '30 min foot reflexology', 'In your hotel room', 'Late slots until 22:00'],
+      includes: [
+        '60 min lymphatic drainage',
+        '30 min foot reflexology',
+        'In your hotel room',
+        'Late slots until 22:00',
+      ],
       price: 85,
       duration: '90 min · in-room',
       badge: 'Day one',
@@ -371,7 +441,12 @@ export const seedContent: SiteContent = {
       name: 'Bridal Party',
       description:
         'Up to five people massaged in the same afternoon at your villa or resort suite — we bring enough therapists that nobody waits long.',
-      includes: ['Up to 5 guests', '60 min each', 'We bring 2–3 therapists', 'Villa, suite or beach'],
+      includes: [
+        'Up to 5 guests',
+        '60 min each',
+        'We bring 2–3 therapists',
+        'Villa, suite or beach',
+      ],
       price: 240,
       duration: 'Half day · groups',
       badge: 'Groups',
@@ -384,7 +459,8 @@ export const seedContent: SiteContent = {
       id: 'team-yaritza',
       name: 'Yaritza',
       role: 'Owner · deep tissue & hot stone',
-      bio: 'Fourteen years of hands, five of them in the biggest resort spas on this coast. She reads a back in about thirty seconds and is the one to ask for if something genuinely hurts.',
+      bio:
+        'Fourteen years of hands, five of them in the biggest resort spas on this coast. She reads a back in about thirty seconds and is the one to ask for if something genuinely hurts.',
       specialties: ['Deep tissue', 'Hot stone', 'Sports recovery'],
       languages: ['Español', 'English'],
       years: '14 years',
@@ -396,7 +472,8 @@ export const seedContent: SiteContent = {
       id: 'team-massiel',
       name: 'Massiel',
       role: 'Relaxing & aromatherapy',
-      bio: 'The slowest, softest hands on the team. Guests fall asleep on her table constantly, which she takes as the highest possible compliment.',
+      bio:
+        'The slowest, softest hands on the team. Guests fall asleep on her table constantly, which she takes as the highest possible compliment.',
       specialties: ['Relaxing', 'Aromatherapy', 'After-sun'],
       languages: ['Español', 'English'],
       years: '7 years',
@@ -408,7 +485,8 @@ export const seedContent: SiteContent = {
       id: 'team-carolina',
       name: 'Carolina',
       role: 'Prenatal & lymphatic drainage',
-      bio: 'Certified in prenatal and post-operative drainage. Endlessly patient, and the person we send to anyone nervous about being touched by a stranger.',
+      bio:
+        'Certified in prenatal and post-operative drainage. Endlessly patient, and the person we send to anyone nervous about being touched by a stranger.',
       specialties: ['Prenatal', 'Lymphatic drainage', 'Reflexology'],
       languages: ['Español', 'English', 'Français'],
       years: '6 years',
@@ -420,7 +498,8 @@ export const seedContent: SiteContent = {
       id: 'team-anyi',
       name: 'Anyi',
       role: 'Reductive & anti-cellulite',
-      bio: 'Strong. Genuinely strong. Ask her for the Dominican reductive massage and then hold on — regulars book her five sessions at a time.',
+      bio:
+        'Strong. Genuinely strong. Ask her for the Dominican reductive massage and then hold on — regulars book her five sessions at a time.',
       specialties: ['Reductive', 'Anti-cellulite', 'Deep tissue'],
       languages: ['Español', 'English (basic)'],
       years: '5 years',
@@ -432,7 +511,8 @@ export const seedContent: SiteContent = {
       id: 'team-dahiana',
       name: 'Dahiana',
       role: 'Beach sessions & four hands',
-      bio: 'The one who carries the tent to the sand before sunrise. Loves beach work, big groups, and being half of a four-hands session.',
+      bio:
+        'The one who carries the tent to the sand before sunrise. Loves beach work, big groups, and being half of a four-hands session.',
       specialties: ['Beach massage', 'Four hands', 'Relaxing'],
       languages: ['Español', 'English', 'Deutsch (basic)'],
       years: '4 years',
@@ -500,7 +580,8 @@ export const seedContent: SiteContent = {
       category: 'Beach',
       blurb:
         'The stretch of sand right outside our door. Softer crowds than the resort beaches, beach bars every hundred metres, and a shallow reef close to shore.',
-      tip: 'Walk left toward El Cortecito for the liveliest section, right for the quiet end where the palms lean over the water.',
+      tip:
+        'Walk left toward El Cortecito for the liveliest section, right for the quiet end where the palms lean over the water.',
       walkMinutes: 2,
       priceLevel: 'Free',
       mapUrl: 'https://maps.google.com/?q=Playa+Los+Corales+Bavaro',
@@ -514,7 +595,8 @@ export const seedContent: SiteContent = {
       category: 'Beach',
       blurb:
         'The old fishing corner of Bávaro — wooden boats pulled up on the sand, souvenir stalls, and the most authentic little strip on this whole coast.',
-      tip: 'Prices at the stalls are opening offers. Smile, offer about half, meet near the middle — it is expected and friendly.',
+      tip:
+        'Prices at the stalls are opening offers. Smile, offer about half, meet near the middle — it is expected and friendly.',
       walkMinutes: 8,
       priceLevel: 'Free',
       mapUrl: 'https://maps.google.com/?q=El+Cortecito+Bavaro',
@@ -528,7 +610,8 @@ export const seedContent: SiteContent = {
       category: 'Eat & Drink',
       blurb:
         'The El Cortecito institution. You pick your fish or lobster from ice, they grill it over coals, and you eat it barefoot with your table on the sand.',
-      tip: 'Seafood is priced by weight — ask them to weigh your pick in front of you so the bill holds no surprises.',
+      tip:
+        'Seafood is priced by weight — ask them to weigh your pick in front of you so the bill holds no surprises.',
       walkMinutes: 9,
       priceLevel: '$$$',
       mapUrl: 'https://maps.google.com/?q=Capitan+Cook+El+Cortecito',
@@ -556,7 +639,8 @@ export const seedContent: SiteContent = {
       category: 'Eat & Drink',
       blurb:
         'One walkable street of independent kitchens — Italian, Argentine grill, sushi, tacos, Dominican criollo. Where everyone eats on the night they escape the buffet.',
-      tip: 'It fills up after 19:00 in high season. Walk down at 18:30, look at three menus, then pick.',
+      tip:
+        'It fills up after 19:00 in high season. Walk down at 18:30, look at three menus, then pick.',
       walkMinutes: 5,
       priceLevel: '$$',
       mapUrl: 'https://maps.google.com/?q=Los+Corales+restaurants+Bavaro',
@@ -570,7 +654,8 @@ export const seedContent: SiteContent = {
       category: 'Eat & Drink',
       blurb:
         'The little local canteens serving la bandera — rice, beans, stewed meat, salad and fried plantain — for a few hundred pesos. This is what the island actually eats at lunch.',
-      tip: 'Go before 13:30, while everything is fresh. Ask for "la bandera con pollo guisado" and you cannot go wrong.',
+      tip:
+        'Go before 13:30, while everything is fresh. Ask for "la bandera con pollo guisado" and you cannot go wrong.',
       walkMinutes: 10,
       priceLevel: '$',
       mapUrl: 'https://maps.google.com/?q=comedor+Bavaro+Punta+Cana',
@@ -584,7 +669,8 @@ export const seedContent: SiteContent = {
       category: 'Excursion',
       blurb:
         'The postcard island — catamaran out, speedboat back, a stop at the natural pool where starfish sit in waist-deep water. The one excursion nearly everyone does.',
-      tip: 'It is a full 12-hour day and the boat gets loud. Book your massage for the evening after, not the morning of.',
+      tip:
+        'It is a full 12-hour day and the boat gets loud. Book your massage for the evening after, not the morning of.',
       walkMinutes: 0,
       priceLevel: '$$$',
       mapUrl: 'https://maps.google.com/?q=Isla+Saona',
@@ -598,7 +684,8 @@ export const seedContent: SiteContent = {
       category: 'Excursion',
       blurb:
         'A cenote of impossible turquoise at the foot of a cliff in Cap Cana, reached by a short jungle walk. Add zip lines and cave pools if you want a whole day of it.',
-      tip: 'First entry of the morning gets you the water almost to yourself and much better photographs.',
+      tip:
+        'First entry of the morning gets you the water almost to yourself and much better photographs.',
       walkMinutes: 0,
       priceLevel: '$$$',
       mapUrl: 'https://maps.google.com/?q=Hoyo+Azul+Scape+Park+Cap+Cana',
@@ -612,7 +699,8 @@ export const seedContent: SiteContent = {
       category: 'Excursion',
       blurb:
         'Twenty-five minutes north, wilder and emptier, with real Atlantic waves and the best beginner surf school on this coast. Fried fish shacks right behind the sand.',
-      tip: 'The current is genuinely strong here — swim where the surf school is, not at the empty ends.',
+      tip:
+        'The current is genuinely strong here — swim where the surf school is, not at the empty ends.',
       walkMinutes: 0,
       priceLevel: '$$',
       mapUrl: 'https://maps.google.com/?q=Playa+Macao+Punta+Cana',
@@ -626,7 +714,8 @@ export const seedContent: SiteContent = {
       category: 'Excursion',
       blurb:
         'You do not need a boat trip to snorkel here. The reef sits a short swim from the shore in front of Los Corales, with parrotfish, sergeant majors and the occasional ray.',
-      tip: 'Go early — the water is clearest before the wind picks up around eleven. Bring reef-safe sunscreen.',
+      tip:
+        'Go early — the water is clearest before the wind picks up around eleven. Bring reef-safe sunscreen.',
       walkMinutes: 3,
       priceLevel: 'Free',
       mapUrl: 'https://maps.google.com/?q=Los+Corales+reef+snorkeling',
@@ -640,7 +729,8 @@ export const seedContent: SiteContent = {
       category: 'Nightlife',
       blurb:
         'Not a nightclub so much as a three-hour circus — acrobats on wires, tribute acts, confetti cannons, open bar. Downtown Punta Cana, and completely relentless.',
-      tip: 'Doors open around 22:00 but the show builds after midnight. Ticket includes drinks, so take a taxi, not a car.',
+      tip:
+        'Doors open around 22:00 but the show builds after midnight. Ticket includes drinks, so take a taxi, not a car.',
       walkMinutes: 0,
       priceLevel: '$$$',
       mapUrl: 'https://maps.google.com/?q=Coco+Bongo+Punta+Cana',
@@ -652,7 +742,8 @@ export const seedContent: SiteContent = {
       id: 'dsc-imagine',
       name: 'Imagine Punta Cana',
       category: 'Nightlife',
-      blurb: 'A discotheque built inside a natural cave system, with different music in each cavern. Strange and completely brilliant.',
+      blurb:
+        'A discotheque built inside a natural cave system, with different music in each cavern. Strange and completely brilliant.',
       tip: 'Wednesdays and Saturdays are the big nights. Dress code is smart — no beachwear at the door.',
       walkMinutes: 0,
       priceLevel: '$$$',
@@ -667,7 +758,8 @@ export const seedContent: SiteContent = {
       category: 'Shopping',
       blurb:
         'The nearest proper mall — pharmacy, supermarket, cigars, rum, amber and larimar, a cinema and a food court. Free shuttles run from most resorts.',
-      tip: 'Larimar is only mined in the Dominican Republic. Buy it here from a certified shop rather than from a beach vendor.',
+      tip:
+        'Larimar is only mined in the Dominican Republic. Buy it here from a certified shop rather than from a beach vendor.',
       walkMinutes: 0,
       priceLevel: '$$',
       mapUrl: 'https://maps.google.com/?q=Palma+Real+Shopping+Village',
@@ -681,7 +773,8 @@ export const seedContent: SiteContent = {
       category: 'Essentials',
       blurb:
         'Water, rum, coffee, sunscreen and fruit at local prices, five minutes from the beach — a fraction of what the resort shop charges for the same bottle.',
-      tip: 'Buy the big 5-litre water bottles. Never drink the tap water, and skip ice from street stalls.',
+      tip:
+        'Buy the big 5-litre water bottles. Never drink the tap water, and skip ice from street stalls.',
       walkMinutes: 5,
       priceLevel: '$',
       mapUrl: 'https://maps.google.com/?q=supermercado+Los+Corales+Bavaro',
@@ -695,7 +788,8 @@ export const seedContent: SiteContent = {
       category: 'Essentials',
       blurb:
         'Pharmacies here are excellent and much cheaper than at home — after-sun, motion sickness tablets, mosquito repellent, most antibiotics over the counter.',
-      tip: 'For anything more serious, the private clinics in Bávaro are fast and speak English. Keep your travel insurance number in your phone.',
+      tip:
+        'For anything more serious, the private clinics in Bávaro are fast and speak English. Keep your travel insurance number in your phone.',
       walkMinutes: 6,
       priceLevel: '$',
       mapUrl: 'https://maps.google.com/?q=farmacia+Bavaro+Los+Corales',
@@ -709,7 +803,8 @@ export const seedContent: SiteContent = {
       category: 'Essentials',
       blurb:
         'US dollars are accepted nearly everywhere, but you get a better rate paying in pesos. Cards work in restaurants and shops; beach vendors and motoconchos are cash only.',
-      tip: 'Withdraw from a bank ATM inside a mall, not a standalone machine on the street. 10% is a normal, appreciated tip.',
+      tip:
+        'Withdraw from a bank ATM inside a mall, not a standalone machine on the street. 10% is a normal, appreciated tip.',
       walkMinutes: 5,
       priceLevel: '—',
       mapUrl: 'https://maps.google.com/?q=Banco+Popular+Bavaro',
@@ -723,7 +818,8 @@ export const seedContent: SiteContent = {
       category: 'Getting around',
       blurb:
         'Uber works in Punta Cana and is the cheapest honest option. Motoconchos (motorbike taxis) are fastest for short hops. Resort taxis are comfortable but priced in dollars.',
-      tip: 'Agree the price before you get in any taxi or on any motoconcho. Ask your hotel what the fare should be first.',
+      tip:
+        'Agree the price before you get in any taxi or on any motoconcho. Ask your hotel what the fare should be first.',
       walkMinutes: 0,
       priceLevel: '$',
       mapUrl: 'https://maps.google.com/?q=Bavaro+Punta+Cana',
@@ -737,7 +833,8 @@ export const seedContent: SiteContent = {
       category: 'Essentials',
       blurb:
         'Seaweed drifts onto this coast mostly between May and August; crews clear the main beaches each morning. UV is brutal between 11:00 and 15:00 even under cloud.',
-      tip: 'Swim early, shade in the middle of the day, and book your beach massage for the golden hour instead of noon.',
+      tip:
+        'Swim early, shade in the middle of the day, and book your beach massage for the golden hour instead of noon.',
       walkMinutes: 0,
       priceLevel: '—',
       mapUrl: '',
@@ -879,7 +976,8 @@ export const seedContent: SiteContent = {
     {
       id: 'pay-cash',
       name: 'Cash',
-      description: 'US dollars or Dominican pesos, paid after the session. Nothing to arrange in advance.',
+      description:
+        'US dollars or Dominican pesos, paid after the session. Nothing to arrange in advance.',
       icon: 'cash',
       url: '',
       enabled: true,
@@ -888,7 +986,8 @@ export const seedContent: SiteContent = {
     {
       id: 'pay-stripe',
       name: 'Card via Stripe',
-      description: 'Visa, Mastercard and Amex. We send you a secure Stripe link on WhatsApp — pay before we arrive or on the table.',
+      description:
+        'Visa, Mastercard and Amex. We send you a secure Stripe link on WhatsApp — pay before we arrive or on the table.',
       icon: 'stripe',
       url: '',
       enabled: true,
@@ -897,7 +996,8 @@ export const seedContent: SiteContent = {
     {
       id: 'pay-azul',
       name: 'Banco Popular · Azul',
-      description: 'Local card payments and transfers through Banco Popular Azul. The easiest option if you have a Dominican account.',
+      description:
+        'Local card payments and transfers through Banco Popular Azul. The easiest option if you have a Dominican account.',
       icon: 'bank',
       url: '',
       enabled: true,
@@ -906,7 +1006,8 @@ export const seedContent: SiteContent = {
     {
       id: 'pay-paypal',
       name: 'PayPal',
-      description: 'Send to our PayPal address, or ask us for a payment request. Useful if you would rather not enter a card at all.',
+      description:
+        'Send to our PayPal address, or ask us for a payment request. Useful if you would rather not enter a card at all.',
       icon: 'paypal',
       url: '',
       enabled: true,
