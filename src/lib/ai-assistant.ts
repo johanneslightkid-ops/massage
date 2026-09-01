@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import type { SiteContent, CollectionKey } from '@shared/types';
+import type { SiteContent } from '@shared/types';
 
 export interface AIMessage {
   id: string;
@@ -24,10 +24,47 @@ export interface AIAssistantState {
   error: string | null;
 }
 
-// Speech recognition types
+// Speech recognition types. The Web Speech API is not part of the TypeScript
+// DOM lib, so the minimal surface this hook uses is declared locally.
+interface SpeechRecognitionAlternativeLike {
+  transcript: string;
+}
+
+interface SpeechRecognitionResultLike {
+  isFinal: boolean;
+  [index: number]: SpeechRecognitionAlternativeLike;
+}
+
+interface SpeechRecognitionResultListLike {
+  length: number;
+  [index: number]: SpeechRecognitionResultLike;
+  [Symbol.iterator](): IterableIterator<SpeechRecognitionResultLike>;
+}
+
+interface SpeechRecognitionResultEvent {
+  results: SpeechRecognitionResultListLike;
+}
+
+interface SpeechRecognitionErrorEvent {
+  error: string;
+}
+
+interface SpeechRecognitionLike {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((event: SpeechRecognitionResultEvent) => void) | null;
+  onerror: ((event: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start(): void;
+  stop(): void;
+}
+
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+
 interface IWindow extends Window {
-  webkitSpeechRecognition?: typeof SpeechRecognition;
-  SpeechRecognition?: typeof SpeechRecognition;
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  SpeechRecognition?: SpeechRecognitionConstructor;
 }
 
 interface UseAIAssistantProps {
@@ -53,7 +90,7 @@ export function useAIAssistant({ onContentChange, currentLanguage = 'en' }: UseA
     error: null,
   });
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const synthesisRef = useRef<SpeechSynthesis | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -68,7 +105,7 @@ export function useAIAssistant({ onContentChange, currentLanguage = 'en' }: UseA
       recognition.interimResults = true;
       recognition.lang = currentLanguage === 'es' ? 'es-ES' : 'en-US';
       
-      recognition.onresult = async (event) => {
+      recognition.onresult = async (event: SpeechRecognitionResultEvent) => {
         const transcript = Array.from(event.results)
           .map((result) => result[0].transcript)
           .join('');
@@ -79,7 +116,7 @@ export function useAIAssistant({ onContentChange, currentLanguage = 'en' }: UseA
         }
       };
       
-      recognition.onerror = (event) => {
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error('Speech recognition error:', event.error);
         setState((prev) => ({
           ...prev,
@@ -234,6 +271,7 @@ export function useAIAssistant({ onContentChange, currentLanguage = 'en' }: UseA
     stopSpeaking,
     sendTextMessage,
     clearMessages,
-    isSupported: !!(window as unknown as IWindow).SpeechRecognition,
+    isSupported: !!((window as unknown as IWindow).SpeechRecognition
+      || (window as unknown as IWindow).webkitSpeechRecognition),
   };
 }

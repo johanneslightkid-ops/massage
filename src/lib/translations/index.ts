@@ -74,9 +74,6 @@ export const uiTranslations: Record<string, Translation> = {
   'ai.click_mic': { key: 'ai.click_mic', en: 'Click the microphone to speak', es: 'Haz clic en el micrófono para hablar' },
 };
 
-// Cache for dynamic translations
-const translationCache = new Map<string, string>();
-
 /**
  * Get translation for a key in the specified language
  */

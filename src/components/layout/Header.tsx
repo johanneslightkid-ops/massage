@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
-import { Menu, X, MessageCircle, MapPin, Clock, Globe } from 'lucide-react'
+import { Menu, X, MessageCircle, MapPin, Clock } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
 import { cn, whatsappLink } from '@/lib/utils'
 import { Motif } from '@/components/art/Motif'
