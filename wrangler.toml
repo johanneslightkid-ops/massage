@@ -4,34 +4,48 @@ pages_build_output_dir = "./dist"
 compatibility_date = "2026-08-26"
 compatibility_flags = ["nodejs_compat"]
 
-# Cloudflare Workers AI (free tier) — llama-3.1 + whisper + melotts
+# ---------------------------------------------------------------------------
+# Bindings are NOT inherited by named environments.
+#
+# Pages deploys every build into `env.preview` or `env.production`, so a
+# binding declared only at the top level is missing from the deployed
+# Functions — the build log says so out loud ("ai exists at the top level,
+# but not on env.production"). Anything the Functions need at runtime has to
+# be repeated in both environments, which is why this file looks redundant.
+# ---------------------------------------------------------------------------
+
+# --- Local dev (`wrangler pages dev`) ---
 [ai]
 binding = "AI"
 
-# --- Local dev + production ---
 [[kv_namespaces]]
 binding = "CONTENT"
-id = "09e7faead934494c8e48ffb806f0ed3e"
+id = "78cfcbe1fc734caea63722f90580297e"
 
 [vars]
 SITE_NAME = "Ola Serena"
 
 # CLOUDINARY_API_SECRET is set as a secret (never in source):
 #   npx wrangler pages secret put CLOUDINARY_API_SECRET
-# For this project, the current secret value is stored server-side only.
 
 # --- Preview deployments ---
+[env.preview.ai]
+binding = "AI"
+
 [[env.preview.kv_namespaces]]
 binding = "CONTENT"
-id = "e21d3f61654b4a11986a7ac04da9f018"
+id = "78cfcbe1fc734caea63722f90580297e"
 
 [env.preview.vars]
 SITE_NAME = "Ola Serena (preview)"
 
 # --- Production deployments ---
+[env.production.ai]
+binding = "AI"
+
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
-id = "09e7faead934494c8e48ffb806f0ed3e"
+id = "78cfcbe1fc734caea63722f90580297e"
 
 [env.production.vars]
 SITE_NAME = "Ola Serena"
