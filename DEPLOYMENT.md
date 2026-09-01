@@ -81,22 +81,50 @@ password will never verify and nobody can sign in.
 
 ---
 
-## Bindings
+## Bindings and the two-account trap
 
-`wrangler.toml` must point at namespaces that actually exist. Check with:
+This repository has been configured against **two different Cloudflare
+accounts**, and the mismatch is the single easiest way to break the deploy:
 
-```bash
-npx wrangler kv namespace list
+| Thing | Account |
+| --- | --- |
+| Pages projects `massage-playero`, `loscorales` | `d5272033401c64f8cc6ce650a8321cb2` |
+| Worker `massage`, KV `massage-site-content` | `441c9800bf1a29d18bff02f4adf8e9c9` |
+
+A namespace id is only meaningful inside its own account. Listing namespaces
+while logged into one account and pasting an id into `wrangler.toml` for a
+project that deploys into the *other* is what produces:
+
+```
+Error: Failed to publish your Function. Got error: KV namespace '…' not found.
 ```
 
-| Binding   | Environment          | Namespace ID                       |
-| --------- | -------------------- | ---------------------------------- |
-| `CONTENT` | production and local | `09e7faead934494c8e48ffb806f0ed3e` |
-| `CONTENT` | preview              | `e21d3f61654b4a11986a7ac04da9f018` |
-| `AI`      | all                  | Workers AI, no id needed            |
+So before changing an id, confirm which account the Pages project deploys into
+and list namespaces **in that account**:
 
-A binding that names a namespace which is not on the account does not fail the
-deploy — it fails at request time, with a 500 from `/api/content`.
+```bash
+npx wrangler login
+npx wrangler kv namespace list        # ids are account-scoped
+```
+
+`wrangler.toml` is the single source of truth for the id — `scripts/sync-kv.mjs`
+reads it rather than keeping its own copy, so the seed always lands in the
+namespace the Functions actually read.
+
+## Bindings are not inherited by environments
+
+Pages deploys every build into `env.preview` or `env.production`. A binding
+declared only at the top level of `wrangler.toml` is **absent from the deployed
+Functions** — the build log says so:
+
+```
+- "ai" exists at the top level, but not on "env.production".
+```
+
+That is not cosmetic: with `[ai]` only at the top level the admin assistant
+returns `503 Cloudflare Workers AI is not bound` in production while working
+perfectly in local dev. Every binding is repeated in all three blocks for this
+reason.
 
 ---
 

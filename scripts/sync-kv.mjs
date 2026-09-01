@@ -17,18 +17,30 @@
  */
 
 import { execSync } from 'node:child_process'
-import { writeFileSync, unlinkSync } from 'node:fs'
+import { readFileSync, writeFileSync, unlinkSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 
 /**
- * These are the namespaces that actually exist on the account
- * (`npx wrangler kv namespace list`), and they must stay in step with
- * wrangler.toml — a binding pointing at a namespace that is not there fails at
- * request time, not at deploy time, which is a horrible way to find out.
+ * The namespace ids come from wrangler.toml rather than being repeated here.
+ *
+ * They were duplicated once, drifted, and the deploy failed with "KV namespace
+ * … not found" — the seed went to one namespace while the Functions read
+ * another. One source of truth is the fix. Set KV_NAMESPACE_ID /
+ * KV_NAMESPACE_PREVIEW_ID to override without editing either file.
  */
-const NAMESPACES = {
-  production: process.env.KV_NAMESPACE_ID || '09e7faead934494c8e48ffb806f0ed3e',
-  preview: process.env.KV_NAMESPACE_PREVIEW_ID || 'e21d3f61654b4a11986a7ac04da9f018',
+function namespaceFromWrangler(env) {
+  const toml = readFileSync('./wrangler.toml', 'utf-8')
+  const section = env === 'preview' ? 'env.preview.kv_namespaces' : 'env.production.kv_namespaces'
+
+  // Find `[[<section>]]` and take the first `id = "…"` beneath it, stopping at
+  // the next section header so a neighbouring block is never picked up.
+  const start = toml.indexOf(`[[${section}]]`)
+  const body = start >= 0 ? toml.slice(start + section.length + 4) : toml
+  const scoped = body.split(/^\s*\[/m)[0]
+  const match = scoped.match(/id\s*=\s*"([0-9a-f]{32})"/i)
+
+  if (!match) throw new Error(`No kv_namespaces id for "${section}" in wrangler.toml`)
+  return match[1]
 }
 
 const LANGS = ['en', 'es']
@@ -38,11 +50,14 @@ const PBKDF2_ITERATIONS = 100_000
 const DEFAULT_PASSWORD = 'massage'
 
 const env = process.argv[2] || 'production'
-const namespaceId = NAMESPACES[env]
-if (!namespaceId) {
+if (env !== 'production' && env !== 'preview') {
   console.error(`Unknown environment "${env}". Use production | preview.`)
   process.exit(1)
 }
+
+const namespaceId =
+  (env === 'preview' ? process.env.KV_NAMESPACE_PREVIEW_ID : process.env.KV_NAMESPACE_ID) ||
+  namespaceFromWrangler(env)
 
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID
 const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN
@@ -124,6 +139,7 @@ async function put(key, value) {
 
 async function main() {
   console.log(`\n🌊 KV sync — ${env}, namespace ${namespaceId}`)
+  console.log('   (from wrangler.toml — the Functions read this exact namespace)')
   console.log(`   auth: ${useApi ? 'REST API token' : 'wrangler CLI'}`)
   console.log(`   mode: ${FORCE ? 'FORCE (overwrites existing values)' : 'safe (skips existing keys)'}\n`)
 

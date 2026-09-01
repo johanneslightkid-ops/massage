@@ -207,10 +207,17 @@ still load and apply normally.
 
 The KV namespaces already exist and are wired up in `wrangler.toml`:
 
-| Binding | Environment | Namespace ID |
-| --- | --- | --- |
-| `CONTENT` | production & local | `09e7faead934494c8e48ffb806f0ed3e` |
-| `CONTENT` | preview | `e21d3f61654b4a11986a7ac04da9f018` |
+Namespace ids are **account-scoped**. This repo has been configured against
+two Cloudflare accounts — the Pages projects live in one, the Worker and the
+`massage-site-content` KV namespace in another — so an id copied from the
+wrong account fails the deploy with "KV namespace … not found".
+
+`wrangler.toml` holds the id, and `scripts/sync-kv.mjs` reads it from there.
+Confirm it against the account the Pages project deploys into:
+
+```bash
+npx wrangler kv namespace list
+```
 
 ```bash
 npx wrangler login      # opens a browser; must be run on your own machine
