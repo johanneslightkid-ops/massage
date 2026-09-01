@@ -71,9 +71,25 @@ export const api = {
 
   deleteBooking: (id: string) => request<{ ok: true }>(`/admin/bookings/${id}`, { method: 'DELETE' }),
 
-  reset: (section: string) =>
-    request<{ ok: true; section: string }>('/admin/reset', {
+  reset: (section: string, lang: string = 'en') =>
+    request<{ ok: true; section: string }>(`/admin/reset?lang=${lang}`, {
       method: 'POST',
       body: JSON.stringify({ section }),
     }),
+
+  /* ----------------------------------------------------------------- ai */
+
+  aiChat: (payload: {
+    messages: { role: 'user' | 'assistant'; content: string }[]
+    language: string
+    context?: string
+  }) => request<{ reply: string; model: string }>('/ai/chat', { method: 'POST', body: JSON.stringify(payload) }),
+
+  aiTranslate: (payload: { fields: Record<string, string>; targetLang: string }) =>
+    request<{ translated: Record<string, string> }>('/ai/translate', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  aiStatus: () => request<{ ready: boolean; models: Record<string, string> }>('/ai/status'),
 }

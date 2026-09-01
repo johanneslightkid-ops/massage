@@ -42,28 +42,36 @@ export interface BookingDraft {
   notes: string
 }
 
-/** Turns the reservation form into a message the owner can act on in one read. */
-export function bookingMessage(draft: BookingDraft, brand: string): string {
-  const lines = [`Hola ${brand}! I would like to reserve a massage.`, '']
-  const add = (label: string, value: string) => {
-    if (value?.trim()) lines.push(`${label}: ${value.trim()}`)
+/**
+ * Turns the reservation form into a message the owner can act on in one read.
+ * The labels come from the dictionary, so a Spanish visitor sends a Spanish
+ * message — which is the language the studio actually answers in.
+ */
+export function bookingMessage(
+  draft: BookingDraft,
+  brand: string,
+  t: (key: string, vars?: Record<string, string | number>) => string,
+): string {
+  const lines = [t('wa.intro', { brand }), '']
+  const add = (key: string, value: string) => {
+    if (value?.trim()) lines.push(`${t(key)}: ${value.trim()}`)
   }
-  add('Name', draft.name)
-  add('Treatment', draft.service)
-  add('Duration', draft.duration)
-  add('Where', draft.venue)
-  add('Hotel / room', draft.hotel)
-  add('Date', draft.date)
-  add('Time', draft.time)
-  add('People', draft.people)
-  add('Notes', draft.notes)
+  add('wa.name', draft.name)
+  add('wa.treatment', draft.service)
+  add('wa.duration', draft.duration)
+  add('wa.where', draft.venue)
+  add('wa.hotel', draft.hotel)
+  add('wa.date', draft.date)
+  add('wa.time', draft.time)
+  add('wa.people', draft.people)
+  add('wa.notes', draft.notes)
   return lines.join('\n')
 }
 
-export function formatDateTime(iso: string): string {
+export function formatDateTime(iso: string, locale?: string): string {
   const date = new Date(iso)
   if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleString(undefined, {
+  return date.toLocaleString(locale, {
     day: 'numeric',
     month: 'short',
     hour: '2-digit',
@@ -71,11 +79,12 @@ export function formatDateTime(iso: string): string {
   })
 }
 
-export const bookingStatusLabels: Record<Booking['status'], string> = {
-  new: 'New',
-  confirmed: 'Confirmed',
-  done: 'Done',
-  cancelled: 'Cancelled',
+/** Booking statuses map to dictionary keys, never to baked-in English. */
+export const bookingStatusKeys: Record<Booking['status'], string> = {
+  new: 'status.new',
+  confirmed: 'status.confirmed',
+  done: 'status.done',
+  cancelled: 'status.cancelled',
 }
 
 /** Stable pseudo-random 0..1 from a string — used to vary generated artwork. */

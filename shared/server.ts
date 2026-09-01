@@ -1,11 +1,8 @@
-import { seedContent } from './seed'
-import { seedContentEs } from './seed-es'
+import { seedFor } from './seeds'
 import type { Booking, CollectionKey, SiteContent } from './types'
 
-/** Returns the appropriate seed for a given language (en fallback). */
-export function seedFor(lang: string): SiteContent {
-  return lang === 'es' ? seedContentEs : seedContent
-}
+export { seedFor, isSeedLang, SUPPORTED_LANGS } from './seeds'
+export type { SeedLang } from './seeds'
 
 export const KV_KEYS = {
   content: (lang: string = 'en') => `content:${lang}:v1`,

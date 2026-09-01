@@ -107,7 +107,7 @@ with preview, select, duration/price rows and label/value pairs.
 ## How the content flows
 
 ```
-shared/seed.ts ──first request──▶ KV "content:v1" ──GET /api/content──▶ ContentProvider ──▶ pages
+shared/seed.ts ─first request─▶ KV "content:<lang>:v1" ─GET /api/content?lang─▶ ContentProvider ─▶ pages
                                         ▲
                                         └── PUT /api/admin/{settings,collection/:key} ◀── /admin
 ```

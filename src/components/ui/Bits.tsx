@@ -1,5 +1,20 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/translations/LanguageProvider'
+
+export type PillTone = 'sand' | 'sky' | 'lagoon' | 'palm' | 'flamingo' | 'coral' | 'sun' | 'ocean' | 'glass'
+
+const pillTones: Record<PillTone, string> = {
+  sand: 'bg-sand-200/70 text-ocean-800',
+  sky: 'bg-sky-100 text-sky-800',
+  lagoon: 'bg-seafoam-100 text-lagoon-700',
+  palm: 'bg-palm-100 text-palm-700',
+  flamingo: 'bg-flamingo-100 text-flamingo-700',
+  coral: 'bg-coral-100 text-coral-600',
+  sun: 'bg-sun-200 text-sun-700',
+  ocean: 'bg-ocean-900/8 text-ocean-800',
+  glass: 'bg-white/14 text-sand-100 backdrop-blur-sm ring-1 ring-white/20',
+}
 
 export function Pill({
   children,
@@ -8,21 +23,13 @@ export function Pill({
 }: {
   children: ReactNode
   className?: string
-  tone?: 'sand' | 'lagoon' | 'coral' | 'sun' | 'ocean' | 'glass'
+  tone?: PillTone
 }) {
-  const tones = {
-    sand: 'bg-sand-100 text-ocean-800',
-    lagoon: 'bg-seafoam-100 text-lagoon-600',
-    coral: 'bg-coral-100 text-coral-600',
-    sun: 'bg-sun-200 text-sun-600',
-    ocean: 'bg-ocean-900/8 text-ocean-800',
-    glass: 'bg-white/12 text-sand-100 backdrop-blur-sm',
-  }
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.72rem] font-semibold tracking-wide',
-        tones[tone],
+        'inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[0.72rem] font-semibold tracking-wide',
+        pillTones[tone],
         className,
       )}
     >
@@ -32,8 +39,9 @@ export function Pill({
 }
 
 export function Stars({ count = 5, className }: { count?: number; className?: string }) {
+  const t = useT()
   return (
-    <div className={cn('flex gap-0.5 text-sun-500', className)} aria-label={`${count} out of 5 stars`}>
+    <div className={cn('flex gap-0.5 text-sun-500', className)} aria-label={t('card.stars', { count })}>
       {Array.from({ length: 5 }).map((_, index) => (
         <svg
           key={index}
@@ -54,12 +62,22 @@ export function Stars({ count = 5, className }: { count?: number; className?: st
 export function Tick({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={cn('size-4 shrink-0', className)} aria-hidden="true">
-      <circle cx="12" cy="12" r="9.5" fill="currentColor" opacity="0.14" />
-      <path d="m8 12.4 2.7 2.6L16 9.6" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="9.5" fill="currentColor" opacity="0.16" />
+      <path
+        d="m8 12.4 2.7 2.6L16 9.6"
+        stroke="currentColor"
+        strokeWidth="1.9"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
 
+/**
+ * The base surface for every card on the site. Soft, slightly translucent and
+ * lifted off the page — never a hard-edged panel.
+ */
 export function Card({
   children,
   className,
@@ -72,7 +90,7 @@ export function Card({
   return (
     <Tag
       className={cn(
-        'group relative overflow-hidden rounded-4xl border border-ocean-900/8 bg-white/70 shadow-soft backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]',
+        'group relative overflow-hidden rounded-5xl border border-white/70 bg-white/72 shadow-soft ring-1 ring-sky-900/5 backdrop-blur-sm transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)]',
         className,
       )}
     >

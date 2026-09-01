@@ -50,16 +50,16 @@ export interface SettingsGroup {
 
 const orderField: Field = {
   key: 'order',
-  label: 'Sort order',
+  label: 'Order',
   type: 'number',
   help: 'Lower numbers appear first.',
 }
 
 const imageField: Field = {
   key: 'image',
-  label: 'Photo URL',
+  label: 'Photo',
   type: 'image',
-  help: 'Paste any image link. Leave empty to use the generated tropical artwork.',
+  help: 'Upload a photo or paste a link. Leave it empty and we draw the tropical artwork instead.',
   full: true,
 }
 
@@ -77,7 +77,7 @@ export const settingsGroups: SettingsGroup[] = [
       { key: 'heroTitle', label: 'Hero title', type: 'text' },
       { key: 'heroHighlight', label: 'Hero title — highlighted words', type: 'text', help: 'Rendered in the script accent typeface.' },
       { key: 'heroSubtitle', label: 'Hero paragraph', type: 'textarea', rows: 3, full: true },
-      { key: 'heroImage', label: 'Hero photo URL', type: 'image', full: true },
+      { key: 'heroImage', label: 'Hero photo', type: 'image', full: true },
       { key: 'heroCtaPrimary', label: 'Primary button label', type: 'text' },
       { key: 'heroCtaSecondary', label: 'Secondary button label', type: 'text' },
       { key: 'announcementEnabled', label: 'Show announcement bar', type: 'boolean' },
@@ -130,7 +130,7 @@ export const settingsGroups: SettingsGroup[] = [
       { key: 'ownerRole', label: 'Owner role', type: 'text' },
       { key: 'ownerQuote', label: 'Pull quote', type: 'textarea', rows: 2, full: true },
       { key: 'ownerStory', label: 'Story', type: 'textarea', rows: 6, full: true },
-      { key: 'ownerPhoto', label: 'Owner photo URL', type: 'image', full: true },
+      { key: 'ownerPhoto', label: 'Owner photo', type: 'image', full: true },
     ],
   },
   {
@@ -226,7 +226,7 @@ export const collectionSchemas: CollectionSchema[] = [
       { key: 'specialties', label: 'Specialities', type: 'list', full: true },
       { key: 'languages', label: 'Languages', type: 'list', full: true },
       { key: 'years', label: 'Experience', type: 'text', placeholder: '7 years' },
-      { key: 'photo', label: 'Photo URL', type: 'image', full: true },
+      { key: 'photo', label: 'Photo', type: 'image', full: true },
       { key: 'accent', label: 'Card accent', type: 'select', options: ['ocean', 'coral', 'palm', 'sun', 'seafoam'] },
       orderField,
     ],

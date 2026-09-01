@@ -15,27 +15,32 @@ import {
   LogOut,
   MapPin,
   MessageSquareQuote,
+  Mic,
   Settings2,
   Sparkles,
   Star,
   Users,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { collectionSchemas } from '@shared/schema'
+import { localizedCollections } from '@shared/schema-i18n'
 import type { CollectionKey, SiteContent } from '@shared/types'
 import { api } from '@/lib/api'
 import { useContent } from '@/lib/content-store'
+import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { useSeo } from '@/lib/seo'
 import { cn } from '@/lib/utils'
 import { useSetMobileNav } from '@/components/layout/mobile-nav'
+import { LanguageToggle } from '@/components/ui/LanguageToggle'
 import { Login } from '@/components/admin/Login'
 import { SettingsEditor } from '@/components/admin/SettingsEditor'
 import { CollectionEditor } from '@/components/admin/CollectionEditor'
 import { BookingsPanel } from '@/components/admin/BookingsPanel'
 import { SecurityPanel } from '@/components/admin/SecurityPanel'
+import { AssistantPanel } from '@/components/admin/AssistantPanel'
 
 const icons: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard className="size-[1.15rem]" />,
+  assistant: <Mic className="size-[1.15rem]" />,
   settings: <Settings2 className="size-[1.15rem]" />,
   sparkles: <Sparkles className="size-[1.15rem]" />,
   gift: <Gift className="size-[1.15rem]" />,
@@ -58,14 +63,11 @@ interface AdminSection {
   icon: ReactNode
 }
 
-const staticSections: AdminSection[] = [
-  { key: 'overview', label: 'Overview', short: 'Home', icon: icons.dashboard },
-  { key: 'settings', label: 'Site settings', short: 'Site', icon: icons.settings },
-]
-
 export function Admin() {
   const { refresh } = useContent()
-  useSeo({ path: '/admin', title: 'Admin', description: '', noindex: true })
+  const { t, language } = useLanguage()
+  useSeo({ path: '/admin', title: t('admin.title'), description: '', noindex: true })
+
   const [checking, setChecking] = useState(true)
   const [authed, setAuthed] = useState(false)
   const [usingDefault, setUsingDefault] = useState(false)
@@ -73,26 +75,32 @@ export function Admin() {
   const [section, setSection] = useState('overview')
   const [newBookings, setNewBookings] = useState(0)
 
+  // Forms are rendered from the schema for the language being edited, so the
+  // labels *and* the select options match the document in KV.
+  const schemas = useMemo(() => localizedCollections(language), [language])
+
   const sections = useMemo<AdminSection[]>(
     () => [
-      ...staticSections,
-      ...collectionSchemas.map((schema) => ({
+      { key: 'overview', label: t('admin.overview'), short: t('admin.overview_short'), icon: icons.dashboard },
+      { key: 'assistant', label: t('admin.assistant'), short: t('admin.assistant_short'), icon: icons.assistant },
+      { key: 'settings', label: t('admin.settings'), short: t('admin.settings_short'), icon: icons.settings },
+      ...schemas.map((schema) => ({
         key: schema.key,
         label: schema.label,
-        short: schema.singular === 'Place or tip' ? 'Guide' : schema.label.split(' ')[0],
+        short: schema.key === 'discover' ? t('admin.guide_short') : schema.label.split(' ')[0],
         icon: icons[schema.icon] ?? icons.sparkles,
       })),
-      { key: 'bookings', label: 'Requests', short: 'Requests', icon: icons.bookings },
-      { key: 'security', label: 'Password & data', short: 'Password', icon: icons.security },
+      { key: 'bookings', label: t('admin.bookings'), short: t('admin.bookings_short'), icon: icons.bookings },
+      { key: 'security', label: t('admin.security'), short: t('admin.security_short'), icon: icons.security },
     ],
-    [],
+    [schemas, t],
   )
 
   const loadContent = useCallback(async () => {
-    const fresh = await api.adminContent()
+    const fresh = await api.adminContent(language)
     setContent(fresh)
     await refresh()
-  }, [refresh])
+  }, [refresh, language])
 
   useEffect(() => {
     let cancelled = false
@@ -127,7 +135,7 @@ export function Admin() {
   useSetMobileNav(
     authed
       ? {
-          title: 'Admin',
+          title: t('admin.title'),
           activeKey: section,
           items: sections.map((entry) => ({
             key: entry.key,
@@ -138,7 +146,7 @@ export function Admin() {
           })),
         }
       : { items: [], activeKey: '' },
-    [authed, section, sections, newBookings],
+    [authed, section, sections, newBookings, t],
   )
 
   async function signOut() {
@@ -168,36 +176,37 @@ export function Admin() {
     )
   }
 
-  const activeSchema = collectionSchemas.find((schema) => schema.key === section)
+  const activeSchema = schemas.find((schema) => schema.key === section)
 
   return (
-    <div className="min-h-dvh bg-sand-100">
+    <div className="min-h-dvh bg-gradient-to-b from-sky-50 via-sand-100 to-seafoam-50">
       {/* -------------------------------------------------- top bar */}
-      <header className="sticky top-0 z-30 border-b border-ocean-900/8 bg-sand-50/92 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 border-b border-sky-900/8 bg-white/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
           <div className="min-w-0">
-            <p className="text-[0.66rem] font-bold tracking-[0.2em] text-lagoon-600 uppercase">
-              {content?.site.brandName ?? 'Admin'}
+            <p className="text-[0.66rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+              {content?.site.brandName ?? t('admin.title')}
             </p>
-            <p className="truncate font-display text-lg text-ocean-900">
+            <p className="truncate font-display text-lg text-ocean-950">
               {sections.find((entry) => entry.key === section)?.label}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            <LanguageToggle variant="inline" />
             <Link
               to="/"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/12 px-4 text-[0.84rem] font-semibold text-ocean-800/70 transition-colors hover:text-ocean-900"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-4 text-[0.84rem] font-semibold text-ocean-800/70 transition-colors hover:text-ocean-950"
             >
               <ExternalLink className="size-3.5" />
-              <span className="hidden sm:inline">View site</span>
+              <span className="hidden sm:inline">{t('action.view_site')}</span>
             </Link>
             <button
               type="button"
               onClick={signOut}
-              className="inline-flex h-10 items-center gap-2 rounded-full bg-ocean-900 px-4 text-[0.84rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800"
+              className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-4 text-[0.84rem] font-semibold text-sand-50 transition-all hover:brightness-110"
             >
               <LogOut className="size-3.5" />
-              <span className="hidden sm:inline">Sign out</span>
+              <span className="hidden sm:inline">{t('action.sign_out')}</span>
             </button>
           </div>
         </div>
@@ -205,7 +214,7 @@ export function Admin() {
 
       <div className="mx-auto flex max-w-6xl gap-8 px-5 py-8 lg:px-8">
         {/* --------------------------------------------- desktop rail */}
-        <nav className="sticky top-24 hidden h-fit w-56 shrink-0 lg:block" aria-label="Admin sections">
+        <nav className="sticky top-24 hidden h-fit w-56 shrink-0 lg:block" aria-label={t('admin.sections')}>
           <ul className="space-y-1">
             {sections.map((entry) => (
               <li key={entry.key}>
@@ -215,14 +224,14 @@ export function Admin() {
                   className={cn(
                     'flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-[0.9rem] font-semibold transition-colors',
                     section === entry.key
-                      ? 'bg-ocean-900 text-sand-50'
-                      : 'text-ocean-800/65 hover:bg-white hover:text-ocean-900',
+                      ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
+                      : 'text-ocean-800/65 hover:bg-white hover:text-ocean-950',
                   )}
                 >
                   {entry.icon}
                   <span className="flex-1 truncate">{entry.label}</span>
                   {entry.key === 'bookings' && newBookings > 0 && (
-                    <span className="grid size-5 place-items-center rounded-full bg-coral-500 text-[0.65rem] font-bold text-white">
+                    <span className="grid size-5 place-items-center rounded-full bg-flamingo-500 text-[0.65rem] font-bold text-white">
                       {newBookings}
                     </span>
                   )}
@@ -238,11 +247,11 @@ export function Admin() {
             <button
               type="button"
               onClick={() => setSection('security')}
-              className="mb-6 flex w-full items-center gap-3 rounded-3xl border border-sun-400/40 bg-sun-200/50 p-4 text-left transition-colors hover:bg-sun-200"
+              className="mb-6 flex w-full items-center gap-3 rounded-4xl border border-sun-400/50 bg-sun-200/60 p-4 text-left transition-colors hover:bg-sun-200"
             >
-              <KeyRound className="size-5 shrink-0 text-sun-600" />
-              <span className="text-[0.9rem] font-semibold text-ocean-900">
-                You are still using the default password — tap to change it.
+              <KeyRound className="size-5 shrink-0 text-sun-700" />
+              <span className="text-[0.9rem] font-semibold text-ocean-950">
+                {t('admin.default_password_warning')}
               </span>
             </button>
           )}
@@ -257,6 +266,10 @@ export function Admin() {
             >
               {section === 'overview' && content && (
                 <Overview content={content} newBookings={newBookings} onJump={setSection} />
+              )}
+
+              {section === 'assistant' && content && (
+                <AssistantPanel content={content} onApplied={loadContent} onJump={setSection} />
               )}
 
               {section === 'settings' && content && (
@@ -299,31 +312,56 @@ function Overview({
   newBookings: number
   onJump: (key: string) => void
 }) {
+  const { t } = useLanguage()
+
   const stats = [
-    { label: 'Treatments', value: content.services.length, key: 'services' },
-    { label: 'Local tips', value: content.discover.length, key: 'discover' },
-    { label: 'Therapists', value: content.team.length, key: 'team' },
-    { label: 'New requests', value: newBookings, key: 'bookings' },
+    { label: t('admin.stat.treatments'), value: content.services.length, key: 'services' },
+    { label: t('admin.stat.tips'), value: content.discover.length, key: 'discover' },
+    { label: t('admin.stat.therapists'), value: content.team.length, key: 'team' },
+    { label: t('admin.stat.requests'), value: newBookings, key: 'bookings' },
+  ]
+
+  const startHere: Array<[string, string]> = [
+    ['settings', t('admin.start.settings')],
+    ['services', t('admin.start.services')],
+    ['team', t('admin.start.team')],
+    ['discover', t('admin.start.discover')],
+    ['security', t('admin.start.security')],
   ]
 
   return (
     <div>
       <header>
-        <h1 className="font-display text-3xl text-ocean-900">Hola, {content.site.ownerName.split(' ')[0]}.</h1>
-        <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">
-          Everything on the website is editable here. Changes go live the moment you save.
-        </p>
+        <h1 className="font-display text-3xl text-ocean-950">
+          {t('admin.hello', { name: content.site.ownerName.split(' ')[0] })}
+        </h1>
+        <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">{t('admin.hello_lead')}</p>
       </header>
 
-      <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* The assistant is the fastest way in — give it the top of the page. */}
+      <button
+        type="button"
+        onClick={() => onJump('assistant')}
+        className="group mt-7 flex w-full items-center gap-4 overflow-hidden rounded-5xl bg-gradient-to-br from-sky-700 via-lagoon-600 to-palm-600 p-6 text-left text-sand-50 shadow-lift transition-transform hover:scale-[1.005]"
+      >
+        <span className="grid size-14 shrink-0 place-items-center rounded-[46%_54%_50%_50%/52%_46%_54%_48%] bg-white/20 backdrop-blur-sm">
+          <Mic className="size-6" />
+        </span>
+        <span className="min-w-0">
+          <span className="block font-display text-xl">{t('ai.title')}</span>
+          <span className="mt-1 block text-[0.88rem] leading-relaxed text-sand-100/85">{t('ai.subtitle')}</span>
+        </span>
+      </button>
+
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map((stat) => (
           <button
             key={stat.key}
             type="button"
             onClick={() => onJump(stat.key)}
-            className="rounded-3xl border border-ocean-900/10 bg-white p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-soft"
+            className="rounded-4xl border border-white/70 bg-white/85 p-5 text-left shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
           >
-            <p className="font-display text-4xl text-ocean-900">{stat.value}</p>
+            <p className="font-display text-4xl text-ocean-950">{stat.value}</p>
             <p className="mt-1 text-[0.78rem] font-semibold tracking-wide text-ocean-800/50 uppercase">
               {stat.label}
             </p>
@@ -332,21 +370,15 @@ function Overview({
       </div>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-4xl border border-ocean-900/10 bg-white p-6">
-          <h2 className="font-display text-xl text-ocean-900">Start here</h2>
+        <div className="rounded-5xl border border-white/70 bg-white/85 p-6 shadow-soft">
+          <h2 className="font-display text-xl text-ocean-950">{t('admin.start_here')}</h2>
           <ul className="mt-4 space-y-2.5 text-[0.9rem]">
-            {[
-              ['settings', 'Put your real WhatsApp number in Site settings → Contact'],
-              ['services', 'Check the treatment prices against what you actually charge'],
-              ['team', 'Replace the team names and add photos'],
-              ['discover', 'Add the places you personally send guests to'],
-              ['security', 'Change the admin password from the default'],
-            ].map(([key, text]) => (
+            {startHere.map(([key, text]) => (
               <li key={key}>
                 <button
                   type="button"
                   onClick={() => onJump(key)}
-                  className="text-left text-ocean-800/75 transition-colors hover:text-lagoon-600"
+                  className="text-left text-ocean-800/75 transition-colors hover:text-lagoon-700"
                 >
                   → {text}
                 </button>
@@ -355,13 +387,13 @@ function Overview({
           </ul>
         </div>
 
-        <div className="rounded-4xl border border-ocean-900/10 bg-white p-6">
-          <h2 className="font-display text-xl text-ocean-900">How editing works</h2>
+        <div className="rounded-5xl border border-white/70 bg-white/85 p-6 shadow-soft">
+          <h2 className="font-display text-xl text-ocean-950">{t('admin.how_title')}</h2>
           <ul className="mt-4 space-y-2.5 text-[0.9rem] leading-relaxed text-ocean-800/70">
-            <li>Tap any row to open it, edit the fields, then press <strong className="text-ocean-900">Save changes</strong> in the bar at the bottom.</li>
-            <li>Arrows on the left of each row change the order things appear in on the website.</li>
-            <li>Photos are added by pasting an image link — leave it empty and we draw tropical artwork instead.</li>
-            <li>Every section has a <strong className="text-ocean-900">Restore defaults</strong> button if an edit goes wrong.</li>
+            <li>{t('admin.how1')}</li>
+            <li>{t('admin.how2')}</li>
+            <li>{t('admin.how3')}</li>
+            <li>{t('admin.how4')}</li>
           </ul>
         </div>
       </div>

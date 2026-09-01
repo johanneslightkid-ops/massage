@@ -1,105 +1,156 @@
 @import 'tailwindcss';
 
 /*
- * Ola Serena — tropical light palette
+ * Massage Playero — tropical light system
  * ------------------------------------------------------------------
- * White is the main canvas. Layered with lush jungle greens, crystal
- * sea blues, sandy golden yellows and flamingo pinks — all in gentle,
- * washed-out tints so the site feels breezy, sun-lit, coastal.
+ * White paper is the ground. Everything laid on it comes from four
+ * families that actually exist on this beach:
+ *
+ *   sky      the wide Caribbean daylight blue  — the dominant hue
+ *   lagoon   the shallow water over white sand — accent and focus
+ *   palm     lush wet jungle green             — growth, calm
+ *   flamingo hot tropical pink                 — warmth, invitation
+ *   sun      golden sandy-beach yellow         — light, highlights
+ *
+ * Shapes are organic rather than geometric: nothing on the page is a
+ * plain rectangle if a softer form will do. The `blob-*` radii, the
+ * <OilSheen /> colour fields and the drifting gradients below are what
+ * give the site its liquid, sun-warmed feel.
  */
 
 @theme {
   /* ---------- Sand (paper white → warm golden) ---------- */
   --color-sand-50:  #ffffff;
-  --color-sand-100: #fdf9f2;
+  --color-sand-100: #fdfaf3;
   --color-sand-200: #f8efdb;
-  --color-sand-300: #f1e0bd;
-  --color-sand-400: #e6c98d;
-  --color-sand-500: #d6ab5c;
+  --color-sand-300: #f0dfba;
+  --color-sand-400: #e4c584;
+  --color-sand-500: #d3a552;
 
-  /* ---------- Ocean (crystal sea blue) ---------- */
-  --color-ocean-950: #062b3a;
-  --color-ocean-900: #0b4a63;
-  --color-ocean-800: #0f6a8a;
-  --color-ocean-700: #1489b0;
-  --color-ocean-600: #29a4cc;
+  /* ---------- Sky (wide Caribbean daylight blue) ---------- */
+  --color-sky-950: #07293f;
+  --color-sky-900: #0d4569;
+  --color-sky-800: #12639a;
+  --color-sky-700: #1a82c4;
+  --color-sky-600: #2f9fdd;
+  --color-sky-500: #55b8ec;
+  --color-sky-400: #82cef5;
+  --color-sky-300: #ade1fa;
+  --color-sky-200: #d0eefd;
+  --color-sky-100: #e8f7fe;
+  --color-sky-50:  #f4fbff;
 
-  /* ---------- Lagoon (turquoise crystal) ---------- */
-  --color-lagoon-700: #0a8b9a;
-  --color-lagoon-600: #13a8b8;
-  --color-lagoon-500: #35c2d1;
-  --color-lagoon-400: #6ed7e0;
-  --color-lagoon-300: #9de5eb;
+  /* ---------- Ocean (deep water — text and dark grounds) ---------- */
+  --color-ocean-950: #04212f;
+  --color-ocean-900: #083c55;
+  --color-ocean-800: #0c5878;
+  --color-ocean-700: #10769c;
+  --color-ocean-600: #2295c0;
+
+  /* ---------- Lagoon (shallow turquoise over white sand) ---------- */
+  --color-lagoon-800: #076a78;
+  --color-lagoon-700: #098c99;
+  --color-lagoon-600: #10abb8;
+  --color-lagoon-500: #2ec9d4;
+  --color-lagoon-400: #63dee6;
+  --color-lagoon-300: #99ebef;
+  --color-lagoon-200: #c4f4f6;
 
   /* ---------- Seafoam (misted lagoon) ---------- */
-  --color-seafoam-300: #bfeef1;
-  --color-seafoam-200: #d8f5f5;
-  --color-seafoam-100: #eafbfa;
-  --color-seafoam-50:  #f5fdfc;
+  --color-seafoam-300: #bdf0f2;
+  --color-seafoam-200: #d6f7f7;
+  --color-seafoam-100: #e9fcfb;
+  --color-seafoam-50:  #f4fefd;
 
-  /* ---------- Palm (lush jungle greens) ---------- */
-  --color-palm-900: #14522f;
-  --color-palm-700: #1f7a44;
-  --color-palm-600: #2b9a58;
-  --color-palm-500: #4bb578;
-  --color-palm-400: #7bd0a1;
-  --color-palm-300: #a9e2c1;
-  --color-palm-200: #cfeedd;
-  --color-palm-100: #e6f6ec;
+  /* ---------- Palm (lush, wet jungle green) ---------- */
+  --color-palm-950: #06301b;
+  --color-palm-900: #0d4a2a;
+  --color-palm-800: #0f6239;
+  --color-palm-700: #16794a;
+  --color-palm-600: #1e9a5c;
+  --color-palm-500: #2fb972;
+  --color-palm-400: #5bd396;
+  --color-palm-300: #92e5bb;
+  --color-palm-200: #c2f1d8;
+  --color-palm-100: #e3f9ed;
 
-  /* ---------- Flamingo (soft pink → hot coral) ---------- */
-  --color-flamingo-600: #e74e83;
-  --color-flamingo-500: #f27aa1;
-  --color-flamingo-400: #f9a2be;
-  --color-flamingo-300: #fdc2d3;
-  --color-flamingo-200: #ffdbe6;
+  /* ---------- Flamingo (soft pink → hot tropical coral) ---------- */
+  --color-flamingo-700: #cf3a6f;
+  --color-flamingo-600: #e84d84;
+  --color-flamingo-500: #f7729e;
+  --color-flamingo-400: #fb9cbb;
+  --color-flamingo-300: #fdc0d3;
+  --color-flamingo-200: #ffdbe7;
   --color-flamingo-100: #fff0f5;
 
   /* ---------- Coral (warm reef accents) ---------- */
-  --color-coral-600: #e35b3b;
-  --color-coral-500: #f2795a;
-  --color-coral-400: #f79a80;
+  --color-coral-600: #df5334;
+  --color-coral-500: #f27154;
+  --color-coral-400: #f89a80;
   --color-coral-300: #fbc2b0;
-  --color-coral-100: #ffe4da;
+  --color-coral-200: #fdd8cc;
+  --color-coral-100: #ffe6dd;
 
-  /* ---------- Sun (sandy golden yellows) ---------- */
-  --color-sun-600: #e4a325;
-  --color-sun-500: #f2ba46;
-  --color-sun-400: #fbcf6d;
-  --color-sun-300: #fde09a;
-  --color-sun-200: #fdedc4;
-  --color-sun-100: #fef7e3;
+  /* ---------- Sun (golden sandy-beach yellow) ---------- */
+  --color-sun-700: #c9860f;
+  --color-sun-600: #e5a41e;
+  --color-sun-500: #f5bd42;
+  --color-sun-400: #fdd274;
+  --color-sun-300: #fde3a3;
+  --color-sun-200: #fdefc9;
+  --color-sun-100: #fef8e6;
 
-  /* Legacy alias — coral used broadly earlier, keep hibiscus available */
-  --color-hibiscus-500: #ea5a86;
+  /* Legacy alias kept so old class names never render as transparent. */
+  --color-hibiscus-500: #f7729e;
 
   --font-display: 'Fraunces', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
   --font-sans:    'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   --radius-4xl: 2rem;
   --radius-5xl: 2.75rem;
+  --radius-6xl: 3.5rem;
 
-  --shadow-soft: 0 18px 42px -28px rgb(11 74 99 / 0.28);
-  --shadow-lift: 0 36px 82px -44px rgb(11 74 99 / 0.38);
-  --shadow-glow: 0 0 60px -12px rgb(53 194 209 / 0.5);
-  --shadow-pink: 0 0 60px -18px rgb(242 122 161 / 0.55);
+  --shadow-soft:  0 18px 42px -28px rgb(8 60 85 / 0.26);
+  --shadow-lift:  0 36px 82px -44px rgb(8 60 85 / 0.36);
+  --shadow-float: 0 48px 110px -52px rgb(8 60 85 / 0.42);
+  --shadow-glow:  0 0 60px -12px rgb(46 201 212 / 0.5);
+  --shadow-pink:  0 0 62px -18px rgb(247 114 158 / 0.55);
+  --shadow-sun:   0 0 62px -18px rgb(253 210 116 / 0.6);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-liquid:   cubic-bezier(0.65, 0, 0.35, 1);
 
   --animate-float:   float 9s var(--ease-out-soft) infinite;
   --animate-sway:    sway  11s ease-in-out infinite;
   --animate-shimmer: shimmer 2.4s linear infinite;
   --animate-rise:    rise 0.7s var(--ease-out-soft) both;
-  --animate-drift:   drift 14s ease-in-out infinite;
+  --animate-drift:   drift 16s ease-in-out infinite;
+  --animate-morph:   morph 18s ease-in-out infinite;
+  --animate-breathe: breathe 7s ease-in-out infinite;
 }
 
 @keyframes float   { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
 @keyframes sway    { 0%,100% { transform: rotate(-2.5deg) } 50% { transform: rotate(2.5deg) } }
 @keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
 @keyframes rise    { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes breathe { 0%,100% { opacity: .55; transform: scale(1) } 50% { opacity: .85; transform: scale(1.06) } }
+
 @keyframes drift {
-  0%, 100% { transform: translate3d(0, 0, 0) }
-  50%      { transform: translate3d(12px, -8px, 0) }
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) }
+  33%      { transform: translate3d(14px, -10px, 0) rotate(3deg) }
+  66%      { transform: translate3d(-10px, 8px, 0) rotate(-2deg) }
+}
+
+/*
+ * The signature move: an organic outline that never settles. Four radii
+ * cycling out of phase read as something poured rather than drawn — the
+ * "oil in water" quality the rest of the palette is built around.
+ */
+@keyframes morph {
+  0%,  100% { border-radius: 62% 38% 46% 54% / 58% 44% 56% 42%; }
+  25%       { border-radius: 44% 56% 62% 38% / 42% 62% 38% 58%; }
+  50%       { border-radius: 56% 44% 38% 62% / 48% 38% 62% 52%; }
+  75%       { border-radius: 38% 62% 54% 46% / 62% 52% 48% 38%; }
 }
 
 @layer base {
@@ -108,12 +159,18 @@
     --safe-b: env(safe-area-inset-bottom, 0px);
     --tabbar-h: 4.5rem;
 
-    /* Ambient page wash — very light tropical gradient behind everything */
+    /*
+     * Ambient page wash. Five overlapping light fields — sky at the top
+     * left, flamingo on the right, palm low, sun at the foot — so the
+     * white page is never flat white anywhere.
+     */
     --page-wash:
-      radial-gradient(1200px 620px at 8% -8%,  #eafbfa 0%, transparent 60%),
-      radial-gradient(900px 500px at 100% 10%, #fff0f5 0%, transparent 60%),
-      radial-gradient(800px 500px at 50% 100%, #fef7e3 0%, transparent 60%),
-      linear-gradient(180deg, #ffffff 0%, #fdfcf7 100%);
+      radial-gradient(1250px 660px at 6% -10%,   #e8f7fe 0%, transparent 62%),
+      radial-gradient(980px 560px  at 100% 4%,   #fff0f5 0%, transparent 60%),
+      radial-gradient(900px 620px  at 84% 46%,   #e9fcfb 0%, transparent 62%),
+      radial-gradient(880px 520px  at 12% 74%,   #e3f9ed 0%, transparent 60%),
+      radial-gradient(1000px 560px at 50% 104%,  #fef8e6 0%, transparent 62%),
+      linear-gradient(180deg, #ffffff 0%, #fdfcf8 100%);
   }
 
   * { -webkit-tap-highlight-color: transparent; }
@@ -139,7 +196,7 @@
     font-family: var(--font-display);
     font-optical-sizing: auto;
     font-weight: 500;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.022em;
     text-wrap: balance;
     color: var(--color-ocean-950);
   }
@@ -154,11 +211,12 @@
   :focus-visible {
     outline: 2px solid var(--color-lagoon-500);
     outline-offset: 3px;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   input, textarea, select, button { font: inherit; color: inherit; }
 
+  /* iOS zooms the page in on any field under 16px — this stops that. */
   @supports (-webkit-touch-callout: none) {
     input, textarea, select { font-size: max(16px, 1em); }
   }
@@ -173,6 +231,8 @@
   }
 }
 
+/* ------------------------------------------------------------ utilities */
+
 @utility no-scrollbar {
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
@@ -186,7 +246,13 @@
   padding-bottom: calc(var(--safe-b) + var(--tabbar-h) + 1rem);
 }
 
-/* Fine paper grain — keeps flat colour fields from looking digital */
+/** Clearance for anything that would otherwise sit under the mobile tab bar. */
+@utility clear-tabbar {
+  padding-bottom: calc(var(--safe-b) + var(--tabbar-h) + 1.25rem);
+  @media (width >= 64rem) { padding-bottom: 0; }
+}
+
+/* Fine paper grain — keeps flat colour fields from looking digital. */
 @utility grain {
   position: relative;
   &::after {
@@ -194,13 +260,13 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.28;
+    opacity: 0.26;
     mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   }
 }
 
-/* Watermark tropical scatter — sea stars, corals, palm silhouettes */
+/* Watermark tropical scatter — sea stars, corals, palm silhouettes. */
 @utility tropical-scatter {
   position: relative;
   &::before {
@@ -208,8 +274,8 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.10;
-    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%23f27aa1' stroke-width='1.4'%3E%3Cpath d='M60 60 l6 -18 l6 18 l18 6 l-18 6 l-6 18 l-6 -18 l-18 -6 z'/%3E%3Ccircle cx='250' cy='70' r='14'/%3E%3Cpath d='M250 56 v28 M236 70 h28 M240 60 l20 20 M260 60 l-20 20'/%3E%3C/g%3E%3Cg fill='none' stroke='%234bb578' stroke-width='1.4'%3E%3Cpath d='M40 240 q30 -60 60 -20 q30 40 60 -30 q30 -70 60 -10' /%3E%3C/g%3E%3Cg fill='none' stroke='%2335c2d1' stroke-width='1.4'%3E%3Cpath d='M180 250 c 20 -12 40 -12 60 0 c 20 -12 20 12 0 24 c -20 12 -40 12 -60 0 c -20 -12 -20 -24 0 -24 z'/%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.09;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%23f7729e' stroke-width='1.4'%3E%3Cpath d='M60 60 l6 -18 l6 18 l18 6 l-18 6 l-6 18 l-6 -18 l-18 -6 z'/%3E%3Ccircle cx='250' cy='70' r='14'/%3E%3Cpath d='M250 56 v28 M236 70 h28 M240 60 l20 20 M260 60 l-20 20'/%3E%3C/g%3E%3Cg fill='none' stroke='%232fb972' stroke-width='1.4'%3E%3Cpath d='M40 240 q30 -60 60 -20 q30 40 60 -30 q30 -70 60 -10'/%3E%3C/g%3E%3Cg fill='none' stroke='%2355b8ec' stroke-width='1.4'%3E%3Cpath d='M180 250 c 20 -12 40 -12 60 0 c 20 -12 20 12 0 24 c -20 12 -40 12 -60 0 c -20 -12 -20 -24 0 -24 z'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 320px 320px;
   }
 }
@@ -227,26 +293,26 @@
 }
 
 @utility glass {
-  background: color-mix(in srgb, #ffffff 78%, transparent);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
-  border: 1px solid color-mix(in srgb, var(--color-lagoon-500) 14%, transparent);
+  background: color-mix(in srgb, #ffffff 76%, transparent);
+  backdrop-filter: blur(20px) saturate(155%);
+  -webkit-backdrop-filter: blur(20px) saturate(155%);
+  border: 1px solid color-mix(in srgb, var(--color-sky-500) 14%, transparent);
 }
 
 @utility glass-tinted {
   background: linear-gradient(140deg,
-    color-mix(in srgb, var(--color-seafoam-100) 92%, transparent) 0%,
-    color-mix(in srgb, var(--color-flamingo-100) 88%, transparent) 55%,
-    color-mix(in srgb, var(--color-sun-100)      95%, transparent) 100%);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgb(255 255 255 / 0.6);
+    color-mix(in srgb, var(--color-sky-100)      92%, transparent) 0%,
+    color-mix(in srgb, var(--color-flamingo-100) 86%, transparent) 52%,
+    color-mix(in srgb, var(--color-sun-100)      94%, transparent) 100%);
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  border: 1px solid rgb(255 255 255 / 0.62);
 }
 
 @utility glass-dark {
-  background: color-mix(in srgb, var(--color-ocean-950) 78%, transparent);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  background: color-mix(in srgb, var(--color-ocean-950) 76%, transparent);
+  backdrop-filter: blur(20px) saturate(145%);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
 }
 
 @utility hairline {
@@ -256,24 +322,88 @@
 @utility skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-sand-100) 25%,
-    var(--color-sand-200) 37%,
-    var(--color-sand-100) 63%
+    var(--color-sky-50) 25%,
+    var(--color-sky-100) 37%,
+    var(--color-sky-50) 63%
   );
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
 }
 
+/* ---------------------------------------------------- organic shapes */
+
+/**
+ * Four asymmetric radii instead of one. Applied to a card or a photo it
+ * reads as a pebble or a leaf rather than a box, which is the whole
+ * point of the design language here.
+ */
+@utility blob {
+  border-radius: 58% 42% 46% 54% / 52% 46% 54% 48%;
+}
+
+@utility blob-alt {
+  border-radius: 42% 58% 56% 44% / 46% 56% 44% 54%;
+}
+
+@utility blob-soft {
+  border-radius: 44% 56% 52% 48% / 50% 46% 54% 50%;
+}
+
+/** A gently drifting organic outline — for decorative fields only. */
+@utility blob-live {
+  animation: var(--animate-morph);
+}
+
+/** Squircle: still soft, but calm enough to hold body copy. */
+@utility squircle {
+  border-radius: 2.25rem;
+}
+
+/* --------------------------------------------------- colour surfaces */
+
 @utility tropical-gradient {
   background: linear-gradient(135deg,
-    var(--color-lagoon-500) 0%,
-    var(--color-palm-500)   45%,
+    var(--color-sky-500)      0%,
+    var(--color-lagoon-500)  38%,
+    var(--color-palm-500)    68%,
     var(--color-flamingo-400) 100%);
 }
 
 @utility sunset-gradient {
   background: linear-gradient(135deg,
-    var(--color-sun-400) 0%,
-    var(--color-flamingo-400) 60%,
-    var(--color-flamingo-500) 100%);
+    var(--color-sun-400)      0%,
+    var(--color-flamingo-400) 58%,
+    var(--color-flamingo-600) 100%);
+}
+
+@utility lagoon-gradient {
+  background: linear-gradient(140deg,
+    var(--color-sky-700)    0%,
+    var(--color-lagoon-600) 46%,
+    var(--color-palm-500)  100%);
+}
+
+/** Thin iridescent rule — a horizon line in miniature. */
+@utility sheen-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--color-sky-300) 18%,
+    var(--color-lagoon-300) 38%,
+    var(--color-palm-300) 58%,
+    var(--color-flamingo-300) 78%,
+    transparent 100%);
+}
+
+/** Gradient text that stays legible against the paper ground. */
+@utility text-tropical {
+  background: linear-gradient(100deg,
+    var(--color-sky-700) 0%,
+    var(--color-lagoon-600) 34%,
+    var(--color-palm-600) 62%,
+    var(--color-flamingo-600) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }

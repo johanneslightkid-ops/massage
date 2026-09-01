@@ -104,6 +104,8 @@ export function localBusinessSchema(
   services: Service[],
   payments: string[],
   origin: string,
+  /** Catalogue name, in the reader's language — this markup is indexed. */
+  catalogName = 'Massage treatments',
 ) {
   const specs = openingHours(site.hours)
 
@@ -133,7 +135,7 @@ export function localBusinessSchema(
     sameAs: [site.instagram, site.facebook, site.tiktok].filter(Boolean),
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
-      name: 'Massage treatments',
+      name: catalogName,
       itemListElement: services.map((service) => ({
         '@type': 'Offer',
         priceCurrency: site.currency,

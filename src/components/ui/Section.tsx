@@ -2,6 +2,19 @@ import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Reveal } from './Reveal'
 
+/**
+ * Section tones are washes rather than flat fills — each one carries a hint of
+ * a different family so scrolling the page moves through sky, then foam, then
+ * warm sand, without any of them announcing itself.
+ */
+const tones = {
+  sand: 'bg-transparent',
+  cream: 'bg-gradient-to-b from-sand-100/80 via-sand-100/55 to-sky-50/70',
+  foam: 'bg-gradient-to-b from-seafoam-50/90 to-sky-50/70',
+  ocean: 'bg-ocean-900 text-sand-50',
+  none: '',
+} as const
+
 export function Section({
   id,
   className,
@@ -11,14 +24,8 @@ export function Section({
   id?: string
   className?: string
   children: ReactNode
-  tone?: 'sand' | 'cream' | 'ocean' | 'none'
+  tone?: keyof typeof tones
 }) {
-  const tones = {
-    sand: 'bg-sand-50',
-    cream: 'bg-sand-100',
-    ocean: 'bg-ocean-900 text-sand-50',
-    none: '',
-  }
   return (
     <section id={id} className={cn('relative', tones[tone], className)}>
       {children}
@@ -52,24 +59,31 @@ export function SectionHead({
       {eyebrow && (
         <p
           className={cn(
-            'mb-4 text-[0.7rem] font-bold tracking-[0.22em] uppercase',
-            invert ? 'text-seafoam-300' : 'text-lagoon-600',
+            'mb-4 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.22em] uppercase',
+            invert ? 'text-seafoam-300' : 'text-lagoon-700',
           )}
         >
+          <span
+            className={cn(
+              'h-1.5 w-1.5 rounded-full',
+              invert ? 'bg-sun-400' : 'bg-flamingo-500',
+            )}
+            aria-hidden="true"
+          />
           {eyebrow}
         </p>
       )}
       <h2
         className={cn(
           'text-3xl leading-[1.08] sm:text-4xl md:text-5xl',
-          invert ? 'text-sand-50' : 'text-ocean-900',
+          invert ? 'text-sand-50' : 'text-ocean-950',
         )}
       >
         {title}
         {script && (
           <>
             {' '}
-            <span className={cn('script', invert ? 'text-sun-400' : 'text-coral-500')}>{script}</span>
+            <span className={cn('script', invert ? 'text-sun-400' : 'text-flamingo-600')}>{script}</span>
           </>
         )}
       </h2>

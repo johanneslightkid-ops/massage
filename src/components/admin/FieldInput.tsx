@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Plus, X, Upload } from 'lucide-react'
 import type { Field } from '@shared/schema'
+import { useT } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 
 const inputBase =
@@ -9,6 +10,7 @@ const inputBase =
 /* -------------------------------------------------------------- list of strings */
 
 function ListEditor({ value, onChange }: { value: string[]; onChange: (next: string[]) => void }) {
+  const t = useT()
   const [draft, setDraft] = useState('')
 
   function add() {
@@ -30,14 +32,14 @@ function ListEditor({ value, onChange }: { value: string[]; onChange: (next: str
             <button
               type="button"
               onClick={() => onChange(value.filter((_, i) => i !== index))}
-              aria-label={`Remove ${entry}`}
+              aria-label={t('field.remove', { name: entry })}
               className="grid size-5 place-items-center rounded-full text-ocean-800/45 hover:bg-ocean-900/10 hover:text-ocean-900"
             >
               <X className="size-3" />
             </button>
           </li>
         ))}
-        {value.length === 0 && <li className="text-[0.82rem] text-ocean-800/40">Nothing added yet.</li>}
+        {value.length === 0 && <li className="text-[0.82rem] text-ocean-800/40">{t('field.nothing_added')}</li>}
       </ul>
       <div className="flex gap-2">
         <input
@@ -49,14 +51,14 @@ function ListEditor({ value, onChange }: { value: string[]; onChange: (next: str
               add()
             }
           }}
-          placeholder="Type and press Enter"
+          placeholder={t('field.type_enter')}
           className={inputBase}
         />
         <button
           type="button"
           onClick={add}
           className="grid size-12 shrink-0 place-items-center rounded-2xl bg-ocean-900 text-sand-50 transition-colors hover:bg-ocean-800"
-          aria-label="Add item"
+          aria-label={t('field.add_item')}
         >
           <Plus className="size-4" />
         </button>
@@ -73,6 +75,7 @@ interface DurationRow {
 }
 
 function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (next: DurationRow[]) => void }) {
+  const t = useT()
   const rows = Array.isArray(value) ? value : []
 
   function update(index: number, patch: Partial<DurationRow>) {
@@ -84,7 +87,7 @@ function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (
       {rows.map((row, index) => (
         <div key={index} className="flex items-center gap-2">
           <label className="flex-1">
-            <span className="sr-only">Minutes</span>
+            <span className="sr-only">{t('field.minutes')}</span>
             <div className="relative">
               <input
                 type="number"
@@ -99,7 +102,7 @@ function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (
             </div>
           </label>
           <label className="flex-1">
-            <span className="sr-only">Price</span>
+            <span className="sr-only">{t('field.price')}</span>
             <div className="relative">
               <span className="pointer-events-none absolute top-1/2 left-4 -translate-y-1/2 text-[0.85rem] text-ocean-800/45">
                 $
@@ -116,7 +119,7 @@ function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (
           <button
             type="button"
             onClick={() => onChange(rows.filter((_, i) => i !== index))}
-            aria-label="Remove duration"
+            aria-label={t('field.remove_duration')}
             className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/50 hover:border-coral-400 hover:text-coral-500"
           >
             <X className="size-4" />
@@ -129,7 +132,7 @@ function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (
         className="inline-flex items-center gap-2 rounded-full bg-sand-100 px-4 py-2 text-[0.82rem] font-semibold text-ocean-800 transition-colors hover:bg-sand-200"
       >
         <Plus className="size-3.5" />
-        Add a length
+        {t('field.add_length')}
       </button>
     </div>
   )
@@ -143,6 +146,7 @@ interface PairRow {
 }
 
 function PairEditor({ value, onChange }: { value: PairRow[]; onChange: (next: PairRow[]) => void }) {
+  const t = useT()
   const rows = Array.isArray(value) ? value : []
 
   function update(index: number, patch: Partial<PairRow>) {
@@ -156,19 +160,19 @@ function PairEditor({ value, onChange }: { value: PairRow[]; onChange: (next: Pa
           <input
             value={row.label}
             onChange={(event) => update(index, { label: event.target.value })}
-            placeholder="Monday – Saturday"
+            placeholder={t('field.pair_label_placeholder')}
             className={inputBase}
           />
           <input
             value={row.value}
             onChange={(event) => update(index, { value: event.target.value })}
-            placeholder="9:00 – 21:00"
+            placeholder={t('field.pair_value_placeholder')}
             className={inputBase}
           />
           <button
             type="button"
             onClick={() => onChange(rows.filter((_, i) => i !== index))}
-            aria-label="Remove row"
+            aria-label={t('field.remove_row')}
             className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/50 hover:border-coral-400 hover:text-coral-500"
           >
             <X className="size-4" />
@@ -181,7 +185,7 @@ function PairEditor({ value, onChange }: { value: PairRow[]; onChange: (next: Pa
         className="inline-flex items-center gap-2 rounded-full bg-sand-100 px-4 py-2 text-[0.82rem] font-semibold text-ocean-800 transition-colors hover:bg-sand-200"
       >
         <Plus className="size-3.5" />
-        Add a row
+        {t('field.add_row')}
       </button>
     </div>
   )
@@ -190,6 +194,7 @@ function PairEditor({ value, onChange }: { value: PairRow[]; onChange: (next: Pa
 /* ----------------------------------------------------------------- switch */
 
 function Switch({ value, onChange, label }: { value: boolean; onChange: (next: boolean) => void; label: string }) {
+  const t = useT()
   return (
     <button
       type="button"
@@ -211,7 +216,7 @@ function Switch({ value, onChange, label }: { value: boolean; onChange: (next: b
           )}
         />
       </span>
-      <span className="text-[0.9rem] font-medium text-ocean-800">{value ? 'On' : 'Off'}</span>
+      <span className="text-[0.9rem] font-medium text-ocean-800">{value ? t('field.on') : t('field.off')}</span>
       <span className="sr-only">{label}</span>
     </button>
   )
@@ -307,6 +312,8 @@ export function FieldInput({
   value: unknown
   onChange: (next: unknown) => void
 }) {
+  const t = useT()
+
   const control = (() => {
     switch (field.type) {
       case 'textarea':
@@ -378,8 +385,8 @@ export function FieldInput({
                 onChange={(event) => onChange(event.target.value)}
                 className={cn(inputBase, 'flex-1')}
               />
-              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-white transition-colors hover:from-lagoon-600 hover:to-palm-600" title="Upload from device">
-                <span className="sr-only">Upload image</span>
+              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-white transition-colors hover:from-lagoon-600 hover:to-palm-600" title={t('field.upload_title')}>
+                <span className="sr-only">{t('field.upload')}</span>
                 <Upload className="size-4" />
                 <input
                   type="file"
@@ -394,7 +401,7 @@ export function FieldInput({
                       onChange(url)
                     } catch (err) {
                       console.error(err)
-                      alert('Failed to upload image: ' + (err instanceof Error ? err.message : String(err)))
+                      alert(t('field.upload_failed', { message: err instanceof Error ? err.message : String(err) }))
                     }
                   }}
                 />

@@ -2,9 +2,12 @@ import { Link } from 'react-router-dom'
 import { Clock, Footprints, MapPin, Quote } from 'lucide-react'
 import type { DiscoverSpot, Package, Service, Testimonial, Therapist } from '@shared/types'
 import { cn, formatPrice } from '@/lib/utils'
+import { useT } from '@/lib/translations/LanguageProvider'
+import { spotCategoryKey, spotCategoryTone } from '@/lib/taxonomy'
 import { Motif } from '@/components/art/Motif'
 import { SceneImage } from '@/components/art/Decor'
 import { Card, Pill, Stars, Tick } from '@/components/ui/Bits'
+import type { PillTone } from '@/components/ui/Bits'
 
 /* ------------------------------------------------------------- treatments */
 
@@ -19,41 +22,42 @@ export function ServiceCard({
   onBook?: (service: Service) => void
   compact?: boolean
 }) {
+  const t = useT()
   const cheapest = service.durations?.[0]
 
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1 hover:shadow-lift">
-      <div className="relative aspect-[16/10] overflow-hidden">
+    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+      <div className="relative aspect-16/10 overflow-hidden">
         <SceneImage
           src={service.image}
           seed={service.id}
           alt={service.name}
           className="transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/70 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/72 via-transparent to-transparent" />
 
-        <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-2xl bg-sand-50/90 text-ocean-800 backdrop-blur-sm">
+        <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-sand-50/92 text-sky-800 backdrop-blur-sm">
           <Motif name={service.icon} className="size-5" />
         </span>
 
         {service.popular && (
-          <span className="absolute top-4 right-4 rounded-full bg-coral-500 px-3 py-1 text-[0.66rem] font-bold tracking-wide text-white uppercase">
-            Popular
+          <span className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 px-3 py-1 text-[0.66rem] font-bold tracking-wide text-white uppercase shadow-soft">
+            {t('card.popular')}
           </span>
         )}
 
         <div className="absolute right-4 bottom-4 left-4 flex items-end justify-between gap-3">
           <h3 className="font-display text-[1.35rem] leading-tight text-sand-50">{service.name}</h3>
           {cheapest && (
-            <span className="shrink-0 rounded-full bg-sand-50/92 px-3 py-1 text-[0.8rem] font-bold text-ocean-900 backdrop-blur-sm">
-              from {formatPrice(cheapest.price, currency)}
+            <span className="shrink-0 rounded-full bg-sand-50/94 px-3 py-1 text-[0.8rem] font-bold text-ocean-950 backdrop-blur-sm">
+              {t('card.from', { price: formatPrice(cheapest.price, currency) })}
             </span>
           )}
         </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-lagoon-600 uppercase">{service.category}</p>
+        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-lagoon-700 uppercase">{service.category}</p>
         <p className="mt-2 text-[0.98rem] leading-relaxed text-ocean-800/80">
           {compact ? service.tagline : service.description}
         </p>
@@ -62,7 +66,7 @@ export function ServiceCard({
           <ul className="mt-5 space-y-2">
             {service.benefits.map((benefit) => (
               <li key={benefit} className="flex items-start gap-2.5 text-[0.9rem] text-ocean-800/85">
-                <Tick className="mt-0.5 text-lagoon-500" />
+                <Tick className="mt-0.5 text-palm-500" />
                 {benefit}
               </li>
             ))}
@@ -73,11 +77,11 @@ export function ServiceCard({
           {service.durations?.map((duration) => (
             <span
               key={duration.minutes}
-              className="inline-flex items-center gap-1.5 rounded-full bg-sand-100 px-3 py-1.5 text-[0.8rem] font-semibold text-ocean-800"
+              className="inline-flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1.5 text-[0.8rem] font-semibold text-sky-800 ring-1 ring-sky-200/70"
             >
               <Clock className="size-3.5 text-lagoon-600" />
-              {duration.minutes} min
-              <span className="text-ocean-900">· {formatPrice(duration.price, currency)}</span>
+              {t('book.minutes', { minutes: duration.minutes })}
+              <span className="text-ocean-950">· {formatPrice(duration.price, currency)}</span>
             </span>
           ))}
         </div>
@@ -87,16 +91,16 @@ export function ServiceCard({
             <button
               type="button"
               onClick={() => onBook(service)}
-              className="inline-flex h-11 w-full items-center justify-center rounded-full bg-ocean-900 text-[0.9rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800"
+              className="inline-flex h-11 w-full items-center justify-center rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 text-[0.9rem] font-semibold text-sand-50 transition-all hover:brightness-110"
             >
-              Reserve this
+              {t('card.reserve')}
             </button>
           ) : (
             <Link
               to={`/book?service=${encodeURIComponent(service.name)}`}
-              className="inline-flex h-11 w-full items-center justify-center rounded-full bg-ocean-900 text-[0.9rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800"
+              className="inline-flex h-11 w-full items-center justify-center rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 text-[0.9rem] font-semibold text-sand-50 transition-all hover:brightness-110"
             >
-              Reserve this
+              {t('card.reserve')}
             </Link>
           )}
         </div>
@@ -108,17 +112,19 @@ export function ServiceCard({
 /* ------------------------------------------------------------------- team */
 
 const accents: Record<string, string> = {
-  ocean: 'from-ocean-800 to-lagoon-600',
-  coral: 'from-coral-500 to-sun-400',
+  ocean: 'from-sky-800 to-lagoon-600',
+  coral: 'from-flamingo-500 to-sun-400',
   palm: 'from-palm-700 to-lagoon-400',
-  sun: 'from-sun-500 to-coral-400',
+  sun: 'from-sun-500 to-flamingo-400',
   seafoam: 'from-lagoon-500 to-seafoam-300',
 }
 
 export function TherapistCard({ person }: { person: Therapist }) {
+  const t = useT()
+
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1 hover:shadow-lift">
-      <div className="relative aspect-[4/5] overflow-hidden">
+    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+      <div className="relative aspect-4/5 overflow-hidden">
         {person.photo ? (
           <img
             src={person.photo}
@@ -127,23 +133,16 @@ export function TherapistCard({ person }: { person: Therapist }) {
             className="size-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
-          <div
-            className={cn(
-              'grid size-full place-items-center bg-gradient-to-br',
-              accents[person.accent] ?? accents.ocean,
-            )}
-          >
-            <span className="font-display text-[4.5rem] leading-none text-sand-50/90">
-              {person.name.charAt(0)}
-            </span>
+          <div className={cn('grid size-full place-items-center bg-gradient-to-br', accents[person.accent] ?? accents.ocean)}>
+            <span className="font-display text-[4.5rem] leading-none text-sand-50/90">{person.name.charAt(0)}</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/75 via-ocean-950/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/78 via-ocean-950/10 to-transparent" />
         <div className="absolute right-5 bottom-5 left-5">
           <h3 className="font-display text-2xl text-sand-50">{person.name}</h3>
           <p className="mt-1 text-[0.82rem] font-semibold text-seafoam-200">{person.role}</p>
         </div>
-        <span className="absolute top-4 right-4 rounded-full bg-sand-50/90 px-3 py-1 text-[0.68rem] font-bold text-ocean-900">
+        <span className="absolute top-4 right-4 rounded-full bg-sand-50/92 px-3 py-1 text-[0.68rem] font-bold text-ocean-950 backdrop-blur-sm">
           {person.years}
         </span>
       </div>
@@ -160,7 +159,7 @@ export function TherapistCard({ person }: { person: Therapist }) {
         </div>
 
         <p className="mt-auto pt-5 text-[0.78rem] font-medium text-ocean-800/55">
-          Speaks {person.languages.join(' · ')}
+          {t('team.speaks', { languages: person.languages.join(' · ') })}
         </p>
       </div>
     </Card>
@@ -169,29 +168,23 @@ export function TherapistCard({ person }: { person: Therapist }) {
 
 /* --------------------------------------------------------------- discover */
 
-const categoryTone: Record<string, 'sand' | 'lagoon' | 'coral' | 'sun' | 'ocean'> = {
-  Beach: 'lagoon',
-  'Eat & Drink': 'coral',
-  Nightlife: 'ocean',
-  Excursion: 'sun',
-  Shopping: 'sand',
-  Essentials: 'ocean',
-  'Getting around': 'sand',
-}
-
 export function SpotCard({ spot }: { spot: DiscoverSpot }) {
+  const t = useT()
+  const key = spotCategoryKey(spot.category)
+  const tone: PillTone = key ? spotCategoryTone[key] : 'sand'
+
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1 hover:shadow-lift">
-      <div className="relative aspect-[16/9] overflow-hidden">
+    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+      <div className="relative aspect-16/9 overflow-hidden">
         <SceneImage
           src={spot.image}
           seed={spot.id}
           alt={spot.name}
           className="transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/65 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/68 to-transparent" />
         <div className="absolute top-3 left-3">
-          <Pill tone={categoryTone[spot.category] ?? 'sand'} className="shadow-soft">
+          <Pill tone={tone} className="shadow-soft">
             {spot.category}
           </Pill>
         </div>
@@ -205,7 +198,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
           {spot.walkMinutes > 0 && (
             <span className="inline-flex items-center gap-1.5">
               <Footprints className="size-3.5 text-lagoon-600" />
-              {spot.walkMinutes} min walk
+              {t('card.walk', { minutes: spot.walkMinutes })}
             </span>
           )}
           {spot.priceLevel && spot.priceLevel !== '—' && <span>{spot.priceLevel}</span>}
@@ -214,8 +207,8 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
         <p className="mt-3 text-[0.93rem] leading-relaxed text-ocean-800/80">{spot.blurb}</p>
 
         {spot.tip && (
-          <p className="mt-4 rounded-2xl bg-seafoam-50 p-4 text-[0.86rem] leading-relaxed text-ocean-800">
-            <span className="font-bold text-lagoon-600">Our tip · </span>
+          <p className="mt-4 rounded-[1.5rem] bg-gradient-to-br from-seafoam-50 to-sky-50 p-4 text-[0.86rem] leading-relaxed text-ocean-800 ring-1 ring-sky-200/60">
+            <span className="font-bold text-lagoon-700">{t('card.tip')}</span>
             {spot.tip}
           </p>
         )}
@@ -223,7 +216,10 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
         <div className="mt-auto flex items-center justify-between gap-3 pt-5">
           <div className="flex flex-wrap gap-1.5">
             {spot.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="rounded-full bg-sand-100 px-2.5 py-1 text-[0.68rem] font-semibold text-ocean-800/70">
+              <span
+                key={tag}
+                className="rounded-full bg-sand-200/60 px-2.5 py-1 text-[0.68rem] font-semibold text-ocean-800/70"
+              >
                 {tag}
               </span>
             ))}
@@ -233,10 +229,10 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
               href={spot.mapUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex shrink-0 items-center gap-1.5 text-[0.8rem] font-bold text-lagoon-600 hover:text-lagoon-500"
+              className="inline-flex shrink-0 items-center gap-1.5 text-[0.8rem] font-bold text-lagoon-700 hover:text-lagoon-600"
             >
               <MapPin className="size-3.5" />
-              Map
+              {t('card.map')}
             </a>
           )}
         </div>
@@ -249,12 +245,10 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
 
 export function TestimonialCard({ review }: { review: Testimonial }) {
   return (
-    <figure className="flex h-full flex-col rounded-4xl border border-white/10 bg-white/5 p-7 backdrop-blur-sm">
-      <Quote className="size-7 text-sun-400/70" strokeWidth={1.6} />
-      <blockquote className="mt-4 flex-1 text-[1rem] leading-relaxed text-sand-100/90">
-        “{review.quote}”
-      </blockquote>
-      <figcaption className="mt-6 border-t border-white/10 pt-5">
+    <figure className="flex h-full flex-col rounded-5xl border border-white/12 bg-white/8 p-7 backdrop-blur-sm">
+      <Quote className="size-7 text-sun-400/75" strokeWidth={1.6} />
+      <blockquote className="mt-4 flex-1 text-[1rem] leading-relaxed text-sand-100/90">“{review.quote}”</blockquote>
+      <figcaption className="mt-6 border-t border-white/12 pt-5">
         <Stars count={review.rating} className="mb-3" />
         <p className="font-display text-lg text-sand-50">{review.name}</p>
         <p className="text-[0.8rem] text-sand-200/60">
@@ -269,15 +263,17 @@ export function TestimonialCard({ review }: { review: Testimonial }) {
 /* --------------------------------------------------------------- packages */
 
 export function PackageCard({ item, currency }: { item: Package; currency: string }) {
+  const t = useT()
+
   return (
-    <Card as="article" className="flex h-full flex-col bg-white/80 p-7 hover:-translate-y-1 hover:shadow-lift">
+    <Card as="article" className="flex h-full flex-col bg-white/82 p-7 hover:-translate-y-1.5 hover:shadow-lift">
       <div className="flex items-start justify-between gap-3">
         <div>
-          {item.badge && <Pill tone="coral">{item.badge}</Pill>}
-          <h3 className="mt-3 font-display text-2xl text-ocean-900">{item.name}</h3>
-          <p className="mt-1 text-[0.8rem] font-semibold tracking-wide text-lagoon-600">{item.duration}</p>
+          {item.badge && <Pill tone="flamingo">{item.badge}</Pill>}
+          <h3 className="mt-3 font-display text-2xl text-ocean-950">{item.name}</h3>
+          <p className="mt-1 text-[0.8rem] font-semibold tracking-wide text-lagoon-700">{item.duration}</p>
         </div>
-        <p className="shrink-0 font-display text-3xl text-coral-500">{formatPrice(item.price, currency)}</p>
+        <p className="shrink-0 font-display text-3xl text-flamingo-600">{formatPrice(item.price, currency)}</p>
       </div>
 
       <p className="mt-4 text-[0.95rem] leading-relaxed text-ocean-800/80">{item.description}</p>
@@ -285,7 +281,7 @@ export function PackageCard({ item, currency }: { item: Package; currency: strin
       <ul className="mt-5 space-y-2">
         {item.includes.map((line) => (
           <li key={line} className="flex items-start gap-2.5 text-[0.9rem] text-ocean-800/85">
-            <Tick className="mt-0.5 text-lagoon-500" />
+            <Tick className="mt-0.5 text-palm-500" />
             {line}
           </li>
         ))}
@@ -294,9 +290,9 @@ export function PackageCard({ item, currency }: { item: Package; currency: strin
       <div className="mt-auto pt-7">
         <Link
           to={`/book?service=${encodeURIComponent(item.name)}`}
-          className="inline-flex h-12 w-full items-center justify-center rounded-full bg-coral-500 text-[0.92rem] font-bold text-white transition-colors hover:bg-coral-600"
+          className="inline-flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 text-[0.92rem] font-bold text-white shadow-soft transition-all hover:shadow-pink hover:brightness-105"
         >
-          Reserve this package
+          {t('card.reserve_package')}
         </Link>
       </div>
     </Card>

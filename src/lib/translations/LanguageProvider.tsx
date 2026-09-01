@@ -1,80 +1,94 @@
-import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import type { ReactNode } from 'react';
-import type { LanguageCode } from './index';
-import { isSupportedLanguage, getUiTranslations } from './index';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
+import type { LanguageCode, TranslateVars } from './index'
+import { isSupportedLanguage, localeTag, otherLanguage, t as translate } from './index'
 
-const STORAGE_KEY = 'preferred_language';
+const STORAGE_KEY = 'preferred_language'
 
 interface LanguageState {
-  language: LanguageCode;
-  setLanguage: (lang: LanguageCode) => void;
-  toggleLanguage: () => void;
-  t: (key: string) => string;
-  translations: Record<string, string>;
+  language: LanguageCode
+  /** The language the site is *not* currently in — used by the AI translator. */
+  alternate: LanguageCode
+  setLanguage: (lang: LanguageCode) => void
+  toggleLanguage: () => void
+  t: (key: string, vars?: TranslateVars) => string
+  locale: string
 }
 
-const LanguageContext = createContext<LanguageState | null>(null);
+const LanguageContext = createContext<LanguageState | null>(null)
+
+/**
+ * Resolves the starting language once, before the first paint, so the page
+ * never flashes English at a Spanish-speaking guest.
+ *
+ * Precedence: `?lang=` in the URL → saved preference → browser language.
+ */
+function initialLanguage(): LanguageCode {
+  if (typeof window === 'undefined') return 'en'
+
+  const fromUrl = new URLSearchParams(window.location.search).get('lang')
+  if (fromUrl && isSupportedLanguage(fromUrl)) return fromUrl
+
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY)
+    if (saved && isSupportedLanguage(saved)) return saved
+  } catch {
+    // Private mode or a locked-down browser — fall through to the browser hint.
+  }
+
+  return navigator.language?.toLowerCase().startsWith('es') ? 'es' : 'en'
+}
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<LanguageCode>('en');
-  const [mounted, setMounted] = useState(false);
-  const [translations, setTranslations] = useState<Record<string, string>>({});
+  const [language, setLanguageState] = useState<LanguageCode>(initialLanguage)
 
-  // Load saved language preference on mount
+  // Keep <html lang>, the saved preference and the URL in step with the state,
+  // so a shared link carries the language the sender was reading in.
   useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && isSupportedLanguage(saved)) {
-      setLanguageState(saved);
-    } else {
-      // Try to detect from browser
-      const browserLang = navigator.language?.toLowerCase() || 'en';
-      if (browserLang.startsWith('es')) {
-        setLanguageState('es');
-      }
+    document.documentElement.lang = language
+    try {
+      window.localStorage.setItem(STORAGE_KEY, language)
+    } catch {
+      // Not being able to remember the choice is not worth an error.
     }
-  }, []);
 
-  // Update translations when language changes
-  useEffect(() => {
-    setTranslations(getUiTranslations(language));
-    document.documentElement.lang = language;
-    if (mounted) {
-      localStorage.setItem(STORAGE_KEY, language);
+    const url = new URL(window.location.href)
+    if (url.searchParams.get('lang') !== language) {
+      url.searchParams.set('lang', language)
+      window.history.replaceState({}, '', url)
     }
-  }, [language, mounted]);
+  }, [language])
 
-  const setLanguage = useCallback((lang: LanguageCode) => {
-    setLanguageState(lang);
-  }, []);
-
-  const toggleLanguage = useCallback(() => {
-    setLanguageState((prev) => (prev === 'en' ? 'es' : 'en'));
-  }, []);
+  const setLanguage = useCallback((lang: LanguageCode) => setLanguageState(lang), [])
+  const toggleLanguage = useCallback(() => setLanguageState(otherLanguage), [])
 
   const t = useCallback(
-    (key: string): string => {
-      return translations[key] || key;
-    },
-    [translations]
-  );
+    (key: string, vars?: TranslateVars) => translate(key, language, vars),
+    [language],
+  )
 
   const value = useMemo<LanguageState>(
     () => ({
       language,
+      alternate: otherLanguage(language),
       setLanguage,
       toggleLanguage,
       t,
-      translations,
+      locale: localeTag(language),
     }),
-    [language, setLanguage, toggleLanguage, t, translations]
-  );
+    [language, setLanguage, toggleLanguage, t],
+  )
 
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage(): LanguageState {
-  const value = useContext(LanguageContext);
-  if (!value) throw new Error('useLanguage must be used inside <LanguageProvider>');
-  return value;
+  const value = useContext(LanguageContext)
+  if (!value) throw new Error('useLanguage must be used inside <LanguageProvider>')
+  return value
+}
+
+/** Shorthand for components that only need the lookup function. */
+export function useT(): (key: string, vars?: TranslateVars) => string {
+  return useLanguage().t
 }

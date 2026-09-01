@@ -5,11 +5,17 @@ import type { CollectionSchema } from '@shared/schema'
 import { blankRecord } from '@shared/schema'
 import type { CollectionKey } from '@shared/types'
 import { api } from '@/lib/api'
+import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 import { FieldInput } from './FieldInput'
 import { SaveBar } from './SaveBar'
 
 type Row = Record<string, unknown>
+
+/** "tratamiento" → "Tratamiento", for the start of a sentence. */
+function capitalise(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1)
+}
 
 export function CollectionEditor({
   schema,
@@ -20,6 +26,8 @@ export function CollectionEditor({
   rows: Row[]
   onSaved: () => Promise<void>
 }) {
+  const { t, language } = useLanguage()
+
   const [draft, setDraft] = useState<Row[]>(rows)
   const [editing, setEditing] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
@@ -82,13 +90,13 @@ export function CollectionEditor({
     setError(null)
     try {
       const normalised = sorted.map((row, index) => ({ ...row, order: index + 1 }))
-      await api.saveCollection(schema.key as CollectionKey, normalised)
+      await api.saveCollection(schema.key as CollectionKey, normalised, language)
       setDraft(normalised)
       await onSaved()
-      setStatus('Saved')
+      setStatus(t('action.saved'))
       setTimeout(() => setStatus(null), 2200)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not save.')
+      setError(cause instanceof Error ? cause.message : t('admin.save_error'))
     } finally {
       setSaving(false)
     }
@@ -98,32 +106,34 @@ export function CollectionEditor({
     setSaving(true)
     setError(null)
     try {
-      await api.reset(schema.key)
+      await api.reset(schema.key, language)
       await onSaved()
       setConfirmReset(false)
-      setStatus('Restored the starting content')
+      setStatus(t('admin.restored_content'))
       setTimeout(() => setStatus(null), 2600)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not reset.')
+      setError(cause instanceof Error ? cause.message : t('admin.reset_error'))
     } finally {
       setSaving(false)
     }
   }
 
+  const singular = schema.singular.toLowerCase()
+
   return (
     <div>
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-ocean-900">{schema.label}</h1>
+          <h1 className="font-display text-3xl text-ocean-950">{schema.label}</h1>
           <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">{schema.description}</p>
         </div>
         <button
           type="button"
           onClick={addRow}
-          className="inline-flex h-11 items-center gap-2 rounded-full bg-ocean-900 px-5 text-[0.88rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800"
+          className="inline-flex h-11 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-5 text-[0.88rem] font-semibold text-sand-50 transition-all hover:brightness-110"
         >
           <Plus className="size-4" />
-          Add {schema.singular.toLowerCase()}
+          {t('admin.add_one', { singular })}
         </button>
       </header>
 
@@ -131,15 +141,16 @@ export function CollectionEditor({
         {sorted.map((row, index) => {
           const id = String(row.id)
           const open = editing === id
-          const title = String(row[schema.titleField] ?? '') || `Untitled ${schema.singular.toLowerCase()}`
+          const title =
+            String(row[schema.titleField] ?? '') || capitalise(t('admin.untitled', { singular }))
           const subtitle = String(row[schema.subtitleField] ?? '')
 
           return (
             <li
               key={id}
               className={cn(
-                'overflow-hidden rounded-3xl border bg-white transition-colors',
-                open ? 'border-lagoon-400/50 shadow-soft' : 'border-ocean-900/10',
+                'overflow-hidden rounded-4xl border bg-white/90 transition-colors',
+                open ? 'border-lagoon-400/60 shadow-soft' : 'border-white/70 shadow-soft',
               )}
             >
               <div className="flex items-center gap-3 p-4">
@@ -148,8 +159,8 @@ export function CollectionEditor({
                     type="button"
                     onClick={() => move(id, -1)}
                     disabled={index === 0}
-                    aria-label="Move up"
-                    className="grid size-6 place-items-center rounded-lg text-ocean-800/40 transition-colors hover:bg-sand-100 hover:text-ocean-900 disabled:opacity-25"
+                    aria-label={t('action.move_up')}
+                    className="grid size-6 place-items-center rounded-lg text-ocean-800/40 transition-colors hover:bg-sky-100 hover:text-ocean-950 disabled:opacity-25"
                   >
                     <ArrowUp className="size-3.5" />
                   </button>
@@ -157,19 +168,15 @@ export function CollectionEditor({
                     type="button"
                     onClick={() => move(id, 1)}
                     disabled={index === sorted.length - 1}
-                    aria-label="Move down"
-                    className="grid size-6 place-items-center rounded-lg text-ocean-800/40 transition-colors hover:bg-sand-100 hover:text-ocean-900 disabled:opacity-25"
+                    aria-label={t('action.move_down')}
+                    className="grid size-6 place-items-center rounded-lg text-ocean-800/40 transition-colors hover:bg-sky-100 hover:text-ocean-950 disabled:opacity-25"
                   >
                     <ArrowDown className="size-3.5" />
                   </button>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setEditing(open ? null : id)}
-                  className="min-w-0 flex-1 text-left"
-                >
-                  <p className="truncate font-semibold text-ocean-900">{title}</p>
+                <button type="button" onClick={() => setEditing(open ? null : id)} className="min-w-0 flex-1 text-left">
+                  <p className="truncate font-semibold text-ocean-950">{title}</p>
                   {subtitle && <p className="mt-0.5 truncate text-[0.82rem] text-ocean-800/50">{subtitle}</p>}
                 </button>
 
@@ -177,15 +184,15 @@ export function CollectionEditor({
                   <button
                     type="button"
                     onClick={() => duplicate(row)}
-                    aria-label="Duplicate"
-                    className="grid size-9 place-items-center rounded-xl text-ocean-800/45 transition-colors hover:bg-sand-100 hover:text-ocean-900"
+                    aria-label={t('action.duplicate')}
+                    className="grid size-9 place-items-center rounded-xl text-ocean-800/45 transition-colors hover:bg-sky-100 hover:text-ocean-950"
                   >
                     <Copy className="size-4" />
                   </button>
                   <button
                     type="button"
                     onClick={() => remove(id)}
-                    aria-label="Delete"
+                    aria-label={t('action.delete')}
                     className="grid size-9 place-items-center rounded-xl text-ocean-800/45 transition-colors hover:bg-coral-100 hover:text-coral-600"
                   >
                     <Trash2 className="size-4" />
@@ -193,10 +200,12 @@ export function CollectionEditor({
                   <button
                     type="button"
                     onClick={() => setEditing(open ? null : id)}
-                    aria-label={open ? 'Close' : 'Edit'}
+                    aria-label={open ? t('action.close') : t('action.edit')}
                     className={cn(
                       'grid size-9 place-items-center rounded-xl transition-colors',
-                      open ? 'bg-ocean-900 text-sand-50' : 'text-ocean-800/45 hover:bg-sand-100 hover:text-ocean-900',
+                      open
+                        ? 'bg-gradient-to-br from-sky-700 to-lagoon-600 text-sand-50'
+                        : 'text-ocean-800/45 hover:bg-sky-100 hover:text-ocean-950',
                     )}
                   >
                     {open ? <X className="size-4" /> : <Pencil className="size-4" />}
@@ -212,7 +221,7 @@ export function CollectionEditor({
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <div className="grid gap-5 border-t border-ocean-900/8 bg-sand-50/60 p-5 sm:grid-cols-2 sm:p-6">
+                    <div className="grid gap-5 border-t border-sky-900/8 bg-sky-50/70 p-5 sm:grid-cols-2 sm:p-6">
                       {schema.fields.map((field) => (
                         <FieldInput
                           key={field.key}
@@ -231,15 +240,15 @@ export function CollectionEditor({
       </ul>
 
       {sorted.length === 0 && (
-        <div className="mt-8 rounded-3xl border border-dashed border-ocean-900/15 p-12 text-center">
-          <p className="text-ocean-800/50">No {schema.label.toLowerCase()} yet.</p>
+        <div className="mt-8 rounded-4xl border border-dashed border-ocean-900/15 p-12 text-center">
+          <p className="text-ocean-800/50">{t('admin.none_yet', { label: schema.label.toLowerCase() })}</p>
           <button
             type="button"
             onClick={addRow}
-            className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-ocean-900 px-5 text-[0.88rem] font-semibold text-sand-50"
+            className="mt-4 inline-flex h-11 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-5 text-[0.88rem] font-semibold text-sand-50"
           >
             <Plus className="size-4" />
-            Add the first one
+            {t('admin.add_first')}
           </button>
         </div>
       )}
@@ -248,44 +257,38 @@ export function CollectionEditor({
         {confirmReset ? (
           <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-coral-100 p-2 pl-4">
             <span className="text-[0.85rem] font-semibold text-coral-600">
-              Replace all {schema.label.toLowerCase()} with the starting content?
+              {t('admin.confirm_reset_collection', { label: schema.label.toLowerCase() })}
             </span>
             <button
               type="button"
               onClick={resetToSeed}
               className="h-9 rounded-full bg-coral-500 px-4 text-[0.82rem] font-bold text-white"
             >
-              Yes, restore
+              {t('action.yes_restore')}
             </button>
             <button
               type="button"
               onClick={() => setConfirmReset(false)}
               className="h-9 rounded-full px-4 text-[0.82rem] font-semibold text-coral-600"
             >
-              Cancel
+              {t('action.cancel')}
             </button>
           </div>
         ) : (
           <button
             type="button"
             onClick={() => setConfirmReset(true)}
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 px-5 text-[0.86rem] font-semibold text-ocean-800/70 transition-colors hover:border-ocean-900/25 hover:text-ocean-900"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-5 text-[0.86rem] font-semibold text-ocean-800/70 transition-colors hover:border-ocean-900/25 hover:text-ocean-950"
           >
             <RotateCcw className="size-4" />
-            Restore defaults
+            {t('action.restore_defaults')}
           </button>
         )}
 
         {error && <p className="text-[0.86rem] font-medium text-coral-600">{error}</p>}
       </div>
 
-      <SaveBar
-        dirty={dirty}
-        saving={saving}
-        status={status}
-        onSave={save}
-        onDiscard={() => setDraft(rows)}
-      />
+      <SaveBar dirty={dirty} saving={saving} status={status} onSave={save} onDiscard={() => setDraft(rows)} />
     </div>
   )
 }

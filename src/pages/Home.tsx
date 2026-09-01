@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Compass } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { useT } from '@/lib/translations/LanguageProvider'
 import { faqSchema, localBusinessSchema, useJsonLd, useSeo } from '@/lib/seo'
 import { sortByOrder } from '@/lib/utils'
 import { Hero } from '@/components/sections/Hero'
@@ -28,15 +29,19 @@ function Rail({ children }: { children: React.ReactNode }) {
 
 const railItem = 'w-[82vw] shrink-0 snap-center sm:w-auto'
 
+const quietLink =
+  'inline-flex h-12 items-center gap-2 rounded-full border border-ocean-900/15 bg-white/60 px-6 text-[0.9rem] font-semibold text-ocean-950 backdrop-blur-sm transition-colors hover:border-lagoon-400/60 hover:bg-white'
+
 export function Home() {
   const { content } = useContent()
+  const t = useT()
   const site = content.site
   const currency = site.currency
 
   useSeo({
     path: '/',
-    title: `${site.brandName} · Massage in ${site.neighborhood}, ${site.city}`,
-    description: `${site.tagline} Studio, beach and hotel-room massage in ${site.neighborhood}. Reserve on WhatsApp.`,
+    title: `${site.brandName} · ${t('seo.home_suffix', { neighborhood: site.neighborhood, city: site.city })}`,
+    description: `${site.tagline} ${site.heroSubtitle}`.slice(0, 300),
   })
   useJsonLd([
     localBusinessSchema(
@@ -44,6 +49,7 @@ export function Home() {
       sortByOrder(content.services),
       content.payments.filter((p) => p.enabled).map((p) => p.name),
       typeof window === 'undefined' ? '' : window.location.origin,
+      t('seo.catalog'),
     ),
     faqSchema(sortByOrder(content.faqs)),
   ])
@@ -62,17 +68,14 @@ export function Home() {
         <Container className="relative">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHead
-              eyebrow="What we do"
-              title="Treatments that suit"
-              script="a holiday body"
-              lead="Everything is done with warm oil, fresh linens and pressure you choose. Prices are per person, in US dollars."
+              eyebrow={t('home.treatments.eyebrow')}
+              title={t('home.treatments.title')}
+              script={t('home.treatments.script')}
+              lead={t('home.treatments.lead')}
             />
             <Reveal delay={0.15}>
-              <Link
-                to="/treatments"
-                className="inline-flex h-12 items-center gap-2 rounded-full border border-ocean-900/15 px-6 text-[0.9rem] font-semibold text-ocean-900 transition-colors hover:bg-ocean-900/5"
-              >
-                All treatments
+              <Link to="/treatments" className={quietLink}>
+                {t('home.treatments.all')}
                 <ArrowRight className="size-4" />
               </Link>
             </Reveal>
@@ -97,10 +100,10 @@ export function Home() {
       <Section tone="cream" className="grain py-20 sm:py-28">
         <Container>
           <SectionHead
-            eyebrow="Occasions & bundles"
-            title="For honeymoons, groups"
-            script="and whole weeks"
-            lead="Fixed prices, no surprises. Every package can be moved to the beach, the studio or your room."
+            eyebrow={t('home.packages.eyebrow')}
+            title={t('home.packages.title')}
+            script={t('home.packages.script')}
+            lead={t('home.packages.lead')}
           />
           <div className="mt-14 grid gap-5 md:grid-cols-2">
             {packages.map((item, index) => (
@@ -118,13 +121,14 @@ export function Home() {
       <Section className="py-20 sm:py-28">
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHead eyebrow="The hands" title="Five women who" script="do this properly" />
+            <SectionHead
+              eyebrow={t('home.team.eyebrow')}
+              title={t('home.team.title')}
+              script={t('home.team.script')}
+            />
             <Reveal delay={0.15}>
-              <Link
-                to="/team"
-                className="inline-flex h-12 items-center gap-2 rounded-full border border-ocean-900/15 px-6 text-[0.9rem] font-semibold text-ocean-900 transition-colors hover:bg-ocean-900/5"
-              >
-                Meet everyone
+              <Link to="/team" className={quietLink}>
+                {t('home.team.all')}
                 <ArrowRight className="size-4" />
               </Link>
             </Reveal>
@@ -149,18 +153,18 @@ export function Home() {
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHead
-              eyebrow="Your neighbourhood guide"
-              title="What is actually good"
-              script="within a short walk"
-              lead="We live here. This is the list we give friends — beaches, the restaurants worth leaving the resort for, and the practical things nobody tells you."
+              eyebrow={t('home.discover.eyebrow')}
+              title={t('home.discover.title')}
+              script={t('home.discover.script')}
+              lead={t('home.discover.lead')}
             />
             <Reveal delay={0.15}>
               <Link
                 to="/discover"
-                className="inline-flex h-12 items-center gap-2 rounded-full bg-ocean-900 px-6 text-[0.9rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800"
+                className="inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-6 text-[0.9rem] font-semibold text-sand-50 shadow-soft transition-all hover:brightness-110"
               >
                 <Compass className="size-4" />
-                Open the guide
+                {t('home.discover.all')}
               </Link>
             </Reveal>
           </div>

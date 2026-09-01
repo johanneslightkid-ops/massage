@@ -11,7 +11,7 @@ binding = "AI"
 # --- Local dev + production ---
 [[kv_namespaces]]
 binding = "CONTENT"
-id = "78cfcbe1fc734caea63722f90580297e"
+id = "09e7faead934494c8e48ffb806f0ed3e"
 
 [vars]
 SITE_NAME = "Ola Serena"
@@ -23,7 +23,7 @@ SITE_NAME = "Ola Serena"
 # --- Preview deployments ---
 [[env.preview.kv_namespaces]]
 binding = "CONTENT"
-id = "78cfcbe1fc734caea63722f90580297e"
+id = "e21d3f61654b4a11986a7ac04da9f018"
 
 [env.preview.vars]
 SITE_NAME = "Ola Serena (preview)"
@@ -31,7 +31,7 @@ SITE_NAME = "Ola Serena (preview)"
 # --- Production deployments ---
 [[env.production.kv_namespaces]]
 binding = "CONTENT"
-id = "78cfcbe1fc734caea63722f90580297e"
+id = "09e7faead934494c8e48ffb806f0ed3e"
 
 [env.production.vars]
 SITE_NAME = "Ola Serena"

@@ -1,48 +1,40 @@
-# Seed KV Namespace Script
+# Scripts
 
-This script helps populate your Cloudflare KV namespace with initial content.
-
-## Quick Start
-
-Run one of these commands from the project root:
+## `sync-kv.mjs` — push the seed content into KV
 
 ```bash
-# Seed production KV (default)
-node scripts/seed-kv.mjs
-
-# Seed preview KV
-node scripts/seed-kv.mjs preview
+npm run sync:kv            # production, writes only missing keys
+npm run sync:kv:preview    # the preview namespace
+npm run seed               # FORCE=1 — overwrites the content documents
+npm run seed:preview
 ```
 
-## What It Does
+Writes `content:en:v1`, `content:es:v1` and (only if absent) `auth:password`.
 
-1. Reads the seed content from `shared/seed.ts`
-2. Generates a secure password hash for the default password "massage"
-3. Writes two keys to your KV namespace:
-   - `content:v1` - All site content (services, team, settings, etc.)
-   - `auth:password` - Admin password hash
+Without `FORCE=1` an existing key is left alone, which is why `postbuild` can
+run it on every deploy without erasing what the owner edited in `/admin`.
+`FORCE=1` replaces the content documents outright — the deliberate reset.
 
-## Prerequisites
+Auth: `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID` if both are set,
+otherwise `npx wrangler` on a machine that is already logged in.
 
-- You must be authenticated with Cloudflare: `npx wrangler login`
-- The KV namespace must exist in your Cloudflare account
+The seeds are imported as real modules (Node strips the TypeScript itself), so a
+broken seed fails the script instead of uploading a truncated document.
 
-## Manual Alternative
-
-If the script fails, you can manually seed using wrangler:
+## `e2e.mjs` — smoke test a running site
 
 ```bash
-# 1. Create a JSON file with seed content
-# 2. Upload it:
-npx wrangler kv key put "content:v1" --namespace-id=09e7faead934494c8e48ffb806f0ed3e --path=./seed-data.json
-
-# 3. Set admin password (hashed):
-npx wrangler kv key put "auth:password" "<hash>" --namespace-id=09e7faead934494c8e48ffb806f0ed3e
+npm run test:e2e
 ```
 
-## Default Credentials
+## `seo-check.mjs` — per-route metadata and JSON-LD
 
-After seeding, you can log into `/admin` with:
-- **Password:** `massage`
+```bash
+npm run test:seo
+```
 
-⚠️ **Important:** Change this default password immediately after first login!
+## `make-og.mjs` — regenerate `public/og.jpg`
+
+```bash
+npm run og
+```

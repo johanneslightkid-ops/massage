@@ -2,16 +2,18 @@ import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-type Variant = 'primary' | 'ocean' | 'whatsapp' | 'outline' | 'ghost' | 'sand'
+type Variant = 'primary' | 'ocean' | 'sky' | 'palm' | 'whatsapp' | 'outline' | 'ghost' | 'sand'
 type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-coral-500 text-white shadow-soft hover:bg-coral-600 active:bg-coral-600',
+    'bg-gradient-to-br from-flamingo-500 to-coral-500 text-white shadow-soft hover:shadow-pink hover:brightness-105',
   ocean: 'bg-ocean-900 text-sand-50 shadow-soft hover:bg-ocean-800',
+  sky: 'bg-gradient-to-br from-sky-600 to-lagoon-600 text-white shadow-soft hover:brightness-105',
+  palm: 'bg-gradient-to-br from-palm-600 to-lagoon-600 text-white shadow-soft hover:brightness-105',
   whatsapp: 'bg-[#25D366] text-[#062e17] shadow-soft hover:bg-[#1fbb59]',
   outline:
-    'border border-ocean-900/20 bg-transparent text-ocean-900 hover:border-ocean-900/40 hover:bg-ocean-900/5',
+    'border border-ocean-900/15 bg-white/60 text-ocean-900 backdrop-blur-sm hover:border-lagoon-400/60 hover:bg-white',
   ghost: 'text-ocean-800 hover:bg-ocean-900/5',
   sand: 'bg-sand-100 text-ocean-900 hover:bg-sand-200',
 }

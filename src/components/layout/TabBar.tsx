@@ -3,6 +3,7 @@ import { motion } from 'motion/react'
 import { Home, Sparkles, Compass, CalendarHeart, Users } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { useT } from '@/lib/translations/LanguageProvider'
 import { useMobileNav } from './mobile-nav'
 
 interface TabItem {
@@ -14,12 +15,13 @@ interface TabItem {
   badge?: number
 }
 
-const publicTabs: TabItem[] = [
-  { key: '/', label: 'Home', icon: <Home className="size-[1.15rem]" /> , to: '/' },
-  { key: '/treatments', label: 'Massage', icon: <Sparkles className="size-[1.15rem]" />, to: '/treatments' },
-  { key: '/discover', label: 'Discover', icon: <Compass className="size-[1.15rem]" />, to: '/discover' },
-  { key: '/team', label: 'Team', icon: <Users className="size-[1.15rem]" />, to: '/team' },
-  { key: '/book', label: 'Reserve', icon: <CalendarHeart className="size-[1.15rem]" />, to: '/book' },
+/** Labels come from the dictionary, so the bar follows the language toggle. */
+const publicTabs: Array<Omit<TabItem, 'label'> & { labelKey: string }> = [
+  { key: '/', labelKey: 'tab.home', icon: <Home className="size-[1.15rem]" />, to: '/' },
+  { key: '/treatments', labelKey: 'tab.treatments', icon: <Sparkles className="size-[1.15rem]" />, to: '/treatments' },
+  { key: '/discover', labelKey: 'tab.discover', icon: <Compass className="size-[1.15rem]" />, to: '/discover' },
+  { key: '/team', labelKey: 'tab.team', icon: <Users className="size-[1.15rem]" />, to: '/team' },
+  { key: '/book', labelKey: 'tab.book', icon: <CalendarHeart className="size-[1.15rem]" />, to: '/book' },
 ]
 
 /**
@@ -28,9 +30,11 @@ const publicTabs: TabItem[] = [
  */
 export function TabBar() {
   const location = useLocation()
+  const t = useT()
   const { override } = useMobileNav()
 
-  const items = override?.items ?? publicTabs
+  const items: TabItem[] =
+    override?.items ?? publicTabs.map((tab) => ({ ...tab, label: t(tab.labelKey) }))
   const activeKey = override?.activeKey ?? location.pathname
   const isAdmin = Boolean(override)
 
@@ -39,18 +43,15 @@ export function TabBar() {
 
   return (
     <nav
-      aria-label={isAdmin ? 'Admin sections' : 'Main navigation'}
-      className={cn(
-        'fixed inset-x-0 bottom-0 z-50 lg:hidden',
-        'pb-[env(safe-area-inset-bottom,0px)]',
-      )}
+      aria-label={isAdmin ? t('admin.sections') : t('nav.main')}
+      className={cn('fixed inset-x-0 bottom-0 z-50 lg:hidden', 'pb-[env(safe-area-inset-bottom,0px)]')}
     >
       <div
         className={cn(
-          'mx-3 mb-3 rounded-[1.75rem] border shadow-lift transition-colors duration-500',
+          'mx-3 mb-3 rounded-[2rem] border shadow-lift transition-colors duration-500',
           isAdmin
             ? 'border-white/10 bg-ocean-950/92 backdrop-blur-xl'
-            : 'border-ocean-900/8 bg-sand-50/92 backdrop-blur-xl',
+            : 'border-white/70 bg-white/85 ring-1 ring-sky-900/5 backdrop-blur-xl',
         )}
       >
         {isAdmin && override?.title && (
@@ -77,8 +78,10 @@ export function TabBar() {
                   <motion.span
                     layoutId={isAdmin ? 'tab-glow-admin' : 'tab-glow'}
                     className={cn(
-                      'absolute inset-x-0 -top-0.5 bottom-0 -z-10 rounded-2xl',
-                      isAdmin ? 'bg-white/12' : 'bg-ocean-900/8',
+                      'absolute inset-x-0 -top-0.5 bottom-0 -z-10 rounded-[1.4rem]',
+                      isAdmin
+                        ? 'bg-white/12'
+                        : 'bg-gradient-to-b from-sky-100 to-seafoam-100 ring-1 ring-sky-300/50',
                     )}
                     transition={{ type: 'spring', stiffness: 400, damping: 34 }}
                   />
@@ -86,7 +89,7 @@ export function TabBar() {
                 <span className="relative">
                   {item.icon}
                   {Boolean(item.badge) && (
-                    <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-coral-500 px-1 text-[0.6rem] font-bold text-white">
+                    <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-flamingo-500 px-1 text-[0.6rem] font-bold text-white">
                       {item.badge}
                     </span>
                   )}
@@ -96,14 +99,14 @@ export function TabBar() {
             )
 
             const className = cn(
-              'flex min-w-[4.1rem] shrink-0 justify-center rounded-2xl transition-colors',
+              'flex min-w-[4.1rem] shrink-0 justify-center rounded-[1.4rem] transition-colors',
               isAdmin
                 ? active
                   ? 'text-sand-50'
                   : 'text-sand-200/55 hover:text-sand-100'
                 : active
-                  ? 'text-ocean-900'
-                  : 'text-ocean-800/50 hover:text-ocean-900',
+                  ? 'text-sky-800'
+                  : 'text-ocean-800/50 hover:text-ocean-950',
             )
 
             return (

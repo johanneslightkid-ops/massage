@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AlertTriangle, Check, KeyRound, Loader2, RotateCcw } from 'lucide-react'
 import { api } from '@/lib/api'
+import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 
 const inputBase =
@@ -15,6 +16,7 @@ export function SecurityPanel({
   onChanged: (usingDefault: boolean) => void
   onResetAll: () => Promise<void>
 }) {
+  const { t, language } = useLanguage()
   const [current, setCurrent] = useState('')
   const [next, setNext] = useState('')
   const [repeat, setRepeat] = useState('')
@@ -30,8 +32,8 @@ export function SecurityPanel({
     setError(null)
     setDone(false)
 
-    if (next.length < 4) return setError('Choose a password of at least 4 characters.')
-    if (next !== repeat) return setError('The two new passwords do not match.')
+    if (next.length < 4) return setError(t('admin.password_too_short'))
+    if (next !== repeat) return setError(t('admin.password_mismatch'))
 
     setBusy(true)
     try {
@@ -42,7 +44,7 @@ export function SecurityPanel({
       setRepeat('')
       setDone(true)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not change the password.')
+      setError(cause instanceof Error ? cause.message : t('admin.password_error'))
     } finally {
       setBusy(false)
     }
@@ -51,7 +53,7 @@ export function SecurityPanel({
   async function resetEverything() {
     setResetting(true)
     try {
-      await api.reset('all')
+      await api.reset('all', language)
       await onResetAll()
       setConfirmReset(false)
     } finally {
@@ -62,35 +64,36 @@ export function SecurityPanel({
   return (
     <div className="max-w-2xl">
       <header>
-        <h1 className="font-display text-3xl text-ocean-900">Password & data</h1>
+        <h1 className="font-display text-3xl text-ocean-950">{t('admin.security')}</h1>
         <p className="mt-1.5 text-[0.92rem] text-ocean-800/60">
-          The admin password protects everything on this page. Change it from the default before you share the site.
+          {t('admin.security_lead')}
         </p>
       </header>
 
       {usingDefaultPassword && (
-        <div className="mt-7 flex gap-3 rounded-3xl border border-sun-400/40 bg-sun-200/40 p-5">
-          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-sun-600" />
+        <div className="mt-7 flex gap-3 rounded-4xl border border-sun-400/50 bg-sun-200/50 p-5">
+          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-sun-700" />
           <div>
-            <p className="font-semibold text-ocean-900">You are still using the default password.</p>
+            <p className="font-semibold text-ocean-950">{t('admin.security_warning_title')}</p>
             <p className="mt-1 text-[0.9rem] leading-relaxed text-ocean-800/70">
-              Anyone who guesses <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[0.84em]">massage</code>{' '}
-              can edit the whole website. Set a new one below — it takes ten seconds.
+              {t('admin.security_warning_body_before')}{' '}
+              <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[0.84em]">massage</code>{' '}
+              {t('admin.security_warning_body_after')}
             </p>
           </div>
         </div>
       )}
 
-      <form onSubmit={submit} className="mt-7 rounded-4xl border border-ocean-900/10 bg-white p-6 sm:p-7">
-        <h2 className="flex items-center gap-2 font-display text-xl text-ocean-900">
+      <form onSubmit={submit} className="mt-7 rounded-5xl border border-white/70 bg-white/90 p-6 shadow-soft sm:p-7">
+        <h2 className="flex items-center gap-2 font-display text-xl text-ocean-950">
           <KeyRound className="size-5 text-lagoon-600" />
-          Change the password
+          {t('admin.change_password')}
         </h2>
 
         <div className="mt-6 space-y-4">
           <label className="block">
             <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
-              Current password
+              {t('admin.current_password')}
             </span>
             <input
               type="password"
@@ -102,7 +105,7 @@ export function SecurityPanel({
           </label>
           <label className="block">
             <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
-              New password
+              {t('admin.new_password')}
             </span>
             <input
               type="password"
@@ -114,7 +117,7 @@ export function SecurityPanel({
           </label>
           <label className="block">
             <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
-              Repeat the new password
+              {t('admin.repeat_password')}
             </span>
             <input
               type="password"
@@ -128,30 +131,29 @@ export function SecurityPanel({
 
         {error && <p className="mt-4 rounded-2xl bg-coral-100 p-3.5 text-[0.86rem] text-coral-600">{error}</p>}
         {done && (
-          <p className="mt-4 flex items-center gap-2 rounded-2xl bg-seafoam-50 p-3.5 text-[0.86rem] font-semibold text-lagoon-600">
+          <p className="mt-4 flex items-center gap-2 rounded-2xl bg-seafoam-50 p-3.5 text-[0.86rem] font-semibold text-lagoon-700">
             <Check className="size-4" />
-            Password changed. Use the new one next time you sign in.
+            {t('admin.password_changed')}
           </p>
         )}
 
         <button
           type="submit"
           disabled={busy}
-          className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-ocean-900 px-6 text-[0.9rem] font-semibold text-sand-50 transition-colors hover:bg-ocean-800 disabled:opacity-60"
+          className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-6 text-[0.9rem] font-semibold text-sand-50 transition-all hover:brightness-110 disabled:opacity-60"
         >
           {busy && <Loader2 className="size-4 animate-spin" />}
-          Update password
+          {t('admin.update_password')}
         </button>
       </form>
 
-      <div className="mt-6 rounded-4xl border border-coral-300/50 bg-coral-100/40 p-6 sm:p-7">
-        <h2 className="flex items-center gap-2 font-display text-xl text-ocean-900">
+      <div className="mt-6 rounded-5xl border border-coral-300/50 bg-coral-100/50 p-6 shadow-soft sm:p-7">
+        <h2 className="flex items-center gap-2 font-display text-xl text-ocean-950">
           <RotateCcw className="size-5 text-coral-500" />
-          Restore all starting content
+          {t('admin.restore_all_title')}
         </h2>
         <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/70">
-          Replaces every treatment, tip, review and setting with the content the site shipped with. Reservation
-          requests and your password are not touched.
+          {t('admin.restore_all_lead')}
         </p>
 
         {confirmReset ? (
@@ -163,14 +165,14 @@ export function SecurityPanel({
               className="inline-flex h-11 items-center gap-2 rounded-full bg-coral-500 px-5 text-[0.86rem] font-bold text-white disabled:opacity-60"
             >
               {resetting && <Loader2 className="size-4 animate-spin" />}
-              Yes, replace everything
+              {t('admin.restore_all_confirm')}
             </button>
             <button
               type="button"
               onClick={() => setConfirmReset(false)}
               className="h-11 rounded-full px-5 text-[0.86rem] font-semibold text-coral-600"
             >
-              Cancel
+              {t('action.cancel')}
             </button>
           </div>
         ) : (
@@ -179,7 +181,7 @@ export function SecurityPanel({
             onClick={() => setConfirmReset(true)}
             className="mt-5 inline-flex h-11 items-center gap-2 rounded-full border border-coral-400/60 px-5 text-[0.86rem] font-semibold text-coral-600 transition-colors hover:bg-coral-100"
           >
-            Restore everything
+            {t('admin.restore_all_cta')}
           </button>
         )}
       </div>

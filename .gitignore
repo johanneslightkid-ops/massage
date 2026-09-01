@@ -1,42 +1,29 @@
-```gitignore
 # Dependencies
 node_modules/
 
-# Build outputs
-dist/
-build/
-*.js.map
-*.ts.map
+# Wrangler's scratch directory — regenerated on every local build.
+.wrangler/
 
-# Environment variables
+# NOTE: dist/ is deliberately tracked. The Cloudflare Pages project serves
+# `pages_build_output_dir`, and committing the build keeps a deploy working
+# whether or not Pages is configured to run `npm run build` itself.
+
+# Environment / secrets
 .env
-.env.local
-*.env.*
+.env.*
+.dev.vars
+
+# KV sync temp files
+.kv-*.tmp
+.kv-*.tmp.json
 
 # Editors
 .vscode/
 .idea/
 
-# Python cache (if present)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
 # Logs
 *.log
 
-# OS generated files
+# OS
 .DS_Store
 Thumbs.db
-
-# Temporary files
-*.tmp
-*.temp
-```
-
-Wait, let me reconsider. The changes are only TypeScript/JSX source files (`src/App.tsx`, `src/lib/content-store.tsx`). There are no build artifacts, dependencies, or temporary files in the change list. According to rule 6, if the change list contains only source or config files and no build artifacts, dependencies, or temp files, I should output an empty .gitignore.
-
-```gitignore
-
-```
