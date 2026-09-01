@@ -2,28 +2,46 @@ import { Link } from 'react-router-dom'
 import { Mail, Phone, MapPin, MessageCircle, Lock } from 'lucide-react'
 import { FacebookGlyph, InstagramGlyph, TikTokGlyph } from '@/components/art/Brand'
 import { useContent } from '@/lib/content-store'
+import { useT } from '@/lib/translations/LanguageProvider'
 import { whatsappLink } from '@/lib/utils'
 import { Motif } from '@/components/art/Motif'
-import { PalmFrond, WaveDivider } from '@/components/art/Decor'
+import { MonsteraLeaf, PalmFrond, WaveDivider } from '@/components/art/Decor'
 import { publicNav } from './Header'
 
 export function Footer() {
   const { content } = useContent()
+  const t = useT()
   const site = content.site
   const year = new Date().getFullYear()
 
   return (
-    <footer className="grain relative overflow-hidden bg-ocean-950 text-sand-100">
+    <footer className="grain relative overflow-hidden bg-gradient-to-b from-ocean-950 via-sky-950 to-ocean-950 text-sand-100">
       <WaveDivider from="var(--color-ocean-950)" tone="var(--color-lagoon-400)" flip className="absolute inset-x-0 -top-px" />
 
       <PalmFrond className="pointer-events-none absolute -top-10 -right-16 h-72 w-56 animate-sway text-lagoon-400/12" />
-      <PalmFrond mirrored className="pointer-events-none absolute -bottom-16 -left-20 h-80 w-60 text-lagoon-400/10" />
+      <MonsteraLeaf mirrored className="pointer-events-none absolute -bottom-14 -left-16 h-80 w-64 text-palm-400/10" />
 
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-24 pb-10 sm:px-8">
+      {/* Oil-slick colour field behind the whole footer. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 left-1/2 h-72 w-[130%] -translate-x-1/2 opacity-30 blur-3xl"
+        style={{
+          background:
+            'radial-gradient(40% 60% at 20% 50%, var(--color-sky-600) 0%, transparent 70%),' +
+            'radial-gradient(36% 56% at 52% 40%, var(--color-flamingo-500) 0%, transparent 70%),' +
+            'radial-gradient(38% 58% at 82% 55%, var(--color-palm-500) 0%, transparent 70%)',
+        }}
+      />
+
+      {/*
+        `clear-tabbar` keeps the last row — the Admin link — above the fixed
+        mobile bottom bar, which used to sit right on top of it.
+      */}
+      <div className="clear-tabbar relative z-10 mx-auto w-full max-w-6xl px-5 pt-24 sm:px-8">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-3">
-              <span className="grid size-12 place-items-center rounded-2xl bg-sand-50/10 text-sun-400">
+              <span className="grid size-12 place-items-center rounded-[44%_56%_50%_50%/50%_46%_54%_50%] bg-gradient-to-br from-sky-600 via-lagoon-600 to-palm-500 text-white">
                 <Motif name="wave" className="size-6" strokeWidth={1.8} />
               </span>
               <div>
@@ -48,25 +66,25 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-[0.68rem] font-bold tracking-[0.2em] text-seafoam-300 uppercase">Explore</p>
+            <p className="text-[0.68rem] font-bold tracking-[0.2em] text-seafoam-300 uppercase">{t('nav.explore')}</p>
             <ul className="mt-5 space-y-3 text-[0.95rem]">
               {publicNav.map((item) => (
                 <li key={item.to}>
                   <Link to={item.to} className="text-sand-200/75 transition-colors hover:text-sand-50">
-                    {item.label}
+                    {t(item.key)}
                   </Link>
                 </li>
               ))}
               <li>
                 <Link to="/book#payment" className="text-sand-200/75 transition-colors hover:text-sand-50">
-                  Ways to pay
+                  {t('nav.payments')}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <p className="text-[0.68rem] font-bold tracking-[0.2em] text-seafoam-300 uppercase">Find us</p>
+            <p className="text-[0.68rem] font-bold tracking-[0.2em] text-seafoam-300 uppercase">{t('footer.find_us')}</p>
             <ul className="mt-5 space-y-4 text-[0.92rem] text-sand-200/75">
               <li className="flex gap-3">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-lagoon-300" />
@@ -106,7 +124,7 @@ export function Footer() {
                 href={whatsappLink(site)}
                 target="_blank"
                 rel="noreferrer noopener"
-                aria-label="WhatsApp"
+                aria-label={t('action.whatsapp')}
                 className="grid size-10 place-items-center rounded-full bg-[#25D366] text-[#062e17]"
               >
                 <MessageCircle className="size-4" strokeWidth={2.4} />
@@ -149,14 +167,16 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-7 text-[0.78rem] text-sand-200/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {site.brandName} · {site.city}, Dominican Republic
-          </p>
-          <div className="flex items-center gap-5">
-            <span>Therapeutic & relaxation massage only</span>
-            <Link to="/admin" className="inline-flex items-center gap-1.5 transition-colors hover:text-sand-100">
+          <p>{t('footer.rights', { year, brand: site.brandName, city: site.city })}</p>
+          {/* Room on the right so the floating WhatsApp button never sits on the Admin link. */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 pr-20 sm:pr-0">
+            <span>{t('footer.disclaimer')}</span>
+            <Link
+              to="/admin"
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1.5 transition-colors hover:border-white/25 hover:text-sand-100"
+            >
               <Lock className="size-3" />
-              Admin
+              {t('nav.admin')}
             </Link>
           </div>
         </div>

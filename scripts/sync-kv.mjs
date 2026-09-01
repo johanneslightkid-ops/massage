@@ -1,122 +1,160 @@
 #!/usr/bin/env node
 /**
- * Deploy-time KV auto-seed for BOTH languages (en + es).
+ * Push the seed content into Cloudflare KV, for both languages.
  *
- * Reads seed content from `shared/seed.ts` and `shared/seed-es.ts`, then
- * pushes each into KV under `content:<lang>:v1`. Runs safely: if the key
- * already exists we *merge over* the existing value so any changes made
- * through /admin are preserved.
+ *   node scripts/sync-kv.mjs                  production, skip keys that exist
+ *   node scripts/sync-kv.mjs preview          the preview namespace
+ *   FORCE=1 node scripts/sync-kv.mjs          overwrite what is already there
  *
- * Auth precedence:
- *   1. CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID (CI / build hook)
- *   2. `npx wrangler` locally (developer machine, already logged in)
+ * Without FORCE this is safe to run on every deploy: a key that already exists
+ * is left alone, so content edited in /admin is never overwritten by a build.
+ * With FORCE it replaces the documents outright — that is the "reset the site
+ * to the seed" button, and it discards admin edits.
  *
- * Usage:
- *   node scripts/sync-kv.mjs                # production (default)
- *   node scripts/sync-kv.mjs preview        # preview namespace
- *   FORCE=1 node scripts/sync-kv.mjs        # overwrite existing values
+ * Auth, in order:
+ *   1. CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID  (CI, build hooks)
+ *   2. `npx wrangler`, already logged in              (a developer machine)
  */
 
 import { execSync } from 'node:child_process'
-import { readFileSync, writeFileSync, unlinkSync } from 'node:fs'
+import { writeFileSync, unlinkSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
 
+/**
+ * These are the namespaces that actually exist on the account
+ * (`npx wrangler kv namespace list`), and they must stay in step with
+ * wrangler.toml — a binding pointing at a namespace that is not there fails at
+ * request time, not at deploy time, which is a horrible way to find out.
+ */
 const NAMESPACES = {
-  production: process.env.KV_NAMESPACE_ID || '78cfcbe1fc734caea63722f90580297e',
-  preview:    process.env.KV_NAMESPACE_PREVIEW_ID || '78cfcbe1fc734caea63722f90580297e',
+  production: process.env.KV_NAMESPACE_ID || '09e7faead934494c8e48ffb806f0ed3e',
+  preview: process.env.KV_NAMESPACE_PREVIEW_ID || 'e21d3f61654b4a11986a7ac04da9f018',
 }
+
+const LANGS = ['en', 'es']
+
+/** Must match PBKDF2_ITERATIONS in shared/server.ts, or no password verifies. */
+const PBKDF2_ITERATIONS = 100_000
+const DEFAULT_PASSWORD = 'massage'
 
 const env = process.argv[2] || 'production'
 const namespaceId = NAMESPACES[env]
 if (!namespaceId) {
-  console.error(`Unknown environment ${env}. Use production | preview.`)
+  console.error(`Unknown environment "${env}". Use production | preview.`)
   process.exit(1)
 }
 
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID
-const API_TOKEN  = process.env.CLOUDFLARE_API_TOKEN
-const FORCE      = process.env.FORCE === '1'
+const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN
+const FORCE = process.env.FORCE === '1'
+const useApi = Boolean(API_TOKEN && ACCOUNT_ID)
 
-async function loadSeed(path) {
-  // Read TS source with node's ESM loader by transpiling on the fly via tsx.
-  // We rely on plain TS-to-JSON heuristic since the seeds are pure data.
-  const src = readFileSync(path, 'utf-8')
-  const start = src.indexOf('export const ')
-  const eq    = src.indexOf('=', start)
-  const body  = src.slice(eq + 1).trim()
-  // Strip trailing ` as SiteContent` type assertion if present.
-  let depth = 0, end = 0, inStr = false, esc = false, quote = ''
-  for (let i = 0; i < body.length; i++) {
-    const c = body[i]
-    if (esc) { esc = false; continue }
-    if (c === '\\') { esc = true; continue }
-    if (inStr) { if (c === quote) inStr = false; continue }
-    if (c === "'" || c === '"' || c === '`') { inStr = true; quote = c; continue }
-    if (c === '{' || c === '[') depth++
-    if (c === '}' || c === ']') { depth--; if (depth === 0) { end = i + 1; break } }
+const api = (key) =>
+  `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/storage/kv/namespaces/${namespaceId}/values/${encodeURIComponent(key)}`
+
+/* ----------------------------------------------------------------- seeds */
+
+/**
+ * Node strips the type annotations itself, so the seeds are imported as real
+ * modules rather than scraped out of the source with a brace counter — if a
+ * seed does not parse, this fails loudly instead of uploading half a document.
+ */
+async function loadSeed(lang) {
+  const file = lang === 'es' ? 'shared/seed-es.ts' : 'shared/seed.ts'
+  const exported = lang === 'es' ? 'seedContentEs' : 'seedContent'
+  const module = await import(pathToFileURL(`${process.cwd()}/${file}`).href)
+  const seed = module[exported]
+  if (!seed || typeof seed !== 'object' || !seed.site) {
+    throw new Error(`${file} did not export a usable ${exported}`)
   }
-  return body.slice(0, end)
+  return seed
 }
 
-async function seedForLang(lang) {
-  const file = lang === 'es' ? './shared/seed-es.ts' : './shared/seed.ts'
-  // Use tsx via child process to safely evaluate the module.
-  const script = `
-    import('${pathToFileURL(process.cwd() + '/' + file.replace('./','')).href}')
-      .then(m => process.stdout.write(JSON.stringify(m.${lang === 'es' ? 'seedContentEs' : 'seedContent'})))
-      .catch(e => { console.error(e); process.exit(1) })`
-  try {
-    const out = execSync(`npx --yes tsx -e "${script.replace(/"/g,'\\"')}"`, { encoding: 'utf-8' })
-    return out
-  } catch (err) {
-    console.warn(`  ⚠ tsx unavailable, falling back to source scrape (${err.message})`)
-    return await loadSeed(file)
-  }
+/* -------------------------------------------------------------- password */
+
+async function hashPassword(password) {
+  const salt = crypto.getRandomValues(new Uint8Array(16))
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(password),
+    'PBKDF2',
+    false,
+    ['deriveBits'],
+  )
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt, iterations: PBKDF2_ITERATIONS, hash: 'SHA-256' },
+    key,
+    256,
+  )
+  const b64 = (bytes) => Buffer.from(bytes).toString('base64')
+  return `pbkdf2$${PBKDF2_ITERATIONS}$${b64(salt)}$${b64(new Uint8Array(bits))}`
 }
 
-async function apiPutKV(lang, valueJson) {
-  const key = `content:${lang}:v1`
-  if (API_TOKEN && ACCOUNT_ID) {
-    if (!FORCE) {
-      const check = await fetch(
-        `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/storage/kv/namespaces/${namespaceId}/values/${encodeURIComponent(key)}`,
-        { headers: { Authorization: `Bearer ${API_TOKEN}` } }
-      )
-      if (check.ok) {
-        console.log(`  ↷ ${lang}: KV already has ${key} (skipped; FORCE=1 to overwrite)`)
-        return
-      }
-    }
-    const res = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/storage/kv/namespaces/${namespaceId}/values/${encodeURIComponent(key)}`,
-      { method: 'PUT', headers: { Authorization: `Bearer ${API_TOKEN}`, 'Content-Type': 'application/json' }, body: valueJson }
-    )
-    if (!res.ok) throw new Error(`Cloudflare KV PUT failed for ${key}: ${res.status} ${await res.text()}`)
-    console.log(`  ✓ ${lang}: pushed ${key} via REST API`)
+/* ------------------------------------------------------------------- kv */
+
+async function exists(key) {
+  if (!useApi) return false
+  const res = await fetch(api(key), { headers: { Authorization: `Bearer ${API_TOKEN}` } })
+  return res.ok
+}
+
+async function put(key, value) {
+  if (useApi) {
+    const res = await fetch(api(key), {
+      method: 'PUT',
+      headers: { Authorization: `Bearer ${API_TOKEN}`, 'Content-Type': 'text/plain' },
+      body: value,
+    })
+    if (!res.ok) throw new Error(`KV PUT ${key} failed: ${res.status} ${await res.text()}`)
     return
   }
-  // Fallback: wrangler CLI (local dev)
-  const tmp = `./.kv-${lang}.tmp.json`
-  writeFileSync(tmp, valueJson)
+
+  const tmp = `./.kv-${key.replace(/[^a-z0-9]/gi, '-')}.tmp`
+  writeFileSync(tmp, value)
   try {
-    execSync(
-      `npx wrangler kv key put "${key}" --namespace-id=${namespaceId} ${env === 'preview' ? '--preview' : ''} --path="${tmp}"`,
-      { stdio: 'inherit' }
-    )
-  } finally { unlinkSync(tmp) }
+    execSync(`npx wrangler kv key put "${key}" --namespace-id=${namespaceId} --path="${tmp}"`, {
+      stdio: 'inherit',
+    })
+  } finally {
+    unlinkSync(tmp)
+  }
 }
+
+/* ----------------------------------------------------------------- main */
 
 async function main() {
-  console.log(`\n🌊 Sync KV (${env}) — namespace ${namespaceId}`)
-  for (const lang of ['en', 'es']) {
-    console.log(`\n▸ Language: ${lang}`)
-    const json = await seedForLang(lang)
-    if (!json || !json.trim().startsWith('{')) {
-      throw new Error(`Seed for ${lang} did not produce valid JSON`)
+  console.log(`\n🌊 KV sync — ${env}, namespace ${namespaceId}`)
+  console.log(`   auth: ${useApi ? 'REST API token' : 'wrangler CLI'}`)
+  console.log(`   mode: ${FORCE ? 'FORCE (overwrites existing values)' : 'safe (skips existing keys)'}\n`)
+
+  for (const lang of LANGS) {
+    const key = `content:${lang}:v1`
+    const seed = await loadSeed(lang)
+
+    if (!FORCE && (await exists(key))) {
+      console.log(`  ↷ ${key} already present — skipped (FORCE=1 to overwrite)`)
+      continue
     }
-    await apiPutKV(lang, json)
+    await put(key, JSON.stringify(seed))
+    console.log(`  ✓ ${key} — ${Object.keys(seed).length} sections`)
   }
-  console.log('\n✨ KV sync complete.\n')
+
+  // The password is never forced: overwriting it would lock the owner out of a
+  // site she had already secured.
+  if (await exists('auth:password')) {
+    console.log('  ↷ auth:password already set — left alone')
+  } else {
+    await put('auth:password', await hashPassword(DEFAULT_PASSWORD))
+    console.log(`  ✓ auth:password — default "${DEFAULT_PASSWORD}", change it in /admin`)
+  }
+
+  console.log('\n✨ Done.\n')
 }
 
-main().catch((err) => { console.error(err); process.exit(1) })
+main().catch((error) => {
+  console.error(`\n❌ ${error.message}\n`)
+  if (!useApi) {
+    console.error('Set CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID, or run `npx wrangler login`.\n')
+  }
+  process.exit(1)
+})

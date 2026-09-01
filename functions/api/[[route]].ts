@@ -1,4 +1,3 @@
-import { seedContent } from '../../shared/seed'
 import type { Booking, SiteContent } from '../../shared/types'
 import {
   DEFAULT_PASSWORD,
@@ -18,6 +17,7 @@ import {
   randomToken,
   readContent,
   recordFailedLogin,
+  seedFor,
   sessionCookie,
   sessionTokenFrom,
   verifyPassword,
@@ -194,18 +194,22 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     if (path === 'admin/reset' && method === 'POST') {
       const body = (await request.json().catch(() => ({}))) as { section?: string }
       const section = body.section ?? 'all'
+      // Restore from the seed for the language being edited — resetting the
+      // Spanish document must not drop English copy into it.
+      const seed = seedFor(lang)
+
       if (section === 'all') {
-        await writeContent(kv, structuredClone(seedContent), lang)
+        await writeContent(kv, structuredClone(seed), lang)
         return json({ ok: true, section })
       }
       if (section === 'site') {
         const current = await readContent(kv, lang)
-        await writeContent(kv, { ...current, site: structuredClone(seedContent.site) }, lang)
+        await writeContent(kv, { ...current, site: structuredClone(seed.site) }, lang)
         return json({ ok: true, section })
       }
       if (isCollectionKey(section)) {
         const current = await readContent(kv, lang)
-        await writeContent(kv, { ...current, [section]: structuredClone(seedContent[section]) } as SiteContent, lang)
+        await writeContent(kv, { ...current, [section]: structuredClone(seed[section]) } as SiteContent, lang)
         return json({ ok: true, section })
       }
       return fail(400, `Cannot reset "${section}".`)

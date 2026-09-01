@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CalendarDays, Check, Clock, Loader2, MessageCircle, Users } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
+import { useT } from '@/lib/translations/LanguageProvider'
 import { faqSchema, useJsonLd, useSeo } from '@/lib/seo'
 import { api } from '@/lib/api'
 import { bookingMessage, cn, formatPrice, sortByOrder, whatsappLink } from '@/lib/utils'
@@ -15,8 +16,8 @@ const TIME_SLOTS = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00', '18:30
 
 function StepLabel({ index, children }: { index: number; children: React.ReactNode }) {
   return (
-    <h2 className="flex items-center gap-3 font-display text-[1.35rem] text-ocean-900">
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ocean-900 text-[0.8rem] font-bold text-sand-50">
+    <h2 className="flex items-center gap-3 font-display text-[1.35rem] text-ocean-950">
+      <span className="grid size-8 shrink-0 place-items-center rounded-[44%_56%_50%_50%/50%_46%_54%_50%] bg-gradient-to-br from-sky-700 to-lagoon-600 text-[0.8rem] font-bold text-sand-50">
         {index}
       </span>
       {children}
@@ -41,10 +42,10 @@ function OptionButton({
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        'relative rounded-3xl border p-4 text-left transition-all duration-300',
+        'relative rounded-[1.6rem] border p-4 text-left transition-all duration-300',
         selected
-          ? 'border-lagoon-500 bg-seafoam-50 shadow-soft'
-          : 'border-ocean-900/10 bg-white/70 hover:border-ocean-900/25',
+          ? 'border-lagoon-400 bg-gradient-to-br from-seafoam-50 to-sky-50 shadow-soft'
+          : 'border-ocean-900/10 bg-white/70 hover:border-lagoon-400/50 hover:bg-white',
         className,
       )}
     >
@@ -60,6 +61,7 @@ function OptionButton({
 
 export function Book() {
   const { content } = useContent()
+  const t = useT()
   const site = content.site
   const currency = site.currency
   const services = useMemo(() => sortByOrder(content.services), [content.services])
@@ -68,8 +70,8 @@ export function Book() {
 
   useSeo({
     path: '/book',
-    title: `Reserve a massage · ${site.brandName}, ${site.neighborhood}`,
-    description: `Reserve a massage in ${site.neighborhood}, ${site.city} — studio, beach or your hotel room. The form opens WhatsApp with your details already filled in.`,
+    title: `${t('nav.book')} · ${site.brandName}, ${site.neighborhood}`,
+    description: t('book.lead'),
   })
   useJsonLd([faqSchema(sortByOrder(content.faqs))])
 
@@ -110,21 +112,15 @@ export function Book() {
     return duration?.price ?? null
   }, [selectedPackage, selectedService, minutes])
 
-  const durationLabel = selectedPackage ? selectedPackage.duration : minutes ? `${minutes} min` : ''
+  const durationLabel = selectedPackage
+    ? selectedPackage.duration
+    : minutes
+      ? t('book.minutes', { minutes })
+      : ''
 
-  const draft = {
-    service: serviceName,
-    duration: durationLabel,
-    venue,
-    date,
-    time,
-    people,
-    name,
-    hotel,
-    notes,
-  }
+  const draft = { service: serviceName, duration: durationLabel, venue, date, time, people, name, hotel, notes }
 
-  const message = bookingMessage(draft, site.brandName)
+  const message = bookingMessage(draft, site.brandName, t)
   const link = whatsappLink(site, message)
   const ready = Boolean(name.trim() && serviceName)
 
@@ -142,20 +138,24 @@ export function Book() {
       await api.createBooking({ ...draft, contact: 'WhatsApp' })
       setSent(true)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not save the request.')
+      setError(cause instanceof Error ? cause.message : t('book.error_save'))
     } finally {
       setSending(false)
       if (!target) window.location.href = link
     }
   }
 
+  const fieldBase =
+    'h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/85 px-4 text-ocean-950 transition-colors focus:border-lagoon-400 focus:outline-none'
+  const labelBase = 'mb-2 block text-[0.82rem] font-semibold text-ocean-800/70'
+
   return (
     <>
       <PageHeader
-        kicker="Reservation"
-        title="Tell us when,"
-        script="we bring everything"
-        lead="Fill this in and it opens WhatsApp with your details already written out. Or just message us directly — both reach the same phone."
+        kicker={t('book.kicker')}
+        title={t('book.title')}
+        script={t('book.script')}
+        lead={t('book.lead')}
       />
 
       <Section className="py-14 sm:py-20">
@@ -164,7 +164,7 @@ export function Book() {
             <div className="min-w-0 space-y-12">
               {/* ---------------------------------------------- treatment */}
               <Reveal>
-                <StepLabel index={1}>Which treatment?</StepLabel>
+                <StepLabel index={1}>{t('book.step_treatment')}</StepLabel>
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {services.map((service) => (
                     <OptionButton
@@ -173,14 +173,16 @@ export function Book() {
                       onClick={() => setServiceName(service.name)}
                     >
                       <div className="flex items-start gap-3">
-                        <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-xl bg-sand-100 text-ocean-800">
+                        <span className="mt-0.5 grid size-9 shrink-0 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-sky-100 text-sky-800">
                           <Motif name={service.icon} className="size-4.5" />
                         </span>
                         <span>
-                          <span className="block font-semibold text-ocean-900">{service.name}</span>
+                          <span className="block font-semibold text-ocean-950">{service.name}</span>
                           <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{service.tagline}</span>
-                          <span className="mt-1.5 block text-[0.8rem] font-bold text-lagoon-600">
-                            from {formatPrice(service.durations[0]?.price ?? 0, currency)}
+                          <span className="mt-1.5 block text-[0.8rem] font-bold text-lagoon-700">
+                            {t('book.from', {
+                              price: formatPrice(service.durations[0]?.price ?? 0, currency),
+                            })}
                           </span>
                         </span>
                       </div>
@@ -190,8 +192,8 @@ export function Book() {
 
                 {packages.length > 0 && (
                   <>
-                    <p className="mt-7 text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-600 uppercase">
-                      Or a package
+                    <p className="mt-7 text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-700 uppercase">
+                      {t('book.or_package')}
                     </p>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
                       {packages.map((item) => (
@@ -200,9 +202,9 @@ export function Book() {
                           selected={serviceName === item.name}
                           onClick={() => setServiceName(item.name)}
                         >
-                          <span className="block font-semibold text-ocean-900">{item.name}</span>
+                          <span className="block font-semibold text-ocean-950">{item.name}</span>
                           <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{item.duration}</span>
-                          <span className="mt-1.5 block text-[0.8rem] font-bold text-coral-500">
+                          <span className="mt-1.5 block text-[0.8rem] font-bold text-flamingo-600">
                             {formatPrice(item.price, currency)}
                           </span>
                         </OptionButton>
@@ -215,20 +217,20 @@ export function Book() {
               {/* ----------------------------------------------- duration */}
               {selectedService && (
                 <Reveal>
-                  <StepLabel index={2}>How long?</StepLabel>
+                  <StepLabel index={2}>{t('book.step_duration')}</StepLabel>
                   <div className="mt-5 flex flex-wrap gap-3">
                     {selectedService.durations.map((duration) => (
                       <OptionButton
                         key={duration.minutes}
                         selected={minutes === duration.minutes}
                         onClick={() => setMinutes(duration.minutes)}
-                        className="min-w-[8.5rem] flex-1 sm:flex-none"
+                        className="min-w-34 flex-1 sm:flex-none"
                       >
-                        <span className="flex items-center gap-2 font-semibold text-ocean-900">
+                        <span className="flex items-center gap-2 font-semibold text-ocean-950">
                           <Clock className="size-4 text-lagoon-600" />
-                          {duration.minutes} min
+                          {t('book.minutes', { minutes: duration.minutes })}
                         </span>
-                        <span className="mt-1 block text-[0.85rem] font-bold text-lagoon-600">
+                        <span className="mt-1 block text-[0.85rem] font-bold text-lagoon-700">
                           {formatPrice(duration.price, currency)}
                         </span>
                       </OptionButton>
@@ -239,14 +241,14 @@ export function Book() {
 
               {/* -------------------------------------------------- where */}
               <Reveal>
-                <StepLabel index={selectedService ? 3 : 2}>Where should we set up?</StepLabel>
+                <StepLabel index={selectedService ? 3 : 2}>{t('book.step_venue')}</StepLabel>
                 <div className="mt-5 grid gap-3 sm:grid-cols-3">
                   {venues.map((option) => (
                     <OptionButton key={option.id} selected={venue === option.name} onClick={() => setVenue(option.name)}>
-                      <span className="grid size-9 place-items-center rounded-xl bg-sand-100 text-ocean-800">
+                      <span className="grid size-9 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-sky-100 text-sky-800">
                         <Motif name={option.icon} className="size-4.5" />
                       </span>
-                      <span className="mt-3 block font-semibold text-ocean-900">{option.name}</span>
+                      <span className="mt-3 block font-semibold text-ocean-950">{option.name}</span>
                       <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{option.subtitle}</span>
                     </OptionButton>
                   ))}
@@ -256,30 +258,30 @@ export function Book() {
 
               {/* --------------------------------------------------- when */}
               <Reveal>
-                <StepLabel index={selectedService ? 4 : 3}>When suits you?</StepLabel>
+                <StepLabel index={selectedService ? 4 : 3}>{t('book.step_when')}</StepLabel>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <label className="block">
                     <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/70">
                       <CalendarDays className="size-4 text-lagoon-600" />
-                      Date
+                      {t('book.date')}
                     </span>
                     <input
                       type="date"
                       value={date}
                       min={todayIso}
                       onChange={(event) => setDate(event.target.value)}
-                      className="h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/80 px-4 text-ocean-900 focus:border-lagoon-400 focus:outline-none"
+                      className={fieldBase}
                     />
                   </label>
                   <label className="block">
                     <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/70">
                       <Users className="size-4 text-lagoon-600" />
-                      How many people
+                      {t('book.people')}
                     </span>
                     <select
                       value={people}
                       onChange={(event) => setPeople(event.target.value)}
-                      className="h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/80 px-4 text-ocean-900 focus:border-lagoon-400 focus:outline-none"
+                      className={fieldBase}
                     >
                       {['1', '2', '3', '4', '5', '6+'].map((count) => (
                         <option key={count} value={count}>
@@ -290,7 +292,7 @@ export function Book() {
                   </label>
                 </div>
 
-                <p className="mt-5 mb-2 text-[0.82rem] font-semibold text-ocean-800/70">Preferred time</p>
+                <p className="mt-5 mb-2 text-[0.82rem] font-semibold text-ocean-800/70">{t('book.preferred_time')}</p>
                 <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
                   {TIME_SLOTS.map((slot) => (
                     <button
@@ -300,8 +302,8 @@ export function Book() {
                       className={cn(
                         'shrink-0 rounded-full px-5 py-2.5 text-[0.85rem] font-semibold transition-all duration-300',
                         time === slot
-                          ? 'bg-ocean-900 text-sand-50 shadow-soft'
-                          : 'border border-ocean-900/12 text-ocean-800/70 hover:border-ocean-900/25',
+                          ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
+                          : 'border border-ocean-900/12 bg-white/50 text-ocean-800/70 hover:border-lagoon-400/60',
                       )}
                     >
                       {slot}
@@ -312,38 +314,34 @@ export function Book() {
 
               {/* -------------------------------------------------- details */}
               <Reveal>
-                <StepLabel index={selectedService ? 5 : 4}>Your details</StepLabel>
+                <StepLabel index={selectedService ? 5 : 4}>{t('book.step_details')}</StepLabel>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <label className="block sm:col-span-2">
-                    <span className="mb-2 block text-[0.82rem] font-semibold text-ocean-800/70">Your name *</span>
+                    <span className={labelBase}>{t('book.name')}</span>
                     <input
                       value={name}
                       onChange={(event) => setName(event.target.value)}
-                      placeholder="How should we greet you?"
-                      className="h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/80 px-4 text-ocean-900 placeholder:text-ocean-800/35 focus:border-lagoon-400 focus:outline-none"
+                      placeholder={t('book.name_placeholder')}
+                      className={cn(fieldBase, 'placeholder:text-ocean-800/35')}
                     />
                   </label>
                   <label className="block sm:col-span-2">
-                    <span className="mb-2 block text-[0.82rem] font-semibold text-ocean-800/70">
-                      Hotel, villa or room number
-                    </span>
+                    <span className={labelBase}>{t('book.hotel')}</span>
                     <input
                       value={hotel}
                       onChange={(event) => setHotel(event.target.value)}
-                      placeholder="e.g. Resort name, building 4, room 212"
-                      className="h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/80 px-4 text-ocean-900 placeholder:text-ocean-800/35 focus:border-lagoon-400 focus:outline-none"
+                      placeholder={t('book.hotel_placeholder')}
+                      className={cn(fieldBase, 'placeholder:text-ocean-800/35')}
                     />
                   </label>
                   <label className="block sm:col-span-2">
-                    <span className="mb-2 block text-[0.82rem] font-semibold text-ocean-800/70">
-                      Anything we should know?
-                    </span>
+                    <span className={labelBase}>{t('book.notes')}</span>
                     <textarea
                       value={notes}
                       onChange={(event) => setNotes(event.target.value)}
                       rows={4}
-                      placeholder="Injuries, pregnancy, pressure preference, sunburn, a surprise for someone…"
-                      className="w-full rounded-2xl border border-ocean-900/12 bg-white/80 px-4 py-3 text-ocean-900 placeholder:text-ocean-800/35 focus:border-lagoon-400 focus:outline-none"
+                      placeholder={t('book.notes_placeholder')}
+                      className="w-full rounded-2xl border border-ocean-900/12 bg-white/85 px-4 py-3 text-ocean-950 transition-colors placeholder:text-ocean-800/35 focus:border-lagoon-400 focus:outline-none"
                     />
                   </label>
                 </div>
@@ -352,29 +350,31 @@ export function Book() {
 
             {/* ---------------------------------------------------- summary */}
             <div className="min-w-0 lg:sticky lg:top-24">
-              <div className="rounded-4xl border border-ocean-900/10 bg-white/80 p-6 shadow-soft backdrop-blur-sm">
-                <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-600 uppercase">Your request</p>
+              <div className="rounded-5xl border border-white/70 bg-white/85 p-6 shadow-lift ring-1 ring-sky-900/5 backdrop-blur-sm">
+                <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+                  {t('book.summary')}
+                </p>
 
                 <dl className="mt-5 space-y-3 text-[0.9rem]">
                   {[
-                    ['Treatment', serviceName || '—'],
-                    ['Duration', durationLabel || '—'],
-                    ['Where', venue || '—'],
-                    ['Date', date || 'Flexible'],
-                    ['Time', time || 'Flexible'],
-                    ['People', people],
+                    [t('book.summary_treatment'), serviceName || '—'],
+                    [t('book.summary_duration'), durationLabel || '—'],
+                    [t('book.summary_where'), venue || '—'],
+                    [t('book.summary_date'), date || t('book.flexible')],
+                    [t('book.summary_time'), time || t('book.flexible')],
+                    [t('book.summary_people'), people],
                   ].map(([label, value]) => (
                     <div key={label} className="flex justify-between gap-4 border-b border-ocean-900/6 pb-2.5">
                       <dt className="text-ocean-800/55">{label}</dt>
-                      <dd className="text-right font-semibold text-ocean-900">{value}</dd>
+                      <dd className="text-right font-semibold text-ocean-950">{value}</dd>
                     </div>
                   ))}
                 </dl>
 
                 {price !== null && (
                   <p className="mt-5 flex items-baseline justify-between">
-                    <span className="text-[0.82rem] font-semibold text-ocean-800/55">Estimated</span>
-                    <span className="font-display text-3xl text-coral-500">{formatPrice(price, currency)}</span>
+                    <span className="text-[0.82rem] font-semibold text-ocean-800/55">{t('book.estimated')}</span>
+                    <span className="font-display text-3xl text-flamingo-600">{formatPrice(price, currency)}</span>
                   </p>
                 )}
 
@@ -389,29 +389,31 @@ export function Book() {
                       : 'cursor-not-allowed bg-sand-200 text-ocean-800/40',
                   )}
                 >
-                  {sending ? <Loader2 className="size-5 animate-spin" /> : <MessageCircle className="size-5" strokeWidth={2.4} />}
-                  {sending ? 'Sending…' : 'Send on WhatsApp'}
+                  {sending ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <MessageCircle className="size-5" strokeWidth={2.4} />
+                  )}
+                  {sending ? t('book.sending') : t('book.send')}
                 </button>
 
                 {!ready && (
-                  <p className="mt-3 text-center text-[0.78rem] text-ocean-800/50">
-                    Pick a treatment and add your name to continue.
-                  </p>
+                  <p className="mt-3 text-center text-[0.78rem] text-ocean-800/50">{t('book.not_ready')}</p>
                 )}
                 {sent && (
-                  <p className="mt-3 rounded-2xl bg-seafoam-50 p-3 text-center text-[0.82rem] font-semibold text-lagoon-600">
-                    Request saved — finish the message in WhatsApp and we will confirm.
+                  <p className="mt-3 rounded-2xl bg-seafoam-50 p-3 text-center text-[0.82rem] font-semibold text-lagoon-700">
+                    {t('book.sent')}
                   </p>
                 )}
                 {error && (
                   <p className="mt-3 rounded-2xl bg-coral-100 p-3 text-center text-[0.82rem] text-coral-600">
-                    {error} You can still send the WhatsApp message.
+                    {error} {t('book.error_suffix')}
                   </p>
                 )}
 
-                <details className="mt-5 rounded-2xl bg-sand-100 p-4">
+                <details className="mt-5 rounded-2xl bg-sky-50 p-4 ring-1 ring-sky-200/60">
                   <summary className="cursor-pointer text-[0.8rem] font-semibold text-ocean-800/70">
-                    Preview the message
+                    {t('book.preview')}
                   </summary>
                   <pre className="mt-3 text-[0.76rem] leading-relaxed whitespace-pre-wrap text-ocean-800/70">
                     {message}

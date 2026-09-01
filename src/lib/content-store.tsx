@@ -1,26 +1,27 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { SiteContent } from '@shared/types'
-import { seedContent } from '@shared/seed'
+import { seedFor } from '@shared/seeds'
 import { api } from './api'
-import { useLanguage } from '../lib/translations/LanguageProvider'
+import { useLanguage } from './translations/LanguageProvider'
+import type { LanguageCode } from './translations'
 
 interface ContentState {
   content: SiteContent
   loading: boolean
   error: string | null
-  lang: string
-  setLang: (lang: string) => void
+  lang: LanguageCode
   refresh: () => Promise<void>
 }
 
 const ContentContext = createContext<ContentState | null>(null)
 
 export function ContentProvider({ children }: { children: ReactNode }) {
-  const { language } = useLanguage()
-  
-  // Seed acts as the instant first paint; KV content replaces it a moment later.
-  const [content, setContent] = useState<SiteContent>(seedContent)
+  const { language, t } = useLanguage()
+
+  // The seed for the *current* language is the instant first paint — switching
+  // to Spanish must never flash English copy while KV is being fetched.
+  const [content, setContent] = useState<SiteContent>(() => seedFor(language))
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -30,25 +31,22 @@ export function ContentProvider({ children }: { children: ReactNode }) {
       setContent(fresh)
       setError(null)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not load content')
+      setError(cause instanceof Error ? cause.message : t('error.content_load'))
     } finally {
       setLoading(false)
     }
-  }, [language])
+  }, [language, t])
 
-  const setLang = useCallback((nextLang: string) => {
-    const url = new URL(window.location.href)
-    url.searchParams.set('lang', nextLang)
-    window.history.pushState({}, '', url)
-  }, [])
-
+  // Swap to the other language's seed immediately, then let KV catch up.
   useEffect(() => {
+    setContent(seedFor(language))
+    setLoading(true)
     void refresh()
-  }, [refresh])
+  }, [language, refresh])
 
   const value = useMemo<ContentState>(
-    () => ({ content, loading, error, lang: language, setLang, refresh }),
-    [content, loading, error, language, setLang, refresh],
+    () => ({ content, loading, error, lang: language, refresh }),
+    [content, loading, error, language, refresh],
   )
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>

@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { Loader2, RefreshCw, Trash2 } from 'lucide-react'
 import type { Booking } from '@shared/types'
 import { api } from '@/lib/api'
-import { bookingStatusLabels, cn, formatDateTime } from '@/lib/utils'
+import { useLanguage } from '@/lib/translations/LanguageProvider'
+import { bookingStatusKeys, cn, formatDateTime } from '@/lib/utils'
 
 const statusStyles: Record<Booking['status'], string> = {
-  new: 'bg-sun-200 text-sun-600',
-  confirmed: 'bg-seafoam-100 text-lagoon-600',
+  new: 'bg-sun-200 text-sun-700',
+  confirmed: 'bg-seafoam-100 text-lagoon-700',
   done: 'bg-sand-200 text-ocean-800',
   cancelled: 'bg-coral-100 text-coral-600',
 }
 
 export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }) {
+  const { t, locale } = useLanguage()
   const [rows, setRows] = useState<Booking[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -24,7 +26,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
       onCount?.(data.filter((row) => row.status === 'new').length)
       setError(null)
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not load requests.')
+      setError(cause instanceof Error ? cause.message : t('admin.bookings_load_error'))
     } finally {
       setBusy(false)
     }
@@ -41,7 +43,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
       await api.updateBooking(booking.id, { status })
       await load()
     } catch (cause) {
-      setError(cause instanceof Error ? cause.message : 'Could not update.')
+      setError(cause instanceof Error ? cause.message : t('admin.bookings_update_error'))
     }
   }
 
@@ -55,9 +57,9 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
     <div>
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-ocean-900">Reservation requests</h1>
+          <h1 className="font-display text-3xl text-ocean-950">{t('admin.bookings_title')}</h1>
           <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">
-            Everything sent through the form on the website. Requests are kept for six months.
+            {t('admin.bookings_lead')}
           </p>
         </div>
         <button
@@ -66,7 +68,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
           className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 px-5 text-[0.86rem] font-semibold text-ocean-800/70 transition-colors hover:text-ocean-900"
         >
           <RefreshCw className={cn('size-4', busy && 'animate-spin')} />
-          Refresh
+          {t('action.refresh')}
         </button>
       </header>
 
@@ -75,20 +77,20 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
       {rows === null ? (
         <div className="mt-10 flex items-center gap-3 text-ocean-800/50">
           <Loader2 className="size-4 animate-spin" />
-          Loading…
+          {t('action.loading')}
         </div>
       ) : rows.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-ocean-900/15 p-12 text-center text-ocean-800/50">
-          No requests yet. They appear here the moment someone uses the reservation form.
+          {t('admin.bookings_empty')}
         </div>
       ) : (
         <ul className="mt-8 space-y-3">
           {rows.map((booking) => (
-            <li key={booking.id} className="rounded-3xl border border-ocean-900/10 bg-white p-5">
+            <li key={booking.id} className="rounded-4xl border border-white/70 bg-white/90 p-5 shadow-soft">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-display text-xl text-ocean-900">{booking.name}</p>
-                  <p className="mt-0.5 text-[0.82rem] text-ocean-800/50">{formatDateTime(booking.createdAt)}</p>
+                  <p className="font-display text-xl text-ocean-950">{booking.name}</p>
+                  <p className="mt-0.5 text-[0.82rem] text-ocean-800/50">{formatDateTime(booking.createdAt, locale)}</p>
                 </div>
                 <span
                   className={cn(
@@ -96,19 +98,19 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
                     statusStyles[booking.status],
                   )}
                 >
-                  {bookingStatusLabels[booking.status]}
+                  {t(bookingStatusKeys[booking.status])}
                 </span>
               </div>
 
               <dl className="mt-4 grid gap-x-6 gap-y-2 text-[0.88rem] sm:grid-cols-2">
                 {[
-                  ['Treatment', booking.service],
-                  ['Duration', booking.duration],
-                  ['Where', booking.venue],
-                  ['Hotel / room', booking.hotel],
-                  ['Date', booking.date],
-                  ['Time', booking.time],
-                  ['People', booking.people],
+                  [t('wa.treatment'), booking.service],
+                  [t('wa.duration'), booking.duration],
+                  [t('wa.where'), booking.venue],
+                  [t('wa.hotel'), booking.hotel],
+                  [t('wa.date'), booking.date],
+                  [t('wa.time'), booking.time],
+                  [t('wa.people'), booking.people],
                 ]
                   .filter(([, value]) => Boolean(value))
                   .map(([label, value]) => (
@@ -120,7 +122,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
               </dl>
 
               {booking.notes && (
-                <p className="mt-4 rounded-2xl bg-sand-100 p-4 text-[0.88rem] leading-relaxed text-ocean-800/80">
+                <p className="mt-4 rounded-2xl bg-sky-50 p-4 text-[0.88rem] leading-relaxed text-ocean-800/80">
                   {booking.notes}
                 </p>
               )}
@@ -134,17 +136,17 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
                     className={cn(
                       'h-9 rounded-full px-4 text-[0.8rem] font-semibold transition-colors',
                       booking.status === status
-                        ? 'bg-ocean-900 text-sand-50'
+                        ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50'
                         : 'border border-ocean-900/12 text-ocean-800/60 hover:text-ocean-900',
                     )}
                   >
-                    {bookingStatusLabels[status]}
+                    {t(bookingStatusKeys[status])}
                   </button>
                 ))}
                 <button
                   type="button"
                   onClick={() => remove(booking)}
-                  aria-label="Delete request"
+                  aria-label={t('admin.delete_request')}
                   className="ml-auto grid size-9 place-items-center rounded-xl text-ocean-800/40 transition-colors hover:bg-coral-100 hover:text-coral-600"
                 >
                   <Trash2 className="size-4" />
