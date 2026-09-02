@@ -12,7 +12,7 @@ import {
   isVenueTag,
   venueTagFromName,
 } from '@shared/journey-tags'
-import type { ConcernTag, IntensityChoice, MomentTag, VenueTag } from '@shared/journey-tags'
+import type { ConcernTag, IntensityChoice, VenueTag } from '@shared/journey-tags'
 import { matchJourneys } from '@shared/matcher'
 import type { GuestAnswers, MatchResult } from '@shared/matcher'
 import type { Service, Venue } from '@shared/types'
@@ -34,16 +34,24 @@ type Step = (typeof STEPS)[number]
 /** The three questions everyone answers; comfort is conditional, result is the end. */
 const QUESTION_COUNT = 3
 
-/**
- * Moments where a short comfort check is worth asking, because the answer
- * genuinely changes what we should suggest.
+/*
+ * The comfort check is shown to everyone, and it was not always.
  *
- * It is not shown to everyone. A guest who says they had a great day on a boat
- * and want firm work does not need to be handed a list of medical-sounding
- * checkboxes — that is the moment the site would stop feeling like a concierge
- * and start feeling like an intake form.
+ * It started life gated to the moments where an answer seemed most likely to
+ * matter — expecting, gentle, targeted, after-adventure, unsure — on the
+ * reasoning that handing a cheerful guest a list of medical-sounding
+ * checkboxes is how a concierge turns into an intake form.
+ *
+ * Walking the personas found the hole in that. A guest running a fever who
+ * picks "I just want to switch off" is exactly the person the check exists
+ * for, and under the gate they were never asked, so the site cheerfully
+ * suggested a massage. Four of the nine opening answers skipped it entirely.
+ *
+ * Being asked one short, optional, clearly-framed question is a small cost.
+ * Not being asked when it mattered is not. So it is asked every time, and the
+ * design carries the weight instead: friendly wording, a plain statement that
+ * the answers stay on the phone, and "None of these" one tap away.
  */
-const COMFORT_MOMENTS: MomentTag[] = ['expecting', 'gentle', 'targeted', 'after-adventure', 'unsure']
 
 export function FindYourMassage() {
   const { content } = useContent()
@@ -97,7 +105,7 @@ export function FindYourMassage() {
 
   /* Which screen are we on --------------------------------------------- */
 
-  const needsComfort = moment ? COMFORT_MOMENTS.includes(moment) : false
+  const needsComfort = Boolean(moment)
 
   const step: Step = !moment
     ? 'moment'

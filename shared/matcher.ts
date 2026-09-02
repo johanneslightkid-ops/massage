@@ -350,3 +350,28 @@ export function alternativeServices(journey: MassageJourney, services: Service[]
     .map((id) => services.find((service) => service.id === id))
     .filter((service): service is Service => Boolean(service))
 }
+
+/**
+ * The journeys a given treatment delivers — the reverse of `leadService`.
+ *
+ * This is what lets a treatment card say what it is *for* without anyone
+ * writing that twice. "Deep Tissue & Sports" is the massage; that it is the
+ * one for the day after the ATV tour is something the journeys already know.
+ * Recommended uses come first, then alternatives, so the card leads with the
+ * situations this treatment is actually the answer to.
+ */
+export function journeysForService(
+  serviceId: string,
+  journeys: MassageJourney[],
+): MassageJourney[] {
+  const primary: MassageJourney[] = []
+  const secondary: MassageJourney[] = []
+
+  for (const journey of journeys) {
+    if (journey.recommendedServiceIds?.includes(serviceId)) primary.push(journey)
+    else if (journey.alternativeServiceIds?.includes(serviceId)) secondary.push(journey)
+  }
+
+  const byOrder = (a: MassageJourney, b: MassageJourney) => (a.order ?? 0) - (b.order ?? 0)
+  return [...primary.sort(byOrder), ...secondary.sort(byOrder)]
+}

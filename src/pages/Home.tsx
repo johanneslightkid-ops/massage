@@ -94,7 +94,7 @@ export function Home() {
             <Rail>
               {featured.map((service, index) => (
                 <Reveal key={service.id} delay={index * 0.06} className={railItem}>
-                  <ServiceCard service={service} currency={currency} compact />
+                  <ServiceCard service={service} currency={currency} journeys={content.journeys ?? []} compact />
                 </Reveal>
               ))}
             </Rail>

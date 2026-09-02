@@ -266,6 +266,8 @@ const en: Dict = {
   'wa.notes': 'Notes',
 
   /* cards ---------------------------------------------------------------- */
+  'card.good_for': 'Good for',
+  'card.pressure': 'Pressure',
   'card.popular': 'Popular',
   'card.from': 'from {price}',
   'card.reserve': 'Reserve this',
@@ -849,6 +851,8 @@ const es: Dict = {
   'wa.notes': 'Notas',
 
   /* cards ---------------------------------------------------------------- */
+  'card.good_for': 'Buena para',
+  'card.pressure': 'Presión',
   'card.popular': 'Popular',
   'card.from': 'desde {price}',
   'card.reserve': 'Reservar este',

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Clock, Footprints, MapPin, Quote } from 'lucide-react'
-import type { DiscoverSpot, Package, Service, Testimonial, Therapist } from '@shared/types'
+import type { DiscoverSpot, MassageJourney, Package, Service, Testimonial, Therapist } from '@shared/types'
+import { journeysForService } from '@shared/matcher'
 import { cn, formatPrice } from '@/lib/utils'
 import { useT } from '@/lib/translations/LanguageProvider'
 import { spotCategoryKey, spotCategoryTone } from '@/lib/taxonomy'
@@ -16,14 +17,27 @@ export function ServiceCard({
   currency,
   onBook,
   compact = false,
+  journeys = [],
 }: {
   service: Service
   currency: string
   onBook?: (service: Service) => void
   compact?: boolean
+  /** Used to show what this treatment is *for*, in the guest's own terms. */
+  journeys?: MassageJourney[]
 }) {
   const t = useT()
   const cheapest = service.durations?.[0]
+
+  /*
+   * What this treatment is for, how firm it is and where it can happen are all
+   * already known — by the journeys that deliver it. Deriving them here means
+   * the owner never writes the same thing twice, and a card can lead with the
+   * human purpose while still naming the modality above it.
+   */
+  const uses = journeysForService(service.id, journeys)
+  const intensities = [...new Set(uses.map((journey) => journey.intensity))]
+  const venueTags = [...new Set(uses.flatMap((journey) => journey.venueTags ?? []))]
 
   return (
     <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
@@ -61,6 +75,47 @@ export function ServiceCard({
         <p className="mt-2 text-[0.98rem] leading-relaxed text-ocean-800/80">
           {compact ? service.tagline : service.description}
         </p>
+
+        {/* Human purpose, straight after the description and before the technique. */}
+        {uses.length > 0 && (
+          <div className="mt-5">
+            <p className="text-[0.7rem] font-bold tracking-[0.16em] text-lagoon-700 uppercase">
+              {t('card.good_for')}
+            </p>
+            <div className="mt-2.5 flex flex-wrap gap-1.5">
+              {uses.slice(0, compact ? 2 : 4).map((journey) => (
+                <Link
+                  key={journey.id}
+                  to={`/find-your-massage?m=${journey.guestTags?.[0] ?? 'unsure'}`}
+                  className="rounded-full bg-seafoam-100 px-3 py-1.5 text-[0.78rem] font-semibold text-lagoon-800 transition-colors hover:bg-seafoam-200"
+                >
+                  {journey.name}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!compact && (intensities.length > 0 || venueTags.length > 0) && (
+          <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[0.82rem]">
+            {intensities.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <dt className="text-ocean-800/55">{t('card.pressure')}</dt>
+                <dd className="font-semibold text-ocean-950">
+                  {intensities.map((level) => t(`find.feel.${level}`)).join(' · ')}
+                </dd>
+              </div>
+            )}
+            {venueTags.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <dt className="text-ocean-800/55">{t('find.where')}</dt>
+                <dd className="font-semibold text-ocean-950">
+                  {venueTags.map((tag) => t(`find.venue.${tag}`)).join(' · ')}
+                </dd>
+              </div>
+            )}
+          </dl>
+        )}
 
         {!compact && service.benefits?.length > 0 && (
           <ul className="mt-5 space-y-2">
