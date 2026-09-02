@@ -45,6 +45,32 @@ This runs in **safe mode**: keys that already exist are left untouched, so it
 is harmless on every subsequent deploy and can stay on permanently. A seeding
 failure never fails the build — the site still ships, and the log says why.
 
+#### Forcing a reseed from the build
+
+Safe mode never overwrites, so it cannot repair content that has already been
+edited into a mess. To reset the site to the seed, add a third variable and
+redeploy:
+
+| Name | Value |
+| --- | --- |
+| `KV_SEED_FORCE` | `1` |
+
+The build log then says so before it writes anything:
+
+```
+[postbuild] KV_SEED_FORCE=1 — syncing KV in FORCE mode.
+[postbuild] The content documents are being OVERWRITTEN with the seed.
+```
+
+**Remove the variable once that deploy finishes.** Left in place it re-flattens
+the owner's content on every future deploy — including the automatic one that
+follows the next push. The admin password is still never forced, so a reseed
+cannot lock anyone out of a site she has already secured.
+
+It is `KV_SEED_FORCE` rather than a bare `FORCE` on purpose: the variable sits
+in a Pages project among unrelated settings, where a name that does not say
+what it forces is a trap.
+
 ### B. From a machine that can reach Cloudflare
 
 ```bash

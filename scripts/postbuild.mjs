@@ -16,6 +16,12 @@
  * deploy after adding the variables writes the documents; every deploy after
  * that is a no-op.
  *
+ * To overwrite instead — the "reset the site to the seed" button — add a third
+ * variable, KV_SEED_FORCE=1, and redeploy. It is deliberately its own name
+ * rather than a bare FORCE, because it lives in a Pages project next to
+ * unrelated settings and needs to say what it forces. REMOVE IT AFTERWARDS:
+ * left in place it re-flattens the owner's content on every future deploy.
+ *
  * A seeding failure never fails the build. Shipping the site with stale KV
  * beats not shipping it at all, and the error is printed in full so it is
  * obvious in the build log.
@@ -40,9 +46,23 @@ if (!hasToken || !hasAccount) {
   process.exit(0)
 }
 
-console.log('\n[postbuild] Credentials present — syncing KV (safe mode, existing keys kept).')
+const force = process.env.KV_SEED_FORCE === '1'
 
-const result = spawnSync(process.execPath, ['scripts/sync-kv.mjs'], { stdio: 'inherit' })
+if (force) {
+  console.log('\n[postbuild] KV_SEED_FORCE=1 — syncing KV in FORCE mode.')
+  console.log('[postbuild] The content documents are being OVERWRITTEN with the seed.')
+  console.log('[postbuild] Anything edited in /admin is discarded. The admin password is')
+  console.log('[postbuild] never forced, so this cannot lock anyone out.')
+  console.log('[postbuild] Remove KV_SEED_FORCE once this deploy is done, or every future')
+  console.log('[postbuild] deploy will wipe the content again.')
+} else {
+  console.log('\n[postbuild] Credentials present — syncing KV (safe mode, existing keys kept).')
+}
+
+const result = spawnSync(process.execPath, ['scripts/sync-kv.mjs'], {
+  stdio: 'inherit',
+  env: force ? { ...process.env, FORCE: '1' } : process.env,
+})
 
 if (result.status !== 0) {
   console.error('\n[postbuild] KV sync FAILED. The deploy continues; the site will serve the')
