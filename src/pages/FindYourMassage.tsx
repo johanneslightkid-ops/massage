@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { ArrowLeft, ArrowRight, MessageCircle, RotateCcw, ShieldCheck } from 'lucide-react'
@@ -138,6 +138,33 @@ export function FindYourMassage() {
   // A new set of answers should start from the best match again.
   useEffect(() => setAltIndex(0), [moment, feel, venue, concerns])
 
+  /*
+   * Focus management.
+   *
+   * Advancing a step swaps the whole panel, which drops focus onto <body>: a
+   * keyboard user loses their place and a screen reader announces nothing.
+   * Focus has to land on the new question instead.
+   *
+   * It has to be a callback ref rather than an effect on `step`. AnimatePresence
+   * runs the outgoing panel's exit animation *before* mounting the incoming
+   * one, so by the time an effect keyed on `step` fires the new heading does
+   * not exist yet and `ref.current` is still null — which is exactly how the
+   * first attempt failed. A callback ref fires when the node actually arrives.
+   *
+   * The heading is focusable only programmatically (tabIndex -1), so it never
+   * becomes an extra stop for someone tabbing through normally.
+   */
+  const firstHeading = useRef(true)
+  const headingRef = useCallback((node: HTMLHeadingElement | null) => {
+    if (!node) return
+    if (firstHeading.current) {
+      // Don't steal focus on arrival — the guest has not asked for anything yet.
+      firstHeading.current = false
+      return
+    }
+    node.focus()
+  }, [])
+
   const mood = moodFor(moment)
 
   /*
@@ -220,7 +247,7 @@ export function FindYourMassage() {
               {/* ---------------------------------------------- step 1 */}
               {step === 'moment' && (
                 <>
-                  <Heading kicker={t('find.kicker')} title={t('find.q_moment')} sub={t('find.q_moment_sub')} />
+                  <Heading ref={headingRef} kicker={t('find.kicker')} title={t('find.q_moment')} sub={t('find.q_moment_sub')} />
                   <div className="mt-8 grid gap-3 sm:grid-cols-2">
                     {MOMENT_TAGS.map((tag, index) => (
                       <ChoiceCard
@@ -241,7 +268,7 @@ export function FindYourMassage() {
               {/* ---------------------------------------------- step 2 */}
               {step === 'feel' && (
                 <>
-                  <Heading title={t('find.q_feel')} sub={t('find.q_feel_sub')} />
+                  <Heading ref={headingRef} title={t('find.q_feel')} sub={t('find.q_feel_sub')} />
                   <div className="mt-8 grid gap-3 sm:grid-cols-2">
                     {INTENSITY_CHOICES.map((choice: IntensityChoice, index) => (
                       <ChoiceCard
@@ -262,7 +289,7 @@ export function FindYourMassage() {
               {/* ---------------------------------------------- step 3 */}
               {step === 'venue' && (
                 <>
-                  <Heading title={t('find.q_venue')} sub={t('find.q_venue_sub')} />
+                  <Heading ref={headingRef} title={t('find.q_venue')} sub={t('find.q_venue_sub')} />
                   <div className="mt-8 grid gap-3 sm:grid-cols-3">
                     {VENUE_TAGS.map((tag: VenueTag, index) => {
                       const record = venues.find((candidate) => venueTagFromName(candidate.name) === tag)
@@ -286,7 +313,7 @@ export function FindYourMassage() {
               {/* ---------------------------------------------- step 4 */}
               {step === 'comfort' && (
                 <>
-                  <Heading title={t('find.q_comfort')} sub={t('find.q_comfort_sub')} />
+                  <Heading ref={headingRef} title={t('find.q_comfort')} sub={t('find.q_comfort_sub')} />
 
                   <p className="mt-5 flex items-start gap-2.5 rounded-[1.4rem] bg-seafoam-50 p-4 text-[0.85rem] leading-relaxed text-ocean-800/75 ring-1 ring-lagoon-200/60">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-lagoon-600" aria-hidden />
@@ -361,6 +388,7 @@ export function FindYourMassage() {
                   onAnother={() => setAltIndex((i) => i + 1)}
                   onRestart={restart}
                   onBack={back}
+                  headingRef={headingRef}
                   whatsapp={whatsappLink(site)}
                 />
               )}
@@ -368,11 +396,42 @@ export function FindYourMassage() {
           </AnimatePresence>
 
           {step === 'moment' && (
-            <p className="mt-10 text-center text-[0.88rem] text-ocean-800/60">
-              <Link to="/treatments" className="font-semibold text-lagoon-700 underline-offset-4 hover:underline">
-                {t('find.intro_note')}
-              </Link>
-            </p>
+            <>
+              <p className="mt-10 text-center text-[0.88rem] text-ocean-800/60">
+                <Link to="/treatments" className="font-semibold text-lagoon-700 underline-offset-4 hover:underline">
+                  {t('find.intro_note')}
+                </Link>
+              </p>
+
+              {/*
+                Every journey, spelled out, below the questions.
+                
+                Two jobs. A guest who would rather browse than answer anything
+                gets to, and the route has real indexable prose describing what
+                it offers instead of being a shell whose content only exists
+                after three clicks. The names and taglines are the long-tail
+                text a search for "massage after ATV tour Punta Cana" can
+                actually match.
+              */}
+              {journeys.length > 0 && (
+                <section className="mt-16 border-t border-ocean-900/8 pt-10">
+                  <h2 className="font-display text-[1.4rem] text-ocean-950">{t('find.all_title')}</h2>
+                  <p className="mt-2 max-w-2xl text-[0.92rem] leading-relaxed text-ocean-800/70">
+                    {t('find.all_lead')}
+                  </p>
+                  <ul className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                    {journeys.map((journey) => (
+                      <li key={journey.id}>
+                        <h3 className="font-display text-[1.05rem] text-ocean-950">{journey.name}</h3>
+                        <p className="mt-0.5 text-[0.88rem] leading-relaxed text-ocean-800/65">
+                          {journey.tagline} {journey.description}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+            </>
           )}
         </Container>
       </Section>
@@ -382,17 +441,25 @@ export function FindYourMassage() {
 
 /* ------------------------------------------------------------- fragments */
 
-function Heading({ kicker, title, sub }: { kicker?: string; title: string; sub?: string }) {
-  return (
-    <header>
-      {kicker && (
-        <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">{kicker}</p>
-      )}
-      <h1 className="font-display text-[1.9rem] leading-[1.12] text-ocean-950 sm:text-[2.6rem]">{title}</h1>
-      {sub && <p className="mt-3 max-w-2xl leading-relaxed text-ocean-800/70">{sub}</p>}
-    </header>
-  )
-}
+const Heading = forwardRef<HTMLHeadingElement, { kicker?: string; title: string; sub?: string }>(
+  function Heading({ kicker, title, sub }, ref) {
+    return (
+      <header>
+        {kicker && (
+          <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">{kicker}</p>
+        )}
+        <h1
+          ref={ref}
+          tabIndex={-1}
+          className="font-display text-[1.9rem] leading-[1.12] text-ocean-950 outline-none sm:text-[2.6rem]"
+        >
+          {title}
+        </h1>
+        {sub && <p className="mt-3 max-w-2xl leading-relaxed text-ocean-800/70">{sub}</p>}
+      </header>
+    )
+  },
+)
 
 const secondaryAction =
   'inline-flex h-13 min-h-12 w-full items-center justify-center gap-2 rounded-full border border-ocean-900/15 bg-white/70 px-6 text-center font-semibold whitespace-nowrap text-ocean-950 transition-colors hover:border-lagoon-400/60 hover:bg-white sm:w-auto'
@@ -415,6 +482,7 @@ function Results({
   onRestart,
   onBack,
   whatsapp,
+  headingRef,
 }: {
   result: MatchResult
   answers: GuestAnswers
@@ -427,6 +495,7 @@ function Results({
   onRestart: () => void
   onBack: () => void
   whatsapp: string
+  headingRef: (node: HTMLHeadingElement | null) => void
 }) {
   const t = useT()
 
@@ -434,7 +503,11 @@ function Results({
   if (result.outcome === 'rest') {
     return (
       <section className="rounded-[2.25rem] border border-white/70 bg-white/85 p-7 shadow-lift ring-1 ring-sky-900/5 backdrop-blur-sm sm:p-10">
-        <h1 className="font-display text-[1.9rem] leading-tight text-ocean-950 sm:text-[2.4rem]">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="font-display text-[1.9rem] leading-tight text-ocean-950 outline-none sm:text-[2.4rem]"
+        >
           {t('find.rest_title')}
         </h1>
         <p className="mt-4 leading-relaxed text-ocean-800/80">{t('find.rest_body')}</p>
@@ -470,7 +543,11 @@ function Results({
         <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
           {t('find.result_kicker')}
         </p>
-        <h1 className="font-display text-[1.9rem] leading-[1.12] text-ocean-950 sm:text-[2.4rem]">
+        <h1
+          ref={headingRef}
+          tabIndex={-1}
+          className="font-display text-[1.9rem] leading-[1.12] text-ocean-950 outline-none sm:text-[2.4rem]"
+        >
           {t('find.result_lead')}
         </h1>
       </header>

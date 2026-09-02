@@ -6,6 +6,7 @@
 const PAGES: Array<{ path: string; priority: string; changefreq: string }> = [
   { path: '/', priority: '1.0', changefreq: 'weekly' },
   { path: '/treatments', priority: '0.9', changefreq: 'weekly' },
+  { path: '/find-your-massage', priority: '0.9', changefreq: 'weekly' },
   { path: '/discover', priority: '0.8', changefreq: 'monthly' },
   { path: '/team', priority: '0.7', changefreq: 'monthly' },
   { path: '/book', priority: '0.9', changefreq: 'monthly' },

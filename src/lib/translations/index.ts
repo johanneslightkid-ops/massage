@@ -569,6 +569,9 @@ const en: Dict = {
   'find.fallback_note':
     'Nothing matched perfectly, so here are the ones our guests love most. Message us and we will help you choose.',
 
+  'find.all_title': 'Every journey we offer',
+  'find.all_lead':
+    'Each one is a real massage from our treatment list, chosen for a particular kind of day. Answer the questions above and we will point you at the right one — or read through them and pick for yourself.',
   'find.rest_title': 'Take care of yourself first.',
   'find.rest_body':
     'This sounds like one of those moments when rest, fluids, cooling down or a doctor matters more than a massage. Once you are feeling well again we would love to help you unwind.',
@@ -1158,6 +1161,9 @@ const es: Dict = {
   'find.fallback_note':
     'Nada encajó del todo, así que estas son las que más gustan. Escríbanos y la ayudamos a elegir.',
 
+  'find.all_title': 'Todas nuestras experiencias',
+  'find.all_lead':
+    'Cada una es un masaje real de nuestra lista, elegido para un tipo de día. Responda las preguntas de arriba y le indicamos cuál, o léalas y elija usted misma.',
   'find.rest_title': 'Primero cuídese usted.',
   'find.rest_body':
     'Esto suena a uno de esos momentos en que descansar, tomar líquido, refrescarse o ver a un médico importa más que un masaje. Cuando se sienta bien otra vez, nos encantará ayudarla a relajarse.',

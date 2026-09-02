@@ -70,13 +70,13 @@ export function Footer() {
             <ul className="mt-5 space-y-3 text-[0.95rem]">
               {publicNav.map((item) => (
                 <li key={item.to}>
-                  <Link to={item.to} className="text-sand-200/75 transition-colors hover:text-sand-50">
+                  <Link to={item.to} className="inline-flex min-h-11 items-center text-sand-200/75 transition-colors hover:text-sand-50">
                     {t(item.key)}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link to="/book#payment" className="text-sand-200/75 transition-colors hover:text-sand-50">
+                <Link to="/book#payment" className="inline-flex min-h-11 items-center text-sand-200/75 transition-colors hover:text-sand-50">
                   {t('nav.payments')}
                 </Link>
               </li>
@@ -98,13 +98,13 @@ export function Footer() {
               </li>
               <li className="flex gap-3">
                 <Phone className="mt-0.5 size-4 shrink-0 text-lagoon-300" />
-                <a href={`tel:${site.phoneDisplay.replace(/\s/g, '')}`} className="hover:text-sand-50">
+                <a href={`tel:${site.phoneDisplay.replace(/\s/g, '')}`} className="inline-flex min-h-11 items-center hover:text-sand-50">
                   {site.phoneDisplay}
                 </a>
               </li>
               <li className="flex gap-3">
                 <Mail className="mt-0.5 size-4 shrink-0 text-lagoon-300" />
-                <a href={`mailto:${site.email}`} className="hover:text-sand-50">
+                <a href={`mailto:${site.email}`} className="inline-flex min-h-11 items-center hover:text-sand-50">
                   {site.email}
                 </a>
               </li>
@@ -173,7 +173,7 @@ export function Footer() {
             <span>{t('footer.disclaimer')}</span>
             <Link
               to="/admin"
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/12 px-3 py-1.5 transition-colors hover:border-white/25 hover:text-sand-100"
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-white/12 px-4 py-2 transition-colors hover:border-white/25 hover:text-sand-100"
             >
               <Lock className="size-3" />
               {t('nav.admin')}
