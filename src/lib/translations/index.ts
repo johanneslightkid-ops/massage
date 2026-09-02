@@ -212,6 +212,8 @@ const en: Dict = {
   'team.speaks': 'Speaks {languages}',
 
   /* booking page --------------------------------------------------------- */
+  'book.from_journey': 'Coming from our suggestion: {journey}. Everything below is already filled in.',
+  'book.change_journey': 'Pick something else',
   'book.kicker': 'Reservation',
   'book.title': 'Tell us when,',
   'book.script': 'we bring everything',
@@ -789,6 +791,8 @@ const es: Dict = {
   'team.speaks': 'Habla {languages}',
 
   /* booking page --------------------------------------------------------- */
+  'book.from_journey': 'Viene de nuestra sugerencia: {journey}. Abajo ya está todo puesto.',
+  'book.change_journey': 'Elegir otra cosa',
   'book.kicker': 'Reserva',
   'book.title': 'Dinos cuándo,',
   'book.script': 'nosotras llevamos todo',

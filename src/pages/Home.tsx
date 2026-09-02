@@ -15,6 +15,7 @@ import {
   VenueSection,
 } from '@/components/sections/blocks'
 import { PackageCard, ServiceCard, SpotCard, TherapistCard } from '@/components/sections/cards'
+import { FindBanner } from '@/components/find/FindBanner'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
 
@@ -62,6 +63,14 @@ export function Home() {
   return (
     <>
       <Hero />
+
+      {/*
+        The guided experience sits directly under the hero because it is the
+        front door: most guests arrive knowing how their day has gone, not
+        which modality they want. The catalogue below stays the reference
+        library for the ones who do.
+      */}
+      <FindBanner journeys={content.journeys ?? []} />
 
       {/* -------------------------------------------------- treatments */}
       <Section className="relative py-20 sm:py-28">

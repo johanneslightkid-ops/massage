@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
-import { CalendarDays, Check, Clock, Loader2, MessageCircle, Users } from 'lucide-react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { CalendarDays, Check, Clock, Loader2, MessageCircle, Sparkles, Users } from 'lucide-react'
 import { useContent } from '@/lib/content-store'
 import { useT } from '@/lib/translations/LanguageProvider'
 import { faqSchema, useJsonLd, useSeo } from '@/lib/seo'
@@ -75,12 +75,21 @@ export function Book() {
   })
   useJsonLd([faqSchema(sortByOrder(content.faqs))])
 
+  /*
+   * The guided flow at /find-your-massage hands the answers over here so the
+   * guest does not re-pick what they have already chosen. Only the massage
+   * itself travels — treatment, length, place and which suggestion led here.
+   * Nothing from the comfort check is ever in this URL.
+   */
   const [params] = useSearchParams()
   const preset = params.get('service') ?? ''
+  const presetMinutes = Number(params.get('minutes')) || null
+  const presetVenue = params.get('venue') ?? ''
+  const fromJourney = params.get('journey') ?? ''
 
   const [serviceName, setServiceName] = useState(preset)
-  const [minutes, setMinutes] = useState<number | null>(null)
-  const [venue, setVenue] = useState('')
+  const [minutes, setMinutes] = useState<number | null>(presetMinutes)
+  const [venue, setVenue] = useState(presetVenue)
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [people, setPeople] = useState('1')
@@ -102,8 +111,11 @@ export function Book() {
     }
   }, [selectedService, minutes])
 
+  // A venue name arriving from the guided flow may not exist any more if the
+  // owner renamed it, so fall back rather than showing a selection nobody made.
   useEffect(() => {
-    if (!venue && venues.length) setVenue(venues[0].name)
+    if (!venues.length) return
+    if (!venue || !venues.some((option) => option.name === venue)) setVenue(venues[0].name)
   }, [venues, venue])
 
   const price = useMemo(() => {
@@ -117,6 +129,16 @@ export function Book() {
     : minutes
       ? t('book.minutes', { minutes })
       : ''
+
+  /*
+   * The journey is non-sensitive context — which suggestion the guest followed —
+   * and it helps the studio prepare. It is appended to the notes rather than
+   * smuggled into a hidden field, so the guest can see it in the preview and
+   * delete it if they would rather not send it.
+   */
+  const journeyName = fromJourney
+    ? (content.journeys ?? []).find((entry) => entry.slug === fromJourney)?.name
+    : undefined
 
   const draft = { service: serviceName, duration: durationLabel, venue, date, time, people, name, hotel, notes }
 
@@ -160,6 +182,17 @@ export function Book() {
 
       <Section className="py-14 sm:py-20">
         <Container>
+          {journeyName && (
+            <Reveal>
+              <p className="mb-8 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-[1.4rem] bg-gradient-to-br from-seafoam-50 to-sky-50 p-4 text-[0.92rem] text-ocean-900 ring-1 ring-lagoon-200/60">
+                <Sparkles className="size-4 shrink-0 text-lagoon-600" aria-hidden />
+                {t('book.from_journey', { journey: journeyName })}
+                <Link to="/find-your-massage" className="font-semibold text-lagoon-700 underline-offset-4 hover:underline">
+                  {t('book.change_journey')}
+                </Link>
+              </p>
+            </Reveal>
+          )}
           <div className="grid gap-8 lg:grid-cols-[1fr_22rem] lg:items-start">
             <div className="min-w-0 space-y-12">
               {/* ---------------------------------------------- treatment */}
