@@ -1,7 +1,7 @@
 {
   "name": "ola-serena",
   "version": "1.0.0",
-  "description": "Tropical massage studio site for Los Corales, Bávaro — React + Vite on Cloudflare Pages with KV-backed CMS.",
+  "description": "Tropical massage studio site for Los Corales, B\u00e1varo \u2014 React + Vite on Cloudflare Pages with KV-backed CMS.",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,8 @@
     "seed:preview": "FORCE=1 node scripts/sync-kv.mjs preview",
     "test:e2e": "node scripts/e2e.mjs",
     "test:seo": "node scripts/seo-check.mjs",
-    "og": "node scripts/make-og.mjs"
+    "og": "node scripts/make-og.mjs",
+    "test": "node --test scripts/parse-reply.test.mjs"
   },
   "repository": {
     "type": "git",

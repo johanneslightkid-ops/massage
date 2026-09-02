@@ -196,6 +196,17 @@ Models used:
 `GET /api/ai/status` reports whether the binding actually arrived — useful when
 the assistant says the AI is unavailable.
 
+The conversation drives writes through an `<action>{…}</action>` block in the
+model's reply. An 8B model mangles that protocol often — fencing the JSON,
+writing prose around it, leaving a trailing comma, omitting the id a `delete`
+needs — so `src/lib/assistant-protocol.ts` recovers what is unambiguous and
+emits **no action** for anything else, rather than guessing at a write to the
+live site. `npm test` covers those cases:
+
+```bash
+npm test
+```
+
 The microphone also needs `Permissions-Policy: microphone=(self)` in
 `public/_headers`. With the default `microphone=()` the browser blocks the page
 from recording and the assistant is text-only.
