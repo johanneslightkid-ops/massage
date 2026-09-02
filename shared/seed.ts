@@ -1,3 +1,4 @@
+import { journeys } from './journeys.ts'
 import type { SiteContent } from './types'
 
 /**
@@ -6,6 +7,7 @@ import type { SiteContent } from './types'
  * the WhatsApp number are placeholders meant to be replaced by the owner.
  */
 export const seedContent: SiteContent = {
+  journeys,
   site: {
     brandName: 'Massage Playero',
     brandMark: 'Massage & Beach Spa · Bávaro',

@@ -1,5 +1,5 @@
-import type { CollectionSchema, Field, SettingsGroup } from './schema'
-import { collectionSchemas, settingsGroups } from './schema'
+import type { CollectionSchema, Field, SettingsGroup } from './schema.ts'
+import { collectionSchemas, settingsGroups } from './schema.ts'
 
 /**
  * Spanish overlay for the admin forms.
@@ -24,7 +24,13 @@ export interface SchemaTranslation {
   placeholder?: string
   description?: string
   singular?: string
+  /** Only for `select`, whose chosen option is what gets stored. */
   options?: string[]
+  /**
+   * Only for `tags`. The stored values stay canonical in every language — the
+   * matcher depends on that — so translation touches the labels alone.
+   */
+  optionLabels?: string[]
 }
 
 export const schemaEs: Record<string, SchemaTranslation> = {
@@ -269,6 +275,117 @@ export const schemaEs: Record<string, SchemaTranslation> = {
     help: 'Sube una foto o pega un enlace. Si lo dejas vacío dibujamos la ilustración tropical.',
   },
   'gallery.order': { label: 'Orden', help: 'Los números más bajos aparecen primero.' },
+
+  /* --------------------------------------------------------- journeys */
+  journeys: {
+    label: 'Experiencias',
+    singular: 'Experiencia',
+    description:
+      'La capa de conserjería. La huésped nos cuenta qué tipo de día está teniendo y le sugerimos una de estas. Cada experiencia apunta a los masajes reales que la hacen posible.',
+  },
+  'journeys.name': { label: 'Nombre' },
+  'journeys.slug': { label: 'Slug', help: 'Se usa en la URL. Minúsculas y guiones en vez de espacios.' },
+  'journeys.tagline': { label: 'Frase de una línea' },
+  'journeys.description': { label: 'Descripción' },
+  'journeys.recommendedServiceIds': {
+    label: 'Masajes que la componen',
+    help: 'El primero manda. Elige los masajes que una terapeuta daría de verdad.',
+  },
+  'journeys.alternativeServiceIds': {
+    label: 'Alternativas igual de buenas',
+    help: 'Se ofrecen cuando la huésped pide ver otra opción.',
+  },
+  'journeys.guestTags': {
+    label: 'Para qué tipo de día sirve',
+    help: 'Las respuestas a la primera pregunta que deberían mostrar esta experiencia.',
+    optionLabels: [
+      'Acaba de llegar',
+      'Vino de una aventura',
+      'Quiere desconectar',
+      'Sabe dónde le duele',
+      'Está celebrando',
+      'Viene acompañada',
+      'La quiere suave',
+      'Está embarazada',
+      'No sabe',
+    ],
+  },
+  'journeys.occasionTags': {
+    label: 'Ocasiones',
+    optionLabels: [
+      'Luna de miel',
+      'Aniversario',
+      'Cumpleaños',
+      'Noche especial',
+      'Celebración',
+      'Pareja',
+      'Amigas',
+      'Familia',
+      'Viaja sola',
+      'Primer masaje',
+    ],
+  },
+  'journeys.timingTags': {
+    label: 'Momento',
+    optionLabels: [
+      'Día de llegada',
+      'Mañana',
+      'Tarde',
+      'Hora dorada',
+      'Noche',
+      'Antes de dormir',
+      'Después de una excursión',
+      'A lo largo de varios días',
+    ],
+  },
+  'journeys.venueTags': {
+    label: 'Dónde funciona',
+    help: 'Deja todas las casillas vacías si funciona en cualquier lado.',
+    optionLabels: ['Nuestro estudio', 'En la playa', 'Hotel o villa'],
+  },
+  'journeys.focusTags': {
+    label: 'Zona del cuerpo',
+    optionLabels: ['Cuerpo completo', 'Espalda, cuello y hombros', 'Piernas y pies', 'Cabeza y cuero cabelludo', 'Piel'],
+  },
+  'journeys.intensity': {
+    label: 'Cómo se siente',
+    options: ['gentle', 'relaxing', 'balanced', 'firm'],
+  },
+  'journeys.durationMinutes': {
+    label: 'Duraciones que ofrece (minutos)',
+    help: 'Solo números, por ejemplo 60 y 90. Tienen que existir en el masaje de arriba.',
+  },
+  'journeys.whyItFits': {
+    label: 'Por qué encaja',
+    help: 'De dos a cuatro razones cortas, escritas como se las dirías en voz alta.',
+  },
+  'journeys.whatToExpect': {
+    label: 'Qué vamos a hacer',
+    help: 'En lenguaje sencillo. Aquí es donde se nombra la técnica profesional.',
+  },
+  'journeys.safetyFlags': {
+    label: 'Autorizada para',
+    help: 'Marca embarazo solo si una terapeuta con formación da esta experiencia. Sin esa marca nunca se le sugiere a una huésped embarazada.',
+    optionLabels: ['Embarazo (terapeuta con formación)'],
+  },
+  'journeys.avoidTags': {
+    label: 'Nunca sugerir si la huésped dijo',
+    optionLabels: [
+      'Que está embarazada',
+      'Cirugía reciente',
+      'Una lesión reciente',
+      'Anticoagulantes',
+      'Fiebre o se siente mal',
+      'Hinchazón sin explicación',
+      'Quemadura de sol',
+      'Que ha estado bebiendo',
+    ],
+  },
+  'journeys.badge': { label: 'Etiqueta', help: 'Texto pequeño en la tarjeta, por ejemplo "El más pedido".' },
+  'journeys.image': { label: 'Foto' },
+  'journeys.featured': { label: 'Mostrar como acceso rápido en la portada' },
+  'journeys.order': { label: 'Orden' },
+
 }
 
 function overlay(lang: string, id: string): SchemaTranslation | undefined {
@@ -278,12 +395,22 @@ function overlay(lang: string, id: string): SchemaTranslation | undefined {
 function localizeField(field: Field, lang: string, id: string): Field {
   const tr = overlay(lang, id)
   if (!tr) return field
+
+  /*
+   * `tags` and `refs` store canonical keys that both language documents share,
+   * so their `options` are never translated — only the labels drawn over them.
+   * Translating the values here would write Spanish tags into the Spanish
+   * document and the matcher would stop recognising them.
+   */
+  const canonical = field.type === 'tags' || field.type === 'refs'
+
   return {
     ...field,
     label: tr.label ?? field.label,
     help: tr.help ?? field.help,
     placeholder: tr.placeholder ?? field.placeholder,
-    options: tr.options ?? field.options,
+    options: canonical ? field.options : (tr.options ?? field.options),
+    optionLabels: tr.optionLabels ?? field.optionLabels,
   }
 }
 

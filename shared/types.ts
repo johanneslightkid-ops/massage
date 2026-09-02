@@ -4,6 +4,16 @@
  * describable — `shared/schema.ts` turns each one into an admin form.
  */
 
+import type {
+  AvoidTag,
+  FocusTag,
+  IntensityTag,
+  OccasionTag,
+  MomentTag,
+  TimingTag,
+  VenueTag,
+} from './journey-tags'
+
 export interface Hours {
   label: string
   value: string
@@ -72,6 +82,70 @@ export interface Service {
   image: string
   featured: boolean
   popular: boolean
+  order: number
+}
+
+/**
+ * A Journey is the concierge layer: a *situation* a guest recognises, mapped
+ * onto the professional treatments that suit it.
+ *
+ * The three content layers stay deliberately distinct, and the words are not
+ * interchangeable:
+ *
+ *   Service  a professional modality — "Deep Tissue & Sports"
+ *   Journey  a moment on holiday     — "After Adventure Recovery"
+ *   Package  a commercial bundle     — "The Whole Week", with a price
+ *
+ * A guest who already knows they want deep tissue goes straight to Treatments.
+ * A guest who only knows their legs ache after an ATV tour gets a Journey. The
+ * Journey then names the real modality, so nobody has to learn massage
+ * vocabulary before they can choose.
+ *
+ * Prose fields are per-language (one KV document each). Tag fields are
+ * canonical keys shared by both — see `shared/journey-tags.ts` for why.
+ */
+export interface MassageJourney {
+  id: string
+  slug: string
+
+  name: string
+  tagline: string
+  description: string
+
+  /** Service ids this journey is actually delivered as. First one leads. */
+  recommendedServiceIds: string[]
+  /** Equally good substitutes, offered as "show me another option". */
+  alternativeServiceIds: string[]
+
+  /** Which "what kind of day" answers this journey speaks to. */
+  guestTags: MomentTag[]
+  occasionTags: OccasionTag[]
+  timingTags: TimingTag[]
+  /** Where it can actually be delivered. Empty means anywhere. */
+  venueTags: VenueTag[]
+  focusTags: FocusTag[]
+
+  intensity: IntensityTag
+  /** Offered lengths, in minutes — must exist on the recommended service. */
+  durationMinutes: number[]
+
+  /** Guest-facing reasons, written as a person would say them out loud. */
+  whyItFits: string[]
+  /** What the therapist will actually do, in plain language. */
+  whatToExpect: string[]
+
+  /**
+   * Capabilities this journey is cleared for. `prenatal-safe` is the one the
+   * matcher acts on: without it, a journey is never shown to a guest who has
+   * said she is expecting.
+   */
+  safetyFlags: string[]
+  /** Guest states that rule this journey out entirely. */
+  avoidTags: AvoidTag[]
+
+  badge: string
+  image: string
+  featured: boolean
   order: number
 }
 
@@ -185,6 +259,7 @@ export interface Booking {
 export interface SiteContent {
   site: SiteSettings
   services: Service[]
+  journeys: MassageJourney[]
   venues: Venue[]
   team: Therapist[]
   benefits: Benefit[]

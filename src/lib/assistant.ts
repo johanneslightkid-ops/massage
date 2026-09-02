@@ -78,10 +78,22 @@ const NEVER_TRANSLATE = new Set([
   'team.name',
   'testimonials.name',
   'discover.name',
+  // A journey's lengths are numbers stored in a list field — there is nothing
+  // to translate, and asking the model to try produces "sesenta".
+  'durationMinutes',
 ])
 
 function isTranslatableField(field: Field, scope: string): boolean {
   if (NEVER_TRANSLATE.has(field.key) || NEVER_TRANSLATE.has(`${scope}.${field.key}`)) return false
+
+  /*
+   * `tags` and `refs` hold the canonical vocabulary both language documents
+   * share — translating them would break the matcher in whichever language got
+   * translated. They fail the type test below anyway; this says why, so nobody
+   * later "fixes" the omission.
+   */
+  if (field.type === 'tags' || field.type === 'refs') return false
+
   return field.type === 'text' || field.type === 'textarea' || field.type === 'list' || field.type === 'pairs'
 }
 

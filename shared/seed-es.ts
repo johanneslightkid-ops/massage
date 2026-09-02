@@ -1,3 +1,4 @@
+import { journeysEs } from './journeys-es.ts'
 import type { SiteContent } from './types'
 
 /**
@@ -6,6 +7,7 @@ import type { SiteContent } from './types'
  * records, IDs, ordering, prices and editable content model.
  */
 export const seedContentEs: SiteContent = {
+  journeys: journeysEs,
   site: {
     brandName: 'Massage Playero',
     brandMark: 'Masajes & Spa de Playa · Bávaro',

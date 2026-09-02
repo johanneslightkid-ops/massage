@@ -5,6 +5,7 @@ import type { CollectionSchema } from '@shared/schema'
 import { blankRecord } from '@shared/schema'
 import type { CollectionKey } from '@shared/types'
 import { api } from '@/lib/api'
+import { useContent } from '@/lib/content-store'
 import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 import { FieldInput } from './FieldInput'
@@ -27,6 +28,26 @@ export function CollectionEditor({
   onSaved: () => Promise<void>
 }) {
   const { t, language } = useLanguage()
+  const { content } = useContent()
+
+  /**
+   * Choices for any `refs` field in this schema — journeys point at services
+   * by id, and the owner needs to see names rather than `svc-relax`.
+   */
+  const refOptionsByField = useMemo(() => {
+    const map: Record<string, Array<{ id: string; label: string }>> = {}
+    for (const field of schema.fields) {
+      if (field.type !== 'refs' || !field.refCollection) continue
+      // The collections are a union of record types; only `id` and a display
+      // field are needed here, so read them off a widened view.
+      const source = content[field.refCollection] as ReadonlyArray<{ id: string; name?: string }>
+      map[field.key] = (source ?? []).map((row) => ({
+        id: row.id,
+        label: row.name ?? row.id,
+      }))
+    }
+    return map
+  }, [schema.fields, content])
 
   const [draft, setDraft] = useState<Row[]>(rows)
   const [editing, setEditing] = useState<string | null>(null)
@@ -228,6 +249,7 @@ export function CollectionEditor({
                           field={field}
                           value={row[field.key]}
                           onChange={(next) => patch(id, field.key, next)}
+                          refOptions={refOptionsByField[field.key]}
                         />
                       ))}
                     </div>

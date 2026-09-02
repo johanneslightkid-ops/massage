@@ -303,14 +303,77 @@ async function uploadToCloudinaryOrFallback(file: File): Promise<string> {
   }
 }
 
+/**
+ * Multi-select as toggle chips.
+ *
+ * Used for `tags` (canonical vocabulary the matcher reads) and `refs` (ids of
+ * other records). Both store an array of stable keys while showing the owner
+ * readable labels, which is why the value and the label are separate here — a
+ * Spanish-speaking owner picks "Recién llegada" and `just-arrived` is stored.
+ */
+function ChipPicker({
+  options,
+  labels,
+  value,
+  onChange,
+  empty,
+}: {
+  options: string[]
+  labels?: string[]
+  value: string[]
+  onChange: (next: string[]) => void
+  empty?: string
+}) {
+  const selected = new Set(value)
+  const toggle = (option: string) => {
+    const next = new Set(selected)
+    if (next.has(option)) next.delete(option)
+    else next.add(option)
+    // Keep the stored order stable and predictable rather than click-ordered.
+    onChange(options.filter((candidate) => next.has(candidate)))
+  }
+
+  if (options.length === 0) {
+    return <p className="text-[0.82rem] text-ocean-800/50">{empty ?? '—'}</p>
+  }
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {options.map((option, index) => {
+        const on = selected.has(option)
+        return (
+          <button
+            key={option}
+            type="button"
+            role="switch"
+            aria-checked={on}
+            onClick={() => toggle(option)}
+            className={cn(
+              'rounded-full border px-3.5 py-2 text-[0.82rem] font-semibold transition-colors',
+              on
+                ? 'border-lagoon-400 bg-gradient-to-r from-seafoam-100 to-sky-100 text-ocean-950'
+                : 'border-ocean-900/12 bg-white/60 text-ocean-800/60 hover:border-lagoon-400/60',
+            )}
+          >
+            {labels?.[index] ?? option}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 export function FieldInput({
   field,
   value,
   onChange,
+  refOptions,
 }: {
   field: Field
   value: unknown
   onChange: (next: unknown) => void
+  /** Choices for a `refs` field: the ids and names of another collection. */
+  refOptions?: Array<{ id: string; label: string }>
 }) {
   const t = useT()
 
@@ -358,6 +421,27 @@ export function FieldInput({
 
       case 'pairs':
         return <PairEditor value={(value as PairRow[]) ?? []} onChange={onChange} />
+
+      case 'tags':
+        return (
+          <ChipPicker
+            options={field.options ?? []}
+            labels={field.optionLabels}
+            value={Array.isArray(value) ? (value as string[]) : []}
+            onChange={onChange}
+          />
+        )
+
+      case 'refs':
+        return (
+          <ChipPicker
+            options={(refOptions ?? []).map((option) => option.id)}
+            labels={(refOptions ?? []).map((option) => option.label)}
+            value={Array.isArray(value) ? (value as string[]) : []}
+            onChange={onChange}
+            empty={t('field.refs_empty')}
+          />
+        )
 
       case 'select':
         return (
