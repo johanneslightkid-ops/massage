@@ -28,7 +28,7 @@ export const journeys: MassageJourney[] = [
     alternativeServiceIds: ['svc-aroma', 'svc-reflex'],
     guestTags: ['just-arrived', 'unsure'],
     occasionTags: ['solo', 'couple', 'first-massage'],
-    timingTags: ['arrival-day', 'evening', 'before-sleep'],
+    timingTags: ['arrival-day', 'evening'],
     venueTags: ['studio', 'hotel', 'beach'],
     focusTags: ['full-body'],
     intensity: 'relaxing',
