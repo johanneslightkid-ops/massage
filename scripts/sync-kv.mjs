@@ -164,6 +164,18 @@ async function main() {
     console.log(`  ✓ auth:password — default "${DEFAULT_PASSWORD}", change it in /admin`)
   }
 
+  // Read one document straight back. Writing successfully to the wrong
+  // namespace looks identical to writing to the right one, and this is the
+  // cheap check that the Functions will actually find what we just wrote.
+  if (useApi) {
+    const res = await fetch(api(`content:en:v1`), {
+      headers: { Authorization: `Bearer ${API_TOKEN}` },
+    })
+    if (!res.ok) throw new Error(`Wrote content:en:v1 but could not read it back: ${res.status}`)
+    const parsed = JSON.parse(await res.text())
+    console.log(`\n  ✓ verified: content:en:v1 reads back with ${parsed.services?.length ?? 0} treatments`)
+  }
+
   console.log('\n✨ Done.\n')
 }
 

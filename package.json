@@ -12,7 +12,7 @@
     "cf:deploy": "npm run build && wrangler pages deploy",
     "sync:kv": "node scripts/sync-kv.mjs",
     "sync:kv:preview": "node scripts/sync-kv.mjs preview",
-    "postbuild": "node -e \"if(process.env.CLOUDFLARE_API_TOKEN&&process.env.CLOUDFLARE_ACCOUNT_ID){require('child_process').execSync('node scripts/sync-kv.mjs',{stdio:'inherit'})}else{console.log('[postbuild] skipping KV sync (CLOUDFLARE_API_TOKEN / _ACCOUNT_ID not set)')}\"",
+    "postbuild": "node scripts/postbuild.mjs",
     "seed": "FORCE=1 node scripts/sync-kv.mjs",
     "seed:preview": "FORCE=1 node scripts/sync-kv.mjs preview",
     "test:e2e": "node scripts/e2e.mjs",
