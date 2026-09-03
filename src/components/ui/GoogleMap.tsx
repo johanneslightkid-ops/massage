@@ -11,7 +11,7 @@ interface GoogleMapProps {
 }
 
 /**
- * The studio on a map. An embed URL renders the live map; with only a plain
+ * The service area on a map. An embed URL renders the live map; with only a plain
  * Maps link we show a card that opens it — never a static-map image, which
  * needs a billed API key the owner does not have.
  */

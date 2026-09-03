@@ -146,7 +146,7 @@ export const TALK_FIRST_CONCERNS: ConcernTag[] = ['recent-surgery', 'acute-injur
 
 /**
  * Pregnancy is neither: it narrows the recommendation to journeys explicitly
- * marked prenatal-appropriate by the studio, and nothing else.
+ * marked prenatal-appropriate by the team, and nothing else.
  */
 export const PRENATAL_SAFE = 'prenatal-safe'
 
@@ -172,7 +172,7 @@ export const isConcernTag = membership(CONCERN_TAGS)
 
 /**
  * Venue records are owner-editable, so their *names* cannot be matched on.
- * Recognise the three shapes the studio works in from either language, and
+ * Recognise the three kinds of space from either language, and
  * fall back to undefined rather than guessing — an unrecognised venue simply
  * stops constraining the recommendation.
  */

@@ -215,7 +215,7 @@ export const schemaEs: Record<string, SchemaTranslation> = {
   'discover.blurb': { label: 'Descripción' },
   'discover.tip': { label: 'Consejo de local' },
   'discover.walkMinutes': {
-    label: 'Minutos a pie desde el estudio',
+    label: 'Minutos a pie desde Los Corales',
     help: '0 oculta el tiempo a pie (útil para excursiones).',
   },
   'discover.priceLevel': { label: 'Nivel de precio', options: ['Gratis', '$', '$$', '$$$', '—'] },
@@ -267,7 +267,7 @@ export const schemaEs: Record<string, SchemaTranslation> = {
   gallery: {
     label: 'Galería',
     singular: 'foto',
-    description: 'Fotos del estudio, del montaje en la playa y del equipo.',
+    description: 'Fotos de un montaje, del equipo y de los tratamientos.',
   },
   'gallery.caption': { label: 'Pie de foto' },
   'gallery.image': {
@@ -341,7 +341,7 @@ export const schemaEs: Record<string, SchemaTranslation> = {
   'journeys.venueTags': {
     label: 'Dónde funciona',
     help: 'Deja todas las casillas vacías si funciona en cualquier lado.',
-    optionLabels: ['Nuestro estudio', 'En la playa', 'Hotel o villa'],
+    optionLabels: ['Habitación de hotel', 'Villa o apartamento', 'Terraza o balcón'],
   },
   'journeys.focusTags': {
     label: 'Zona del cuerpo',

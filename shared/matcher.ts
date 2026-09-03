@@ -12,7 +12,7 @@
  *      be selling a massage at all, and no amount of tag agreement should be
  *      able to outvote that.
  *   2. Hard exclusions. A journey can rule itself out; pregnancy narrows the
- *      field to journeys the studio has explicitly cleared.
+ *      field to journeys the team has explicitly cleared.
  *   3. Only then, scoring — additive tag agreement, highest wins.
  *
  * Scores are an implementation detail and never reach the guest. What reaches
