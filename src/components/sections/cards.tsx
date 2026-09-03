@@ -45,6 +45,7 @@ export function ServiceCard({
         <SceneImage
           src={service.image}
           seed={service.id}
+          slug={service.slug}
           alt={service.name}
           className="transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
         />

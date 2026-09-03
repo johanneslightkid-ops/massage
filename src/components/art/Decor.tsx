@@ -1,4 +1,5 @@
 import { cn, seededUnit } from '@/lib/utils'
+import { hasServiceScene, ServiceScene } from './ServiceScene'
 
 /* ------------------------------------------------------------ wave divider */
 
@@ -322,15 +323,25 @@ export function SceneImage({
   src,
   seed,
   alt,
+  slug,
   className,
 }: {
   src?: string
   seed: string
   alt: string
+  /**
+   * A treatment slug, when the caller has one. Gets the drawn illustration for
+   * that specific treatment instead of the generic beach.
+   */
+  slug?: string
   className?: string
 }) {
+  // A real photograph the owner uploaded always wins.
   if (src) {
     return <img src={src} alt={alt} loading="lazy" decoding="async" className={cn('size-full object-cover', className)} />
+  }
+  if (hasServiceScene(slug)) {
+    return <ServiceScene slug={slug!} className={cn('size-full', className)} />
   }
   return <GeneratedScene seed={seed} className={cn('size-full', className)} />
 }
