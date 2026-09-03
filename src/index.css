@@ -75,6 +75,7 @@
   --color-palm-100: #e3f9ed;
 
   /* ---------- Flamingo (soft pink → hot tropical coral) ---------- */
+  --color-flamingo-800: #a82953;  /* AA-safe on flamingo-100 */
   --color-flamingo-700: #cf3a6f;
   --color-flamingo-600: #e84d84;
   --color-flamingo-500: #f7729e;
@@ -92,6 +93,8 @@
   --color-coral-100: #ffe6dd;
 
   /* ---------- Sun (golden sandy-beach yellow) ---------- */
+  --color-sun-900: #6f4705;   /* AA-safe on sun-200 (sun-800 measured 4.03:1) */
+  --color-sun-800: #a06a0a;
   --color-sun-700: #c9860f;
   --color-sun-600: #e5a41e;
   --color-sun-500: #f5bd42;
@@ -127,6 +130,10 @@
   --animate-drift:   drift 16s ease-in-out infinite;
   --animate-morph:   morph 18s ease-in-out infinite;
   --animate-breathe: breathe 7s ease-in-out infinite;
+  --animate-spin-slow: spin 42s linear infinite;
+  --animate-rise-slow: rise-slow 14s linear infinite;
+  --animate-wiggle:    wiggle 5s ease-in-out infinite;
+  --animate-tide:      tide 13s ease-in-out infinite;
 }
 
 @keyframes float   { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-14px) } }
@@ -134,6 +141,24 @@
 @keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
 @keyframes rise    { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
 @keyframes breathe { 0%,100% { opacity: .55; transform: scale(1) } 50% { opacity: .85; transform: scale(1.06) } }
+
+/* A bubble leaving the sea floor: rises, drifts sideways, fades near the top. */
+@keyframes rise-slow {
+  0%   { transform: translate3d(0, 0, 0) scale(.7);      opacity: 0 }
+  12%  { opacity: .5 }
+  50%  { transform: translate3d(10px, -46vh, 0) scale(1) }
+  88%  { opacity: .35 }
+  100% { transform: translate3d(-6px, -96vh, 0) scale(1.1); opacity: 0 }
+}
+
+/* Barely-there rotation, for a leaf or flower that should not sit perfectly still. */
+@keyframes wiggle { 0%,100% { transform: rotate(-4deg) } 50% { transform: rotate(4deg) } }
+
+/* A slow horizontal breathing, for wave bands and long gradients. */
+@keyframes tide {
+  0%,100% { transform: translate3d(-1.5%, 0, 0) }
+  50%     { transform: translate3d(1.5%, 0, 0) }
+}
 
 @keyframes drift {
   0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) }
@@ -406,4 +431,57 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
+}
+
+/* ---------------------------------------------------------- interactions */
+
+/**
+ * The house hover: a card lifts a little, warms its shadow, and brightens its
+ * edge. Applied through one utility so every widget on the site agrees, and so
+ * reduced-motion only has to be handled once.
+ */
+@utility lift-hover {
+  transition:
+    transform 0.42s var(--ease-out-soft),
+    box-shadow 0.42s var(--ease-out-soft),
+    border-color 0.42s var(--ease-out-soft);
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lift);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    &:hover { transform: none }
+  }
+}
+
+/** A light sweep across a button on hover — a glint off wet glass. */
+@utility sheen-hover {
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgb(255 255 255 / 0.42) 50%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.7s var(--ease-out-soft);
+    pointer-events: none;
+  }
+  &:hover::after { transform: translateX(120%) }
+  @media (prefers-reduced-motion: reduce) {
+    &::after { display: none }
+  }
+}
+
+/** Sand-grain speckle for warm sections — finer and warmer than `grain`. */
+@utility speckle {
+  position: relative;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 1px 1px, rgb(211 165 82 / 0.16) 1px, transparent 0);
+    background-size: 22px 22px;
+  }
 }

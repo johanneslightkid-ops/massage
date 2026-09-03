@@ -60,7 +60,7 @@ export function SectionHead({
         <p
           className={cn(
             'mb-4 inline-flex items-center gap-2 text-[0.7rem] font-bold tracking-[0.22em] uppercase',
-            invert ? 'text-seafoam-300' : 'text-lagoon-700',
+            invert ? 'text-seafoam-300' : 'text-lagoon-800',
           )}
         >
           <span
@@ -91,7 +91,7 @@ export function SectionHead({
         <p
           className={cn(
             'mt-5 text-[1.02rem] leading-relaxed sm:text-lg',
-            invert ? 'text-sand-200/85' : 'text-ocean-800/75',
+            invert ? 'text-sand-200/85' : 'text-ocean-800/85',
           )}
         >
           {lead}

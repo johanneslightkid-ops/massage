@@ -1,5 +1,5 @@
-import { seedContent } from './seed'
-import { seedContentEs } from './seed-es'
+import { seedContent } from './seed.ts'
+import { seedContentEs } from './seed-es.ts'
 import type { SiteContent } from './types'
 
 export const SUPPORTED_LANGS = ['en', 'es'] as const

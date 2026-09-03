@@ -58,7 +58,7 @@ export function Header() {
   return (
     <>
       {site.announcementEnabled && site.announcementText && (
-        <div className="relative z-40 overflow-hidden bg-gradient-to-r from-sky-800 via-lagoon-700 to-palm-700 px-4 py-2 text-center text-[0.74rem] leading-snug font-medium tracking-wide text-seafoam-100">
+        <div className="relative z-40 overflow-hidden bg-gradient-to-r from-lagoon-200 via-seafoam-200 to-palm-200 px-4 py-2 text-center text-[0.76rem] leading-snug font-semibold tracking-wide text-palm-900">
           <span className="mx-auto block max-w-3xl">{site.announcementText}</span>
         </div>
       )}
@@ -79,7 +79,7 @@ export function Header() {
               <span className="block truncate font-display text-[1.05rem] font-semibold tracking-tight text-ocean-950 sm:text-[1.15rem]">
                 {site.brandName}
               </span>
-              <span className="block truncate text-[0.58rem] font-semibold tracking-[0.12em] text-lagoon-700 uppercase sm:text-[0.64rem] sm:tracking-[0.16em]">
+              <span className="block truncate text-[0.58rem] font-semibold tracking-[0.12em] text-lagoon-800 uppercase sm:text-[0.64rem] sm:tracking-[0.16em]">
                 {site.brandMark}
               </span>
             </span>
@@ -94,7 +94,7 @@ export function Header() {
                 className={({ isActive }) =>
                   cn(
                     'relative rounded-full px-3.5 py-2 text-[0.9rem] font-semibold whitespace-nowrap transition-colors',
-                    isActive ? 'text-ocean-950' : 'text-ocean-800/65 hover:text-ocean-950',
+                    isActive ? 'text-ocean-950' : 'text-ocean-800/78 hover:text-ocean-950',
                   )
                 }
               >

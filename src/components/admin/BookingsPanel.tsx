@@ -6,8 +6,8 @@ import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { bookingStatusKeys, cn, formatDateTime } from '@/lib/utils'
 
 const statusStyles: Record<Booking['status'], string> = {
-  new: 'bg-sun-200 text-sun-700',
-  confirmed: 'bg-seafoam-100 text-lagoon-700',
+  new: 'bg-sun-200 text-sun-800',
+  confirmed: 'bg-seafoam-100 text-lagoon-800',
   done: 'bg-sand-200 text-ocean-800',
   cancelled: 'bg-coral-100 text-coral-600',
 }
@@ -58,14 +58,14 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-ocean-950">{t('admin.bookings_title')}</h1>
-          <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">
+          <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/85">
             {t('admin.bookings_lead')}
           </p>
         </div>
         <button
           type="button"
           onClick={load}
-          className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 px-5 text-[0.86rem] font-semibold text-ocean-800/70 transition-colors hover:text-ocean-900"
+          className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 px-5 text-[0.86rem] font-semibold text-ocean-800/80 transition-colors hover:text-ocean-900"
         >
           <RefreshCw className={cn('size-4', busy && 'animate-spin')} />
           {t('action.refresh')}
@@ -75,12 +75,12 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
       {error && <p className="mt-6 rounded-2xl bg-coral-100 p-4 text-[0.88rem] text-coral-600">{error}</p>}
 
       {rows === null ? (
-        <div className="mt-10 flex items-center gap-3 text-ocean-800/50">
+        <div className="mt-10 flex items-center gap-3 text-ocean-800/80">
           <Loader2 className="size-4 animate-spin" />
           {t('action.loading')}
         </div>
       ) : rows.length === 0 ? (
-        <div className="mt-8 rounded-3xl border border-dashed border-ocean-900/15 p-12 text-center text-ocean-800/50">
+        <div className="mt-8 rounded-3xl border border-dashed border-ocean-900/15 p-12 text-center text-ocean-800/80">
           {t('admin.bookings_empty')}
         </div>
       ) : (
@@ -90,7 +90,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="font-display text-xl text-ocean-950">{booking.name}</p>
-                  <p className="mt-0.5 text-[0.82rem] text-ocean-800/50">{formatDateTime(booking.createdAt, locale)}</p>
+                  <p className="mt-0.5 text-[0.82rem] text-ocean-800/80">{formatDateTime(booking.createdAt, locale)}</p>
                 </div>
                 <span
                   className={cn(
@@ -137,7 +137,7 @@ export function BookingsPanel({ onCount }: { onCount?: (count: number) => void }
                       'h-9 rounded-full px-4 text-[0.8rem] font-semibold transition-colors',
                       booking.status === status
                         ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50'
-                        : 'border border-ocean-900/12 text-ocean-800/60 hover:text-ocean-900',
+                        : 'border border-ocean-900/12 text-ocean-800/85 hover:text-ocean-900',
                     )}
                   >
                     {t(bookingStatusKeys[status])}

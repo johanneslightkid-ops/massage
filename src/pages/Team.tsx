@@ -86,7 +86,7 @@ export function Team() {
                     {item.step}
                   </span>
                   <h3 className="mt-3 font-display text-xl text-ocean-950">{item.title}</h3>
-                  <p className="mt-2 text-[0.92rem] leading-relaxed text-ocean-800/75">{item.body}</p>
+                  <p className="mt-2 text-[0.92rem] leading-relaxed text-ocean-800/85">{item.body}</p>
                 </div>
               </Reveal>
             ))}
@@ -94,7 +94,7 @@ export function Team() {
 
           <Reveal delay={0.2}>
             <div className="mt-8 rounded-5xl border border-white/70 bg-white/65 p-7 shadow-soft">
-              <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+              <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
                 {t('team.languages')}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">

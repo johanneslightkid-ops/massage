@@ -5,15 +5,15 @@ import { useT } from '@/lib/translations/LanguageProvider'
 export type PillTone = 'sand' | 'sky' | 'lagoon' | 'palm' | 'flamingo' | 'coral' | 'sun' | 'ocean' | 'glass'
 
 const pillTones: Record<PillTone, string> = {
-  sand: 'bg-sand-200/70 text-ocean-800',
-  sky: 'bg-sky-100 text-sky-800',
-  lagoon: 'bg-seafoam-100 text-lagoon-700',
-  palm: 'bg-palm-100 text-palm-700',
-  flamingo: 'bg-flamingo-100 text-flamingo-700',
+  sand: 'bg-sand-200/70 text-ocean-900',
+  sky: 'bg-sky-100 text-sky-900',
+  lagoon: 'bg-seafoam-100 text-lagoon-800',
+  palm: 'bg-palm-100 text-palm-800',
+  flamingo: 'bg-flamingo-100 text-flamingo-800',
   coral: 'bg-coral-100 text-coral-600',
-  sun: 'bg-sun-200 text-sun-700',
-  ocean: 'bg-ocean-900/8 text-ocean-800',
-  glass: 'bg-white/14 text-sand-100 backdrop-blur-sm ring-1 ring-white/20',
+  sun: 'bg-sun-200 text-sun-900',
+  ocean: 'bg-ocean-900/8 text-ocean-900',
+  glass: 'bg-white/80 text-ocean-900 shadow-soft backdrop-blur-sm ring-1 ring-white/70',
 }
 
 export function Pill({

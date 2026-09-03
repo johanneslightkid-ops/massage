@@ -1,8 +1,8 @@
-import { seedFor } from './seeds'
+import { seedFor } from './seeds.ts'
 import type { Booking, CollectionKey, SiteContent } from './types'
 
-export { seedFor, isSeedLang, SUPPORTED_LANGS } from './seeds'
-export type { SeedLang } from './seeds'
+export { seedFor, isSeedLang, SUPPORTED_LANGS } from './seeds.ts'
+export type { SeedLang } from './seeds.ts'
 
 export const KV_KEYS = {
   content: (lang: string = 'en') => `content:${lang}:v1`,
@@ -102,6 +102,7 @@ export async function writeContent(kv: KVNamespace, content: SiteContent, lang: 
 
 export const COLLECTION_KEYS: CollectionKey[] = [
   'services',
+  'journeys',
   'venues',
   'team',
   'benefits',

@@ -16,7 +16,7 @@ const page = await ctx.newPage()
 let bad = 0
 const ok = (l, p) => { console.log(`${p ? 'PASS' : 'FAIL'}  ${l}`); if (!p) bad++ }
 
-for (const path of ['/', '/treatments', '/discover', '/team', '/book', '/admin']) {
+for (const path of ['/', '/treatments', '/find-your-massage', '/discover', '/team', '/book', '/admin']) {
   await page.goto(BASE + path, { waitUntil: 'networkidle' })
   await page.waitForTimeout(1100)
   const r = await page.evaluate(() => ({

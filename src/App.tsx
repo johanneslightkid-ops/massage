@@ -8,6 +8,9 @@ import { Home } from './pages/Home'
 import { PageFallback } from './components/ui/PageFallback'
 
 const Treatments = lazy(() => import('./pages/Treatments').then((m) => ({ default: m.Treatments })))
+const FindYourMassage = lazy(() =>
+  import('./pages/FindYourMassage').then((m) => ({ default: m.FindYourMassage })),
+)
 const Discover = lazy(() => import('./pages/Discover').then((m) => ({ default: m.Discover })))
 const Team = lazy(() => import('./pages/Team').then((m) => ({ default: m.Team })))
 const Book = lazy(() => import('./pages/Book').then((m) => ({ default: m.Book })))
@@ -28,6 +31,14 @@ export function App() {
                   element={
                     <Suspense fallback={<PageFallback />}>
                       <Treatments />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="find-your-massage"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <FindYourMassage />
                     </Suspense>
                   }
                 />

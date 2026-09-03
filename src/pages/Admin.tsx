@@ -184,7 +184,7 @@ export function Admin() {
       <header className="sticky top-0 z-30 border-b border-sky-900/8 bg-white/85 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5 lg:px-8">
           <div className="min-w-0">
-            <p className="text-[0.66rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+            <p className="text-[0.66rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
               {content?.site.brandName ?? t('admin.title')}
             </p>
             <p className="truncate font-display text-lg text-ocean-950">
@@ -195,7 +195,7 @@ export function Admin() {
             <LanguageToggle variant="inline" />
             <Link
               to="/"
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-4 text-[0.84rem] font-semibold text-ocean-800/70 transition-colors hover:text-ocean-950"
+              className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-4 text-[0.84rem] font-semibold text-ocean-800/80 transition-colors hover:text-ocean-950"
             >
               <ExternalLink className="size-3.5" />
               <span className="hidden sm:inline">{t('action.view_site')}</span>
@@ -225,7 +225,7 @@ export function Admin() {
                     'flex w-full items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-[0.9rem] font-semibold transition-colors',
                     section === entry.key
                       ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
-                      : 'text-ocean-800/65 hover:bg-white hover:text-ocean-950',
+                      : 'text-ocean-800/78 hover:bg-white hover:text-ocean-950',
                   )}
                 >
                   {entry.icon}
@@ -249,7 +249,7 @@ export function Admin() {
               onClick={() => setSection('security')}
               className="mb-6 flex w-full items-center gap-3 rounded-4xl border border-sun-400/50 bg-sun-200/60 p-4 text-left transition-colors hover:bg-sun-200"
             >
-              <KeyRound className="size-5 shrink-0 text-sun-700" />
+              <KeyRound className="size-5 shrink-0 text-sun-800" />
               <span className="text-[0.9rem] font-semibold text-ocean-950">
                 {t('admin.default_password_warning')}
               </span>
@@ -335,7 +335,7 @@ function Overview({
         <h1 className="font-display text-3xl text-ocean-950">
           {t('admin.hello', { name: content.site.ownerName.split(' ')[0] })}
         </h1>
-        <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">{t('admin.hello_lead')}</p>
+        <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/85">{t('admin.hello_lead')}</p>
       </header>
 
       {/* The assistant is the fastest way in — give it the top of the page. */}
@@ -362,7 +362,7 @@ function Overview({
             className="rounded-4xl border border-white/70 bg-white/85 p-5 text-left shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
           >
             <p className="font-display text-4xl text-ocean-950">{stat.value}</p>
-            <p className="mt-1 text-[0.78rem] font-semibold tracking-wide text-ocean-800/50 uppercase">
+            <p className="mt-1 text-[0.78rem] font-semibold tracking-wide text-ocean-800/80 uppercase">
               {stat.label}
             </p>
           </button>
@@ -378,7 +378,7 @@ function Overview({
                 <button
                   type="button"
                   onClick={() => onJump(key)}
-                  className="text-left text-ocean-800/75 transition-colors hover:text-lagoon-700"
+                  className="text-left text-ocean-800/85 transition-colors hover:text-lagoon-800"
                 >
                   → {text}
                 </button>
@@ -389,7 +389,7 @@ function Overview({
 
         <div className="rounded-5xl border border-white/70 bg-white/85 p-6 shadow-soft">
           <h2 className="font-display text-xl text-ocean-950">{t('admin.how_title')}</h2>
-          <ul className="mt-4 space-y-2.5 text-[0.9rem] leading-relaxed text-ocean-800/70">
+          <ul className="mt-4 space-y-2.5 text-[0.9rem] leading-relaxed text-ocean-800/80">
             <li>{t('admin.how1')}</li>
             <li>{t('admin.how2')}</li>
             <li>{t('admin.how3')}</li>

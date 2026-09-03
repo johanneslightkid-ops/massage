@@ -1,3 +1,13 @@
+import {
+  FOCUS_TAGS,
+  INTENSITY_TAGS,
+  MOMENT_TAGS,
+  OCCASION_TAGS,
+  TIMING_TAGS,
+  VENUE_TAGS,
+  CONCERN_TAGS,
+  PRENATAL_SAFE,
+} from './journey-tags.ts'
 import type { CollectionKey } from './types'
 
 /**
@@ -17,13 +27,31 @@ export type FieldType =
   | 'pairs'
   | 'url'
   | 'color'
+  | 'tags'
+  | 'refs'
 
 export interface Field {
   key: string
   label: string
   type: FieldType
   help?: string
+  /**
+   * For `select`, the human-readable choices — the chosen one is what gets
+   * stored, so these are translated by `schema-i18n.ts`.
+   *
+   * For `tags` and `refs` these are *canonical keys* and must never be
+   * translated: the matcher reads them identically in both languages. Their
+   * display text comes from `optionLabels` instead.
+   */
   options?: string[]
+  /**
+   * Labels shown for `options`, positionally. Only `tags` uses this, and it is
+   * the half `schema-i18n.ts` translates — so the owner reads "Recién
+   * llegada" while the stored value stays `just-arrived`.
+   */
+  optionLabels?: string[]
+  /** For `refs`: which collection the ids point at. */
+  refCollection?: CollectionKey
   placeholder?: string
   rows?: number
   full?: boolean
@@ -140,8 +168,8 @@ export const settingsGroups: SettingsGroup[] = [
     description: 'The small print that saves you WhatsApp messages.',
     fields: [
       { key: 'currency', label: 'Currency code', type: 'text', help: 'Used for price display, e.g. USD.' },
-      { key: 'hotelSurcharge', label: 'Travel / hotel surcharge note', type: 'textarea', rows: 2, full: true },
-      { key: 'beachNote', label: 'Beach session note', type: 'textarea', rows: 2, full: true },
+      { key: 'travelNote', label: 'Travel note (zones and any surcharge)', type: 'textarea', rows: 2, full: true },
+      { key: 'setupNote', label: 'What we bring and how we set up', type: 'textarea', rows: 2, full: true },
       { key: 'cancellationPolicy', label: 'Cancellation policy', type: 'textarea', rows: 2, full: true },
     ],
   },
@@ -173,6 +201,162 @@ export const collectionSchemas: CollectionSchema[] = [
       imageField,
       { key: 'featured', label: 'Show on the home page', type: 'boolean' },
       { key: 'popular', label: 'Mark as popular', type: 'boolean' },
+      orderField,
+    ],
+  },
+  {
+    key: 'journeys',
+    label: 'Journeys',
+    singular: 'Journey',
+    icon: 'compass',
+    titleField: 'name',
+    subtitleField: 'tagline',
+    description:
+      'The concierge layer. A guest tells us what kind of day they are having; we suggest one of these. Each journey points at the real treatments that deliver it.',
+    fields: [
+      { key: 'name', label: 'Name', type: 'text' },
+      { key: 'slug', label: 'Slug', type: 'text', help: 'Used in the URL. Lowercase, dashes instead of spaces.' },
+      { key: 'tagline', label: 'One-line tagline', type: 'text', full: true },
+      { key: 'description', label: 'Description', type: 'textarea', rows: 3, full: true },
+      {
+        key: 'recommendedServiceIds',
+        label: 'Treatments this journey is',
+        type: 'refs',
+        refCollection: 'services',
+        full: true,
+        help: 'The first one leads. Pick the treatments a therapist would actually give.',
+      },
+      {
+        key: 'alternativeServiceIds',
+        label: 'Equally good alternatives',
+        type: 'refs',
+        refCollection: 'services',
+        full: true,
+        help: 'Offered when the guest asks to see another option.',
+      },
+      {
+        key: 'guestTags',
+        label: 'What kind of day it suits',
+        type: 'tags',
+        options: [...MOMENT_TAGS],
+        optionLabels: [
+          'Just arrived',
+          'Had an adventure',
+          'Wants to switch off',
+          'Knows where it hurts',
+          'Celebrating',
+          'With someone',
+          'Wants it gentle',
+          'Expecting',
+          'Not sure',
+        ],
+        full: true,
+        help: 'The answers to the first question that should surface this journey.',
+      },
+      {
+        key: 'occasionTags',
+        label: 'Occasions',
+        type: 'tags',
+        options: [...OCCASION_TAGS],
+        optionLabels: [
+          'Honeymoon',
+          'Anniversary',
+          'Birthday',
+          'Date night',
+          'Celebration',
+          'Couple',
+          'Friends',
+          'Family',
+          'Travelling alone',
+          'First massage',
+        ],
+        full: true,
+      },
+      {
+        key: 'timingTags',
+        label: 'Timing',
+        type: 'tags',
+        options: [...TIMING_TAGS],
+        optionLabels: [
+          'Arrival day',
+          'Morning',
+          'Afternoon',
+          'Golden hour',
+          'Evening',
+          'Before sleep',
+          'After an excursion',
+          'Across several days',
+        ],
+        full: true,
+      },
+      {
+        key: 'venueTags',
+        label: 'Where it works',
+        type: 'tags',
+        options: [...VENUE_TAGS],
+        optionLabels: ['Hotel room', 'Villa or apartment', 'Terrace or balcony'],
+        full: true,
+        help: 'Leave every box empty if it works anywhere.',
+      },
+      {
+        key: 'focusTags',
+        label: 'Body focus',
+        type: 'tags',
+        options: [...FOCUS_TAGS],
+        optionLabels: ['Full body', 'Back, neck & shoulders', 'Legs & feet', 'Head & scalp', 'Skin'],
+        full: true,
+      },
+      { key: 'intensity', label: 'How it feels', type: 'select', options: [...INTENSITY_TAGS] },
+      {
+        key: 'durationMinutes',
+        label: 'Lengths offered (minutes)',
+        type: 'list',
+        full: true,
+        help: 'Numbers only, e.g. 60 and 90. These must exist on the treatment above.',
+      },
+      {
+        key: 'whyItFits',
+        label: 'Why it fits',
+        type: 'list',
+        full: true,
+        help: 'Two to four short reasons, written the way you would say them out loud.',
+      },
+      {
+        key: 'whatToExpect',
+        label: 'What we will do',
+        type: 'list',
+        full: true,
+        help: 'Plain language. This is where the professional technique gets named.',
+      },
+      {
+        key: 'safetyFlags',
+        label: 'Cleared for',
+        type: 'tags',
+        options: [PRENATAL_SAFE],
+        optionLabels: ['Pregnancy (trained therapist)'],
+        full: true,
+        help: 'Only tick prenatal if an appropriately trained therapist gives this journey. Without it, it is never suggested to a guest who is expecting.',
+      },
+      {
+        key: 'avoidTags',
+        label: 'Never suggest when the guest has said',
+        type: 'tags',
+        options: [...CONCERN_TAGS],
+        optionLabels: [
+          'They are pregnant',
+          'Recent surgery',
+          'A fresh injury',
+          'Blood thinners',
+          'Fever or feeling ill',
+          'Unexplained swelling',
+          'Sunburn',
+          'They have been drinking',
+        ],
+        full: true,
+      },
+      { key: 'badge', label: 'Badge', type: 'text', help: 'Small label on the card, e.g. "Most booked".' },
+      imageField,
+      { key: 'featured', label: 'Show as a quick path on the home page', type: 'boolean' },
       orderField,
     ],
   },
@@ -269,7 +453,7 @@ export const collectionSchemas: CollectionSchema[] = [
       },
       { key: 'blurb', label: 'Description', type: 'textarea', rows: 3, full: true },
       { key: 'tip', label: 'Insider tip', type: 'textarea', rows: 2, full: true },
-      { key: 'walkMinutes', label: 'Minutes on foot from the studio', type: 'number', help: '0 hides the walking time (use for excursions).' },
+      { key: 'walkMinutes', label: 'Minutes on foot from Los Corales', type: 'number', help: '0 hides the walking time (use for excursions).' },
       { key: 'priceLevel', label: 'Price level', type: 'select', options: ['Free', '$', '$$', '$$$', '—'] },
       { key: 'mapUrl', label: 'Google Maps link', type: 'url', full: true },
       { key: 'tags', label: 'Tags', type: 'list', full: true },
@@ -320,7 +504,7 @@ export const collectionSchemas: CollectionSchema[] = [
     fields: [
       { key: 'name', label: 'Name', type: 'text' },
       { key: 'description', label: 'Description', type: 'textarea', rows: 3, full: true },
-      { key: 'icon', label: 'Icon', type: 'select', options: ['cash', 'stripe', 'bank', 'paypal', 'card'] },
+      { key: 'icon', label: 'Icon', type: 'select', options: ['cash', 'card', 'paypal', 'link'] },
       { key: 'url', label: 'Payment link', type: 'url', full: true, help: 'Optional. A Stripe payment link, PayPal.me link or Azul checkout URL.' },
       { key: 'enabled', label: 'Show on the site', type: 'boolean' },
       orderField,
@@ -333,7 +517,7 @@ export const collectionSchemas: CollectionSchema[] = [
     icon: 'image',
     titleField: 'caption',
     subtitleField: 'image',
-    description: 'Photos of the studio, the beach setup and the team.',
+    description: 'Photos of a setup, the team and the treatments.',
     fields: [
       { key: 'caption', label: 'Caption', type: 'text', full: true },
       imageField,
@@ -361,6 +545,8 @@ export function blankRecord(schema: CollectionSchema, nextOrder: number): Record
         record[field.key] = false
         break
       case 'list':
+      case 'tags':
+      case 'refs':
         record[field.key] = []
         break
       case 'durations':

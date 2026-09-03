@@ -5,42 +5,92 @@ single KV namespace and the API in `functions/`.
 
 ---
 
-## 1. Seed KV (once, before the first deploy)
+## 1. Seed KV
 
-The site reads its content from KV. Until the keys exist, every visitor sees the
-built-in seed and nothing is editable.
+The site reads its content from KV. Until `content:en:v1` and `content:es:v1`
+exist, every visitor sees the built-in seed and `/admin` has nothing to edit.
+
+Seeding needs a network route to `api.cloudflare.com`. Pick whichever of these
+you actually have.
+
+### A. From the Pages build — no local network access needed
+
+The Pages build container sits inside Cloudflare's network, so it can always
+reach the API even when your laptop or a sandboxed environment cannot. The
+build already tries: `postbuild` runs the sync whenever credentials are
+present, and prints this when they are not:
+
+```
+[postbuild] KV sync skipped — CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN not set.
+```
+
+To switch it on, add two variables to the Pages project — **Settings →
+Variables and Secrets**, for both Production and Preview:
+
+| Name | Value |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | the account the Pages project deploys into |
+| `CLOUDFLARE_API_TOKEN` | a token with **Workers KV Storage: Edit** on that account |
+
+Then redeploy. The build log will show each key written and a read-back check:
+
+```
+  ✓ content:en:v1 — 11 sections
+  ✓ content:es:v1 — 11 sections
+  ✓ auth:password — default "massage", change it in /admin
+  ✓ verified: content:en:v1 reads back with 8 treatments
+```
+
+This runs in **safe mode**: keys that already exist are left untouched, so it
+is harmless on every subsequent deploy and can stay on permanently. A seeding
+failure never fails the build — the site still ships, and the log says why.
+
+#### Forcing a reseed from the build
+
+Safe mode never overwrites, so it cannot repair content that has already been
+edited into a mess. To reset the site to the seed, add a third variable and
+redeploy:
+
+| Name | Value |
+| --- | --- |
+| `KV_SEED_FORCE` | `1` |
+
+The build log then says so before it writes anything:
+
+```
+[postbuild] KV_SEED_FORCE=1 — syncing KV in FORCE mode.
+[postbuild] The content documents are being OVERWRITTEN with the seed.
+```
+
+**Remove the variable once that deploy finishes.** Left in place it re-flattens
+the owner's content on every future deploy — including the automatic one that
+follows the next push. The admin password is still never forced, so a reseed
+cannot lock anyone out of a site she has already secured.
+
+It is `KV_SEED_FORCE` rather than a bare `FORCE` on purpose: the variable sits
+in a Pages project among unrelated settings, where a name that does not say
+what it forces is a trap.
+
+### B. From a machine that can reach Cloudflare
 
 ```bash
 npx wrangler login          # first time only
-npm run seed                # production
-npm run seed:preview        # the preview namespace
+npm run sync:kv             # safe: writes only missing keys
+npm run seed                # FORCE=1: overwrites the content documents
 ```
 
-`npm run seed` is `FORCE=1 node scripts/sync-kv.mjs` — it **overwrites** the
-content documents with the seed. That is what you want on a first deploy and
-when you deliberately want to reset the site; it is *not* what you want once
-the owner has edited anything.
-
-For the safe version — write only the keys that do not exist yet — run:
+Or with a token instead of an interactive login:
 
 ```bash
-npm run sync:kv
-```
-
-This is also what `postbuild` runs automatically when `CLOUDFLARE_API_TOKEN` and
-`CLOUDFLARE_ACCOUNT_ID` are set in the build environment, so a deploy never
-silently erases the owner's work.
-
-### Without wrangler (CI, a build hook, a remote shell)
-
-```bash
-export CLOUDFLARE_ACCOUNT_ID=<your account id>
-export CLOUDFLARE_API_TOKEN=<a token with "Workers KV Storage: Edit">
+export CLOUDFLARE_ACCOUNT_ID=<account id>
+export CLOUDFLARE_API_TOKEN=<token with Workers KV Storage: Edit>
 FORCE=1 node scripts/sync-kv.mjs
 ```
 
-The script prints which auth path it took and whether it is in FORCE or safe
-mode before it writes anything.
+`FORCE=1` replaces the content documents outright — the deliberate "reset the
+site to the seed" button. Without it, existing keys are kept. Either way the
+password is only written when absent, so re-running can never lock the owner
+out of a site she has already secured.
 
 ---
 
@@ -145,6 +195,17 @@ Models used:
 
 `GET /api/ai/status` reports whether the binding actually arrived — useful when
 the assistant says the AI is unavailable.
+
+The conversation drives writes through an `<action>{…}</action>` block in the
+model's reply. An 8B model mangles that protocol often — fencing the JSON,
+writing prose around it, leaving a trailing comma, omitting the id a `delete`
+needs — so `src/lib/assistant-protocol.ts` recovers what is unambiguous and
+emits **no action** for anything else, rather than guessing at a write to the
+live site. `npm test` covers those cases:
+
+```bash
+npm test
+```
 
 The microphone also needs `Permissions-Policy: microphone=(self)` in
 `public/_headers`. With the default `microphone=()` the browser blocks the page

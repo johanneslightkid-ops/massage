@@ -7,62 +7,85 @@ import { whatsappLink } from '@/lib/utils'
 import { MonsteraLeaf, PalmFrond } from '@/components/art/Decor'
 
 /**
- * Daylight backdrop built from CSS gradients plus one SVG sea band, so the
- * horizon stays on screen at every aspect ratio instead of being cropped away
- * on a phone the way a fixed-viewBox illustration would be.
+ * Midday, not dusk.
  *
- * The palette is the middle of a bright Caribbean afternoon rather than a
- * sunset: wide sky blue at the top, turquoise shallows, warm sand at the foot.
+ * This used to open on #07293f — near-black navy — under a 62% dark veil, and
+ * because it is the first screen the whole site read as a dark blue-green one.
+ * It is now lit the way Bávaro actually looks at two in the afternoon: pale
+ * sky overhead, turquoise shallows, wet sand at the foot, and no veil at all.
+ *
+ * Losing the veil means the headline sits on light, so the hero text is dark
+ * rather than white — the one change that does most of the brightening.
  */
 function HeroBackdrop() {
   return (
     <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#07293f_0%,#0d4569_18%,#12639a_36%,#1a82c4_52%,#2f9fdd_66%,#55b8ec_78%,#9fdfe8_90%,#fdd274_100%)]" />
+      {/* sky: white at the horizon, deepening only slightly overhead */}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,#bfe6fb_0%,#d8f1fd_14%,#eaf8fe_30%,#f7fdff_46%,#ffffff_56%)]" />
 
-      {/* sun high and to the right, hazy rather than a hard disc */}
-      <div className="absolute top-[16%] left-[76%] size-[54vmax] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,250,235,0.9)_0%,rgba(253,226,163,0.46)_30%,rgba(251,156,187,0.2)_54%,rgba(251,156,187,0)_74%)]" />
-      <div className="absolute top-[16%] left-[76%] size-[8vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#FFFAEB] opacity-90 blur-[2px]" />
+      {/* sun, high right, hazy and warm */}
+      <div className="absolute top-[13%] left-[78%] size-[58vmax] max-w-none -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,252,240,0.95)_0%,rgba(253,226,163,0.55)_26%,rgba(251,156,187,0.22)_50%,rgba(251,156,187,0)_72%)]" />
+      <div className="absolute top-[13%] left-[78%] size-[7vmax] -translate-x-1/2 -translate-y-1/2 animate-breathe rounded-full bg-[#FFFDF4] blur-[3px]" />
+
+      {/* a few soft clouds, drifting */}
+      <div className="animate-drift absolute top-[18%] left-[8%] h-16 w-56 rounded-full bg-white/70 blur-2xl sm:h-20 sm:w-80" />
+      <div className="animate-float absolute top-[30%] right-[12%] h-12 w-40 rounded-full bg-white/60 blur-2xl sm:h-16 sm:w-64" />
 
       {/* sea */}
       <svg
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 h-[34%] min-h-[200px] w-full"
+        className="absolute inset-x-0 bottom-0 h-[42%] min-h-[220px] w-full"
       >
         <defs>
           <linearGradient id="hero-sea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#63dee6" />
-            <stop offset="34%" stopColor="#2ec9d4" />
-            <stop offset="72%" stopColor="#1a82c4" />
-            <stop offset="100%" stopColor="#0c5878" />
+            <stop offset="0%" stopColor="#c4f4f6" />
+            <stop offset="22%" stopColor="#63dee6" />
+            <stop offset="55%" stopColor="#2ec9d4" />
+            <stop offset="82%" stopColor="#10abb8" />
+            <stop offset="100%" stopColor="#63dee6" />
+          </linearGradient>
+          <linearGradient id="hero-sand" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#fdefc9" />
+            <stop offset="100%" stopColor="#f8efdb" />
           </linearGradient>
         </defs>
         <rect width="1440" height="320" fill="url(#hero-sea)" />
-        <ellipse cx="1100" cy="26" rx="150" ry="16" fill="#FFF6E2" opacity="0.28" />
-        <ellipse cx="1100" cy="74" rx="104" ry="11" fill="#FFF6E2" opacity="0.18" />
-        <ellipse cx="1100" cy="120" rx="66" ry="8" fill="#FFF6E2" opacity="0.12" />
+
+        {/* sun glitter on the water */}
+        <ellipse cx="1120" cy="22" rx="160" ry="15" fill="#FFFFFF" opacity="0.55" />
+        <ellipse cx="1120" cy="66" rx="110" ry="10" fill="#FFFFFF" opacity="0.4" />
+        <ellipse cx="1120" cy="108" rx="70" ry="7" fill="#FFFFFF" opacity="0.28" />
+
         {[0, 1, 2, 3, 4, 5].map((i) => (
           <path
             key={i}
-            d={`M0 ${52 + i * 44}c120 0 120-16 240-16s120 16 240 16 120-16 240-16 120 16 240 16 120-16 240-16 120 16 240 16`}
-            stroke="#F2FBFF"
-            strokeOpacity={0.2 - i * 0.026}
+            d={`M0 ${44 + i * 42}c120 0 120-16 240-16s120 16 240 16 120-16 240-16 120 16 240 16 120-16 240-16 120 16 240 16`}
+            stroke="#FFFFFF"
+            strokeOpacity={0.5 - i * 0.06}
             strokeWidth="2.5"
             fill="none"
           />
         ))}
+
+        {/* wet sand and foam at the very bottom */}
+        <path d="M0 268c150 0 180-14 320-14s200 16 340 16 210-18 350-18 250 16 430 16v52H0Z" fill="url(#hero-sand)" />
+        <path
+          d="M0 268c150 0 180-14 320-14s200 16 340 16 210-18 350-18 250 16 430 16"
+          stroke="#FFFFFF"
+          strokeWidth="7"
+          fill="none"
+          opacity="0.9"
+        />
       </svg>
 
       {/*
-        The oil slick sits on top of the water, not under it — a film of colour
-        on the surface, which is the whole reason it is here.
+        The oil sheen stays — it is the signature — but on a light ground it has
+        to tint rather than glow, so it multiplies instead of screening.
       */}
-      <div className="animate-drift absolute inset-x-[-10%] bottom-[2%] h-[52%] opacity-50 mix-blend-screen blur-2xl">
+      <div className="animate-drift absolute inset-x-[-10%] bottom-[6%] h-[46%] opacity-30 mix-blend-multiply blur-2xl">
         <div className="size-full bg-[radial-gradient(38%_58%_at_16%_52%,#2fb972_0%,transparent_70%),radial-gradient(34%_54%_at_48%_36%,#f7729e_0%,transparent_70%),radial-gradient(36%_56%_at_72%_62%,#fdd274_0%,transparent_70%),radial-gradient(40%_60%_at_92%_44%,#2ec9d4_0%,transparent_70%)]" />
       </div>
-
-      {/* readability veil — kept light so the daylight still reads as one */}
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,33,47,0.62)_0%,rgba(4,33,47,0.16)_36%,rgba(4,33,47,0.22)_66%,rgba(4,33,47,0.5)_100%)]" />
     </div>
   )
 }
@@ -77,20 +100,23 @@ export function Hero() {
   const therapists = content.team.length
 
   return (
-    <section className="grain relative isolate flex min-h-[94svh] flex-col justify-end overflow-hidden bg-sky-950 text-sand-50 lg:min-h-[88svh] lg:justify-center">
+    <section className="grain relative isolate flex min-h-[94svh] flex-col justify-end overflow-hidden bg-sky-100 text-ocean-950 lg:min-h-[88svh] lg:justify-center">
       {site.heroImage ? (
         <>
           <img src={site.heroImage} alt="" className="absolute inset-0 size-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-sky-950/85 via-sky-900/35 to-ocean-950/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/45 to-white/85" />
         </>
       ) : (
         <HeroBackdrop />
       )}
 
-      <PalmFrond className="pointer-events-none absolute -top-14 -left-24 h-[26rem] w-72 animate-sway text-palm-800/55 sm:-left-16 lg:h-[34rem] lg:w-96" />
+      <PalmFrond className="pointer-events-none absolute -top-14 -left-24 h-[26rem] w-72 animate-sway text-palm-500/60 sm:-left-16 lg:h-[34rem] lg:w-96" />
       <MonsteraLeaf
         mirrored
-        className="pointer-events-none absolute -top-16 -right-24 h-[22rem] w-72 text-palm-800/35 lg:h-[30rem] lg:w-96"
+        className="pointer-events-none absolute -top-24 -right-32 h-[16rem] w-52 rotate-12 text-palm-400/30 lg:h-[22rem] lg:w-72"
+      />
+      <MonsteraLeaf
+        className="pointer-events-none absolute top-[6%] right-[6%] hidden h-28 w-24 -rotate-12 animate-sway text-palm-500/25 lg:block"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-5 pt-28 pb-32 sm:px-8 sm:pb-28 lg:py-24">
@@ -98,7 +124,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[0.7rem] font-semibold tracking-[0.14em] text-seafoam-100 uppercase backdrop-blur-sm"
+          className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-4 py-1.5 text-[0.7rem] font-semibold tracking-[0.14em] text-palm-800 uppercase shadow-soft backdrop-blur-sm"
         >
           <MapPin className="size-3.5" />
           {site.heroKicker}
@@ -108,10 +134,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-3xl text-[2.7rem] leading-[1.02] font-normal tracking-[-0.035em] text-sand-50 sm:text-6xl lg:text-[4.6rem]"
+          className="mt-6 max-w-3xl text-[2.7rem] leading-[1.02] font-normal tracking-[-0.035em] text-ocean-950 sm:text-6xl lg:text-[4.6rem]"
         >
           {site.heroTitle}{' '}
-          <span className="script bg-gradient-to-r from-sun-200 via-sun-400 to-flamingo-300 bg-clip-text text-transparent drop-shadow-[0_2px_18px_rgba(4,33,47,0.35)]">
+          <span className="script bg-gradient-to-r from-palm-600 to-lagoon-600 bg-clip-text text-transparent">
             {site.heroHighlight}
           </span>
         </motion.h1>
@@ -120,7 +146,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-xl text-[1.02rem] leading-relaxed text-sand-100/88 sm:text-lg"
+          className="mt-6 max-w-xl text-[1.02rem] leading-relaxed text-ocean-800/85 sm:text-lg"
         >
           {site.heroSubtitle}
         </motion.p>
@@ -142,7 +168,7 @@ export function Hero() {
           </a>
           <Link
             to="/treatments"
-            className="inline-flex h-14 items-center justify-center rounded-full border border-white/25 bg-white/10 px-7 text-[1rem] font-semibold text-sand-50 backdrop-blur-sm transition-colors duration-300 hover:bg-white/20"
+            className="inline-flex h-14 items-center justify-center rounded-full border border-ocean-900/12 bg-white/85 px-7 text-[1rem] font-semibold text-ocean-950 shadow-soft backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white"
           >
             {site.heroCtaSecondary}
           </Link>
@@ -152,10 +178,10 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.9, delay: 0.4 }}
-          className="no-scrollbar -mx-5 mt-10 flex items-center gap-x-7 overflow-x-auto px-5 whitespace-nowrap text-sand-100/85 sm:mx-0 sm:mt-12 sm:flex-wrap sm:gap-x-8 sm:gap-y-3 sm:px-0 sm:whitespace-normal"
+          className="no-scrollbar -mx-5 mt-10 flex items-center gap-x-7 overflow-x-auto px-5 whitespace-nowrap text-ocean-800/80 sm:mx-0 sm:mt-12 sm:flex-wrap sm:gap-x-8 sm:gap-y-3 sm:px-0 sm:whitespace-normal"
         >
           <div className="flex shrink-0 items-center gap-2">
-            <span className="flex text-sun-400">
+            <span className="flex text-sun-500">
               {Array.from({ length: 5 }).map((_, index) => (
                 <Star key={index} className="size-4 fill-current" strokeWidth={0} />
               ))}
@@ -180,7 +206,7 @@ export function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 1, 0], y: [0, 8, 14, 20] }}
           transition={{ duration: 2.6, repeat: Infinity, delay: 1.2 }}
-          className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-sand-100/50 lg:block"
+          className="pointer-events-none absolute bottom-6 left-1/2 hidden -translate-x-1/2 text-ocean-800/45 lg:block"
         >
           <ArrowDown className="size-5" />
         </motion.div>

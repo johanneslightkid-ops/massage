@@ -111,7 +111,7 @@ export function Discover() {
                   'shrink-0 rounded-full px-4 py-2 text-[0.82rem] font-semibold transition-all duration-300',
                   active === category
                     ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
-                    : 'border border-ocean-900/12 bg-white/50 text-ocean-800/70 hover:border-lagoon-400/60 hover:text-ocean-950',
+                    : 'border border-ocean-900/12 bg-white/50 text-ocean-800/80 hover:border-lagoon-400/60 hover:text-ocean-950',
                 )}
               >
                 {category === ALL ? t('filter.all') : category}
@@ -123,7 +123,7 @@ export function Discover() {
 
       <Section className="py-12 sm:py-16">
         <Container>
-          <p className="text-[0.82rem] font-semibold text-ocean-800/50">
+          <p className="text-[0.82rem] font-semibold text-ocean-800/80">
             {shown.length === 1
               ? t('discover.count_one', { count: shown.length })
               : t('discover.count_other', { count: shown.length })}
@@ -141,7 +141,7 @@ export function Discover() {
           {shown.length === 0 && (
             <div className="mt-16 text-center">
               <p className="font-display text-2xl text-ocean-950">{t('discover.empty_title')}</p>
-              <p className="mt-2 text-ocean-800/60">{t('discover.empty_lead')}</p>
+              <p className="mt-2 text-ocean-800/85">{t('discover.empty_lead')}</p>
               <button
                 type="button"
                 onClick={() => {
@@ -199,7 +199,7 @@ export function Discover() {
                 className="mt-10"
                 embedUrl={site.mapEmbedUrl}
                 viewUrl={site.mapUrl}
-                address={`${site.addressLine} · ${site.neighborhood}`}
+                address={site.addressLine}
               />
             </Reveal>
           </Container>

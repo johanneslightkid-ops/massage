@@ -65,17 +65,17 @@ export function SecurityPanel({
     <div className="max-w-2xl">
       <header>
         <h1 className="font-display text-3xl text-ocean-950">{t('admin.security')}</h1>
-        <p className="mt-1.5 text-[0.92rem] text-ocean-800/60">
+        <p className="mt-1.5 text-[0.92rem] text-ocean-800/85">
           {t('admin.security_lead')}
         </p>
       </header>
 
       {usingDefaultPassword && (
         <div className="mt-7 flex gap-3 rounded-4xl border border-sun-400/50 bg-sun-200/50 p-5">
-          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-sun-700" />
+          <AlertTriangle className="mt-0.5 size-5 shrink-0 text-sun-800" />
           <div>
             <p className="font-semibold text-ocean-950">{t('admin.security_warning_title')}</p>
-            <p className="mt-1 text-[0.9rem] leading-relaxed text-ocean-800/70">
+            <p className="mt-1 text-[0.9rem] leading-relaxed text-ocean-800/80">
               {t('admin.security_warning_body_before')}{' '}
               <code className="rounded bg-white/70 px-1.5 py-0.5 font-mono text-[0.84em]">massage</code>{' '}
               {t('admin.security_warning_body_after')}
@@ -92,7 +92,7 @@ export function SecurityPanel({
 
         <div className="mt-6 space-y-4">
           <label className="block">
-            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
+            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/80 uppercase">
               {t('admin.current_password')}
             </span>
             <input
@@ -104,7 +104,7 @@ export function SecurityPanel({
             />
           </label>
           <label className="block">
-            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
+            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/80 uppercase">
               {t('admin.new_password')}
             </span>
             <input
@@ -116,7 +116,7 @@ export function SecurityPanel({
             />
           </label>
           <label className="block">
-            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
+            <span className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/80 uppercase">
               {t('admin.repeat_password')}
             </span>
             <input
@@ -131,7 +131,7 @@ export function SecurityPanel({
 
         {error && <p className="mt-4 rounded-2xl bg-coral-100 p-3.5 text-[0.86rem] text-coral-600">{error}</p>}
         {done && (
-          <p className="mt-4 flex items-center gap-2 rounded-2xl bg-seafoam-50 p-3.5 text-[0.86rem] font-semibold text-lagoon-700">
+          <p className="mt-4 flex items-center gap-2 rounded-2xl bg-seafoam-50 p-3.5 text-[0.86rem] font-semibold text-lagoon-800">
             <Check className="size-4" />
             {t('admin.password_changed')}
           </p>
@@ -152,7 +152,7 @@ export function SecurityPanel({
           <RotateCcw className="size-5 text-coral-500" />
           {t('admin.restore_all_title')}
         </h2>
-        <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/70">
+        <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/80">
           {t('admin.restore_all_lead')}
         </p>
 

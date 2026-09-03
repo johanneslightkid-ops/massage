@@ -15,19 +15,12 @@ import { blankRecord, type CollectionSchema, type Field } from '@shared/schema'
 import { localizedCollections, localizedSettingsGroups } from '@shared/schema-i18n'
 import type { CollectionKey, SiteContent } from '@shared/types'
 import { api } from './api'
+import { isActionable, parseReply, type AssistantAction } from './assistant-protocol'
 import type { LanguageCode } from './translations'
 import { getLanguageDisplayName, localeTag, otherLanguage } from './translations'
 
-/* --------------------------------------------------------------- actions */
-
-export type AssistantAction =
-  | { kind: 'none' }
-  | { kind: 'done' }
-  | { kind: 'set_setting'; field: string; value: string }
-  | { kind: 'create'; collection: CollectionKey; fields: Record<string, unknown> }
-  | { kind: 'update'; collection: CollectionKey; id: string; fields: Record<string, unknown> }
-  | { kind: 'delete'; collection: CollectionKey; id: string }
-  | { kind: 'manual'; task: string; collection?: string; id?: string; label?: string }
+export { isActionable, parseReply } from './assistant-protocol'
+export type { AssistantAction } from './assistant-protocol'
 
 export interface AssistantMessage {
   id: string
@@ -85,10 +78,22 @@ const NEVER_TRANSLATE = new Set([
   'team.name',
   'testimonials.name',
   'discover.name',
+  // A journey's lengths are numbers stored in a list field — there is nothing
+  // to translate, and asking the model to try produces "sesenta".
+  'durationMinutes',
 ])
 
 function isTranslatableField(field: Field, scope: string): boolean {
   if (NEVER_TRANSLATE.has(field.key) || NEVER_TRANSLATE.has(`${scope}.${field.key}`)) return false
+
+  /*
+   * `tags` and `refs` hold the canonical vocabulary both language documents
+   * share — translating them would break the matcher in whichever language got
+   * translated. They fail the type test below anyway; this says why, so nobody
+   * later "fixes" the omission.
+   */
+  if (field.type === 'tags' || field.type === 'refs') return false
+
   return field.type === 'text' || field.type === 'textarea' || field.type === 'list' || field.type === 'pairs'
 }
 
@@ -183,31 +188,6 @@ export function missingPhotos(content: SiteContent, lang: LanguageCode): ManualS
     steps.push({ id: 'photo-site-owner', task: 'photo', label: content.site.ownerName, section: 'settings' })
   }
   return steps
-}
-
-/* -------------------------------------------------------- action parsing */
-
-/** Pulls the trailing `<action>{…}</action>` block out of a model reply. */
-export function parseReply(raw: string): { text: string; action?: AssistantAction } {
-  const match = raw.match(/<action>([\s\S]*?)<\/action>/i)
-  const text = raw
-    .replace(/<action>[\s\S]*?<\/action>/gi, '')
-    // A small model sometimes opens the tag and never closes it.
-    .replace(/<action>[\s\S]*$/i, '')
-    .trim()
-
-  if (!match) return { text }
-  try {
-    const parsed = JSON.parse(match[1].trim()) as AssistantAction
-    if (parsed && typeof parsed.kind === 'string') return { text, action: parsed }
-  } catch {
-    // A malformed block is treated as no action at all — never as a guess.
-  }
-  return { text }
-}
-
-export function isActionable(action?: AssistantAction): boolean {
-  return Boolean(action && action.kind !== 'none' && action.kind !== 'done' && action.kind !== 'manual')
 }
 
 /* ------------------------------------------------------------ the hook */

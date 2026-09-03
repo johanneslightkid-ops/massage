@@ -119,14 +119,22 @@ export function localBusinessSchema(
     image: `${origin}/og.jpg`,
     ...(site.phoneDisplay ? { telephone: site.phoneDisplay.replace(/\s/g, '') } : {}),
     ...(site.email ? { email: site.email } : {}),
+    /*
+     * No `streetAddress`. Every massage happens where the guest is staying,
+     * so there is no premises for a visitor to walk into — and publishing one
+     * anyway is exactly what Google's service-area guidance tells you not to
+     * do. The locality still anchors the business geographically; areaServed
+     * carries the part that is actually true.
+     */
     address: {
       '@type': 'PostalAddress',
-      streetAddress: site.addressLine,
       addressLocality: site.neighborhood,
       addressRegion: site.city,
       addressCountry: 'DO',
     },
-    areaServed: [site.neighborhood, site.city, 'Punta Cana', 'Cap Cana', 'Uvero Alto'].filter(Boolean),
+    areaServed: [site.neighborhood, site.city, 'Punta Cana', 'Cap Cana', 'Uvero Alto', 'El Cortecito', 'Los Corales']
+      .filter(Boolean)
+      .filter((name, index, all) => all.indexOf(name) === index),
     ...(specs.length ? { openingHoursSpecification: specs } : {}),
     priceRange: '$$',
     currenciesAccepted: 'USD, DOP',

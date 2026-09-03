@@ -15,8 +15,10 @@ import {
   VenueSection,
 } from '@/components/sections/blocks'
 import { PackageCard, ServiceCard, SpotCard, TherapistCard } from '@/components/sections/cards'
+import { FindBanner } from '@/components/find/FindBanner'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
+import { Hibiscus, MonsteraLeaf, PalmFrond, ScatterDots, SunBurst } from '@/components/art/Decor'
 
 /** Mobile gets a snap-scrolling rail; desktop gets the grid. */
 function Rail({ children }: { children: React.ReactNode }) {
@@ -63,8 +65,23 @@ export function Home() {
     <>
       <Hero />
 
+      {/*
+        The guided experience sits directly under the hero because it is the
+        front door: most guests arrive knowing how their day has gone, not
+        which modality they want. The catalogue below stays the reference
+        library for the ones who do.
+      */}
+      <FindBanner journeys={content.journeys ?? []} />
+
       {/* -------------------------------------------------- treatments */}
-      <Section className="relative py-20 sm:py-28">
+      <Section className="relative overflow-hidden py-20 sm:py-28">
+        {/* Each section gets one piece of weather of its own, so scrolling the
+            page feels like moving through a place rather than down a list. */}
+        <SunBurst className="animate-spin-slow pointer-events-none absolute -top-24 -right-28 hidden size-96 text-sun-300/40 lg:block" />
+        <ScatterDots
+          seed="treatments"
+          className="pointer-events-none absolute inset-x-0 top-0 h-40 text-lagoon-400/50"
+        />
         <Container className="relative">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHead
@@ -85,7 +102,7 @@ export function Home() {
             <Rail>
               {featured.map((service, index) => (
                 <Reveal key={service.id} delay={index * 0.06} className={railItem}>
-                  <ServiceCard service={service} currency={currency} compact />
+                  <ServiceCard service={service} currency={currency} journeys={content.journeys ?? []} compact />
                 </Reveal>
               ))}
             </Rail>
@@ -97,8 +114,10 @@ export function Home() {
       <BenefitsSection />
 
       {/* ---------------------------------------------------- packages */}
-      <Section tone="cream" className="grain py-20 sm:py-28">
-        <Container>
+      <Section tone="cream" className="grain speckle relative overflow-hidden py-20 sm:py-28">
+        <Hibiscus className="animate-wiggle pointer-events-none absolute top-12 -left-10 size-40 text-flamingo-300/45" />
+        <MonsteraLeaf className="pointer-events-none absolute -right-16 bottom-4 hidden h-72 w-56 rotate-6 text-palm-300/45 sm:block" />
+        <Container className="relative">
           <SectionHead
             eyebrow={t('home.packages.eyebrow')}
             title={t('home.packages.title')}
@@ -118,8 +137,9 @@ export function Home() {
       <OwnerSection />
 
       {/* -------------------------------------------------------- team */}
-      <Section className="py-20 sm:py-28">
-        <Container>
+      <Section className="relative overflow-hidden py-20 sm:py-28">
+        <PalmFrond className="animate-sway pointer-events-none absolute -top-20 -left-24 hidden h-96 w-72 text-palm-300/45 lg:block" />
+        <Container className="relative">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHead
               eyebrow={t('home.team.eyebrow')}
@@ -149,8 +169,10 @@ export function Home() {
       <TestimonialsSection />
 
       {/* ---------------------------------------------------- discover */}
-      <Section className="py-20 sm:py-28">
-        <Container>
+      <Section className="relative overflow-hidden py-20 sm:py-28">
+        <ScatterDots seed="discover" count={30} className="pointer-events-none absolute inset-0 text-sun-400/35" />
+        <Hibiscus className="animate-wiggle pointer-events-none absolute -right-8 top-16 size-32 text-flamingo-300/40" />
+        <Container className="relative">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <SectionHead
               eyebrow={t('home.discover.eyebrow')}

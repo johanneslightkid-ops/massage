@@ -1,3 +1,4 @@
+import { journeys } from './journeys.ts'
 import type { SiteContent } from './types'
 
 /**
@@ -6,16 +7,17 @@ import type { SiteContent } from './types'
  * the WhatsApp number are placeholders meant to be replaced by the owner.
  */
 export const seedContent: SiteContent = {
+  journeys,
   site: {
     brandName: 'Massage Playero',
-    brandMark: 'Massage & Beach Spa · Bávaro',
-    tagline: 'Unhurried massage in Los Corales — in our studio, on the sand, or in your room.',
+    brandMark: 'Mobile massage · Bávaro & Punta Cana',
+    tagline: 'Unhurried massage, brought to wherever you are staying in Bávaro and Punta Cana.',
 
-    heroKicker: 'Los Corales · El Cortecito · Bávaro Beach',
+    heroKicker: 'Bávaro · El Cortecito · Punta Cana · Cap Cana',
     heroTitle: 'Slow down to',
     heroHighlight: 'island time',
     heroSubtitle:
-      'A small women-run massage studio two minutes from the sand in Los Corales. We also come to your beach chair or your hotel room — with our own table, oils and music.',
+      'A small women-run team that comes to you. Your hotel room, your villa, your terrace — we arrive with the table, the linens, the oils and the music, and you never have to leave the property.',
     heroImage: '',
     heroCtaPrimary: 'Reserve on WhatsApp',
     heroCtaSecondary: 'See treatments & prices',
@@ -24,7 +26,7 @@ export const seedContent: SiteContent = {
     ownerRole: 'Owner & lead therapist',
     ownerQuote: 'A good massage should feel like the sea got into your shoulders.',
     ownerStory:
-      'I grew up in Higüey and have been working with my hands for fourteen years — first in the big resort spas along Bávaro, then on my own. In 2019 I opened this little studio behind the Los Corales beach path so guests could get resort-quality work without resort prices, and so my team could be paid properly. Today four therapists work with me. We are all Dominican, all certified, and we all still get excited when someone falls asleep on the table.',
+      'I grew up in Higüey and have been working with my hands for fourteen years — first in the big resort spas along Bávaro, then on my own. In 2019 I stopped waiting for guests to find a spa and started carrying the table to them instead, so people could get resort-quality work without resort prices, and so my team could be paid properly. Today four therapists work with me. We are all Dominican, all certified, and we all still get excited when someone falls asleep on the table.',
     ownerPhoto: '',
 
     whatsapp: '18095550123',
@@ -32,7 +34,7 @@ export const seedContent: SiteContent = {
     phoneDisplay: '+1 809 555 0123',
     email: 'hola@olaserena.do',
 
-    addressLine: 'Calle Los Corales, behind the beach path',
+    addressLine: 'We come to you — no studio to travel to',
     neighborhood: 'Los Corales / El Cortecito',
     city: 'Bávaro, Punta Cana',
     mapUrl: 'https://maps.google.com/?q=Los+Corales+Bavaro+Punta+Cana',
@@ -41,7 +43,7 @@ export const seedContent: SiteContent = {
     hours: [
       { label: 'Monday – Saturday', value: '9:00 – 21:00' },
       { label: 'Sunday', value: '10:00 – 19:00' },
-      { label: 'Hotel & beach visits', value: 'Until 22:00, last booking 20:30' },
+      { label: 'Late visits', value: 'Until 22:00, last booking 20:30' },
     ],
     languages: ['Español', 'English', 'Deutsch (basic)', 'Français (basic)', 'Русский (basic)'],
 
@@ -53,43 +55,43 @@ export const seedContent: SiteContent = {
     announcementText: 'Same-day appointments are usually possible — message us on WhatsApp and we answer in minutes.',
 
     currency: 'USD',
-    hotelSurcharge:
-      'Hotel and villa visits: +$10 inside Bávaro / El Cortecito, +$20 for Cap Cana, Uvero Alto and Punta Cana Village.',
-    beachNote:
-      'Beach massages happen under our shade tent on Los Corales beach — towels, sheets and music included.',
+    travelNote:
+      'We travel to you: +$10 inside Bávaro / El Cortecito, +$20 for Cap Cana, Uvero Alto and Punta Cana Village.',
+    setupNote:
+      'We bring the folding table, fresh linens, towels, oils and a small speaker, and we carry all of it out again. All you need to clear is about two metres of floor.',
     cancellationPolicy:
       'Plans change on holiday. Cancel or move your appointment free of charge up to 3 hours before.',
   },
 
   venues: [
     {
-      id: 'venue-studio',
-      name: 'Our studio in Los Corales',
-      subtitle: 'Two minutes from the sand',
+      id: 'venue-room',
+      name: 'Your hotel or resort room',
+      subtitle: 'Anywhere in Bávaro & Punta Cana',
       description:
-        'A cool, quiet room behind the beach path — air conditioning, private shower, herbal tea afterwards. The most comfortable option if you want deep work or a longer session.',
-      icon: 'home',
-      note: 'Free filtered water and tea · private changing area · card payments accepted',
+        'The most common one. We arrive with a folding table, fresh linens, oils and a small speaker, set up beside the bed, and leave the room exactly as we found it. Air conditioning and a shower are already there, which is most of what a good massage needs.',
+      icon: 'bed',
+      note: 'Tell us the resort name and building when you book so we can pass reception smoothly',
       order: 1,
     },
     {
-      id: 'venue-beach',
-      name: 'On the beach',
-      subtitle: 'Los Corales & El Cortecito',
+      id: 'venue-villa',
+      name: 'Your villa or apartment',
+      subtitle: 'Rentals, Airbnbs and private homes',
       description:
-        'We set up a shade tent with a proper table right on the sand, so you keep the sound of the water the whole time. Best in the morning or the golden hour before sunset.',
-      icon: 'palm',
-      note: 'Sunrise and sunset slots go first — book a day ahead if you can',
+        'More floor space, which makes this the easiest place for couples, four hands or a small group — two tables fit side by side in most living rooms. Kitchen and shower nearby for a scrub or a wrap.',
+      icon: 'home',
+      note: 'Groups of three or more: message us first so we can send enough therapists',
       order: 2,
     },
     {
-      id: 'venue-hotel',
-      name: 'Your hotel or villa',
-      subtitle: 'In-room, all of Bávaro & Punta Cana',
+      id: 'venue-terrace',
+      name: 'Your terrace, balcony or garden',
+      subtitle: 'Outside, but still your own space',
       description:
-        'We arrive with a folding table, fresh linens, oils and a small speaker. Works in resort rooms, Airbnbs and villas — couples can be done side by side in the same room.',
-      icon: 'bed',
-      note: 'Tell us the resort name and building when you book so we can pass reception smoothly',
+        'Shaded terrace, balcony or poolside inside your property — open air without being on show. Best in the morning or the golden hour before sunset, when the light does half the work.',
+      icon: 'palm',
+      note: 'We watch the wind and the rain, and move you indoors if the weather turns',
       order: 3,
     },
   ],
@@ -193,7 +195,7 @@ export const seedContent: SiteContent = {
       slug: 'couples',
       tagline: 'Two therapists, two tables, side by side',
       description:
-        'Two of us arrive together and work at the same time, in the same room or under the same beach tent. The most-requested thing we do for honeymoons and anniversaries — finish with sparkling water and a fruit plate.',
+        'Two of us arrive together and work at the same time, on two tables side by side in your room or out on your terrace. The most-requested thing we do for honeymoons and anniversaries — finish with sparkling water and a fruit plate.',
       benefits: [
         'Same room, same hour',
         'Perfect for honeymoons',
@@ -392,9 +394,9 @@ export const seedContent: SiteContent = {
       id: 'pkg-honeymoon',
       name: 'Honeymoon Sunset',
       description:
-        'Two therapists, two tables under our tent on Los Corales beach as the light goes gold, then cold sparkling water and a plate of local fruit.',
+        'Two therapists, two tables set up on your terrace or by your window as the light goes gold, then cold sparkling water and a plate of local fruit.',
       includes: [
-        '90 min couples massage on the beach',
+        '90 min couples massage, side by side',
         'Sunset time slot held for you',
         'Flower petals & fruit plate',
         'Photo of the setup if you want one',
@@ -445,7 +447,7 @@ export const seedContent: SiteContent = {
         'Up to 5 guests',
         '60 min each',
         'We bring 2–3 therapists',
-        'Villa, suite or beach',
+        'Villa, suite or terrace',
       ],
       price: 240,
       duration: 'Half day · groups',
@@ -510,10 +512,10 @@ export const seedContent: SiteContent = {
     {
       id: 'team-dahiana',
       name: 'Dahiana',
-      role: 'Beach sessions & four hands',
+      role: 'Early mornings & four hands',
       bio:
-        'The one who carries the tent to the sand before sunrise. Loves beach work, big groups, and being half of a four-hands session.',
-      specialties: ['Beach massage', 'Four hands', 'Relaxing'],
+        'The one who is loading the van before sunrise for the first appointment of the day. Loves big groups, terraces, and being half of a four-hands session.',
+      specialties: ['Relaxing', 'Four hands', 'Groups'],
       languages: ['Español', 'English', 'Deutsch (basic)'],
       years: '4 years',
       photo: '',
@@ -567,7 +569,7 @@ export const seedContent: SiteContent = {
       id: 'ben-nomove',
       title: 'You never have to move',
       description:
-        'Beach chair, hotel room, villa terrace — we carry the table, the sheets, the oils and the music. Your only job is to be horizontal.',
+        'Hotel room, villa, terrace — we carry the table, the sheets, the oils and the music to you. Your only job is to be horizontal.',
       icon: 'palm',
       order: 6,
     },
@@ -834,7 +836,7 @@ export const seedContent: SiteContent = {
       blurb:
         'Seaweed drifts onto this coast mostly between May and August; crews clear the main beaches each morning. UV is brutal between 11:00 and 15:00 even under cloud.',
       tip:
-        'Swim early, shade in the middle of the day, and book your beach massage for the golden hour instead of noon.',
+        'Swim early, shade in the middle of the day, and book your massage for the golden hour instead of noon.',
       walkMinutes: 0,
       priceLevel: '—',
       mapUrl: '',
@@ -850,7 +852,7 @@ export const seedContent: SiteContent = {
       name: 'Hannah & Tom',
       country: 'United Kingdom',
       quote:
-        'We booked the sunset couples massage on our honeymoon and it turned out to be the thing we talk about most. Two therapists, a tent on the sand, the sky going pink. Worth every dollar.',
+        'We booked the sunset couples massage on our honeymoon and it turned out to be the thing we talk about most. Two therapists on our villa terrace, the sky going pink, and nothing for us to organise. Worth every dollar.',
       rating: 5,
       service: 'Couples Massage',
       stayedAt: 'Los Corales',
@@ -905,7 +907,7 @@ export const seedContent: SiteContent = {
       name: 'Dave',
       country: 'United States',
       quote:
-        'Half the price of the resort spa and honestly better. The studio is small and simple but spotlessly clean, and the massage was the real thing. Went back twice.',
+        'Half the price of the resort spa and honestly better. They set up in our room in about five minutes, everything spotlessly clean, and the massage was the real thing. Booked them twice more that week.',
       rating: 5,
       service: 'Hot Stone',
       stayedAt: 'Punta Cana',
@@ -918,7 +920,7 @@ export const seedContent: SiteContent = {
       id: 'faq-book',
       question: 'How do I book?',
       answer:
-        'WhatsApp is fastest — we usually reply within a few minutes between 9:00 and 21:00. Send your dates, how many people, and whether you want the studio, the beach or your room. You can also use the reservation form on this site; it opens WhatsApp with everything already filled in.',
+        'WhatsApp is fastest — we usually reply within a few minutes between 9:00 and 21:00. Send your dates, how many people, and where you are staying. You can also use the reservation form on this site; it opens WhatsApp with everything already filled in.',
       order: 1,
     },
     {
@@ -932,7 +934,7 @@ export const seedContent: SiteContent = {
       id: 'faq-pay',
       question: 'How can I pay?',
       answer:
-        'Cash in US dollars or Dominican pesos, card in the studio, or online before we arrive — we send a Stripe or PayPal link over WhatsApp, and we also accept local transfers and card payments through Banco Popular / Azul. Whatever is easiest for you.',
+        'Three ways, whichever suits you: cash on the day in US dollars or Dominican pesos; card, either upfront through a secure payment link we send on WhatsApp or on the spot when we arrive; or PayPal before the appointment. Nothing is due until you have chosen a time with us.',
       order: 3,
     },
     {
@@ -946,14 +948,14 @@ export const seedContent: SiteContent = {
       id: 'faq-notice',
       question: 'How far in advance should I book?',
       answer:
-        'Same-day appointments are often possible, especially in the studio. For sunset beach slots, couples massages and anything for a group, a day or two ahead is much safer — those hours fill first in high season.',
+        'Same-day appointments are often possible, especially in the morning. For sunset slots, couples massages and anything for a group, a day or two ahead is much safer — those hours fill first in high season.',
       order: 5,
     },
     {
       id: 'faq-bring',
       question: 'What do I need to prepare?',
       answer:
-        'Nothing. For hotel visits, just clear a little space beside the bed. Shower first if you have been in the sea — salt and sand make oil work rough on the skin. Afterwards, drink water and try not to schedule anything demanding for an hour.',
+        'Nothing. Just clear about two metres of floor — beside the bed is usually perfect — and we bring the rest. Shower first if you have been in the sea: salt and sand make oil work rough on the skin. Afterwards, drink water and try not to schedule anything demanding for an hour.',
       order: 6,
     },
     {
@@ -975,52 +977,42 @@ export const seedContent: SiteContent = {
   payments: [
     {
       id: 'pay-cash',
-      name: 'Cash',
+      name: 'Cash on the day',
       description:
-        'US dollars or Dominican pesos, paid after the session. Nothing to arrange in advance.',
+        'US dollars or Dominican pesos, handed over after the session. Nothing to arrange in advance, and no card details anywhere.',
       icon: 'cash',
       url: '',
       enabled: true,
       order: 1,
     },
     {
-      id: 'pay-stripe',
-      name: 'Card via Stripe',
+      id: 'pay-card',
+      name: 'Card — upfront or on arrival',
       description:
-        'Visa, Mastercard and Amex. We send you a secure Stripe link on WhatsApp — pay before we arrive or on the table.',
-      icon: 'stripe',
+        'Visa, Mastercard and Amex. Pay in advance through a secure payment link we send on WhatsApp, or tap your card when we arrive. Whichever you prefer.',
+      icon: 'card',
       url: '',
       enabled: true,
       order: 2,
     },
     {
-      id: 'pay-azul',
-      name: 'Banco Popular · Azul',
+      id: 'pay-paypal',
+      name: 'PayPal, in advance',
       description:
-        'Local card payments and transfers through Banco Popular Azul. The easiest option if you have a Dominican account.',
-      icon: 'bank',
+        'Send it to our PayPal address before the appointment, or ask us for a payment request. Useful if you would rather not hand over a card at all.',
+      icon: 'paypal',
       url: '',
       enabled: true,
       order: 3,
     },
-    {
-      id: 'pay-paypal',
-      name: 'PayPal',
-      description:
-        'Send to our PayPal address, or ask us for a payment request. Useful if you would rather not enter a card at all.',
-      icon: 'paypal',
-      url: '',
-      enabled: true,
-      order: 4,
-    },
   ],
 
   gallery: [
-    { id: 'gal-1', caption: 'Sunrise setup on Los Corales beach', image: '', order: 1 },
-    { id: 'gal-2', caption: 'The studio, five minutes before opening', image: '', order: 2 },
+    { id: 'gal-1', caption: 'Sunrise setup on a Bávaro terrace', image: '', order: 1 },
+    { id: 'gal-2', caption: 'The table going up beside the bed', image: '', order: 2 },
     { id: 'gal-3', caption: 'Warm stones, ready', image: '', order: 3 },
     { id: 'gal-4', caption: 'Golden hour, two tables', image: '', order: 4 },
     { id: 'gal-5', caption: 'Coconut oil pressed on the island', image: '', order: 5 },
-    { id: 'gal-6', caption: 'The walk from our door to the sand', image: '', order: 6 },
+    { id: 'gal-6', caption: 'Everything packed, on the way to the next room', image: '', order: 6 },
   ],
 }

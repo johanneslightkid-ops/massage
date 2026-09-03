@@ -71,7 +71,7 @@ export function AssistantPanel({
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-ocean-950">{t('ai.title')}</h1>
-          <p className="mt-1.5 max-w-xl text-[0.92rem] leading-relaxed text-ocean-800/65">{t('ai.lead')}</p>
+          <p className="mt-1.5 max-w-xl text-[0.92rem] leading-relaxed text-ocean-800/78">{t('ai.lead')}</p>
         </div>
       </header>
 
@@ -129,7 +129,7 @@ export function AssistantPanel({
             className="mt-5 overflow-hidden rounded-5xl border border-white/70 bg-white/90 shadow-soft"
           >
             <div className="flex items-center justify-between gap-3 border-b border-sky-900/8 px-5 py-3">
-              <p className="text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-700 uppercase">
+              <p className="text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-800 uppercase">
                 {t('ai.section_label')} · {getLanguageDisplayName(language)}
               </p>
               <button
@@ -139,7 +139,7 @@ export function AssistantPanel({
                   assistant.setMuted(!assistant.muted)
                 }}
                 aria-label={assistant.muted ? t('ai.unmute') : t('ai.mute')}
-                className="grid size-9 place-items-center rounded-full border border-sky-900/10 text-ocean-800/60 transition-colors hover:bg-sky-50 hover:text-ocean-950"
+                className="grid size-9 place-items-center rounded-full border border-sky-900/10 text-ocean-800/85 transition-colors hover:bg-sky-50 hover:text-ocean-950"
               >
                 {assistant.muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
               </button>
@@ -168,7 +168,7 @@ export function AssistantPanel({
 
               {busy && (
                 <div className="flex justify-start">
-                  <div className="flex items-center gap-2 rounded-[1.4rem_1.4rem_1.4rem_0.4rem] bg-sky-50 px-4 py-3 text-[0.9rem] text-ocean-800/60 ring-1 ring-sky-200/70">
+                  <div className="flex items-center gap-2 rounded-[1.4rem_1.4rem_1.4rem_0.4rem] bg-sky-50 px-4 py-3 text-[0.9rem] text-ocean-800/85 ring-1 ring-sky-200/70">
                     <Loader2 className="size-4 animate-spin" />
                     {assistant.transcribing
                       ? t('ai.transcribing')
@@ -186,7 +186,7 @@ export function AssistantPanel({
                   animate={{ opacity: 1, y: 0 }}
                   className="rounded-4xl border border-sun-400/60 bg-sun-100 p-4"
                 >
-                  <p className="text-[0.7rem] font-bold tracking-[0.18em] text-sun-700 uppercase">
+                  <p className="text-[0.7rem] font-bold tracking-[0.18em] text-sun-800 uppercase">
                     {t('ai.review')}
                   </p>
                   <pre className="mt-2 text-[0.82rem] leading-relaxed whitespace-pre-wrap text-ocean-900">
@@ -205,7 +205,7 @@ export function AssistantPanel({
                     <button
                       type="button"
                       onClick={assistant.reject}
-                      className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/15 px-5 text-[0.85rem] font-semibold text-ocean-800/70 hover:text-ocean-950"
+                      className="inline-flex h-10 items-center gap-2 rounded-full border border-ocean-900/15 px-5 text-[0.85rem] font-semibold text-ocean-800/80 hover:text-ocean-950"
                     >
                       <X className="size-4" />
                       {t('ai.reject')}
@@ -262,7 +262,7 @@ export function AssistantPanel({
                 </button>
               </div>
 
-              <p className="mt-2.5 text-center text-[0.74rem] font-semibold tracking-wide text-ocean-800/50 uppercase">
+              <p className="mt-2.5 text-center text-[0.74rem] font-semibold tracking-wide text-ocean-800/80 uppercase">
                 {assistant.listening ? t('ai.listening') : t('ai.tap_mic')}
               </p>
             </div>
@@ -296,15 +296,15 @@ export function AssistantPanel({
       {(assistant.finished || !assistant.live) && (
         <div className="mt-6 rounded-5xl border border-sun-400/50 bg-gradient-to-br from-sun-100 to-flamingo-100 p-6 shadow-soft">
           <h2 className="flex items-center gap-2 font-display text-xl text-ocean-950">
-            <ImagePlus className="size-5 text-sun-700" />
+            <ImagePlus className="size-5 text-sun-800" />
             {t('ai.manual_title')}
           </h2>
           {assistant.finished && (
-            <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/75">{t('ai.closing')}</p>
+            <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/85">{t('ai.closing')}</p>
           )}
 
           {assistant.manualSteps.length === 0 ? (
-            <p className="mt-4 text-[0.9rem] text-ocean-800/70">{t('ai.manual_none')}</p>
+            <p className="mt-4 text-[0.9rem] text-ocean-800/80">{t('ai.manual_none')}</p>
           ) : (
             <ul className="mt-4 space-y-2">
               {assistant.manualSteps.slice(0, 12).map((step) => (
