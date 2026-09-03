@@ -199,7 +199,7 @@ export function Discover() {
                 className="mt-10"
                 embedUrl={site.mapEmbedUrl}
                 viewUrl={site.mapUrl}
-                address={`${site.addressLine} · ${site.neighborhood}`}
+                address={site.addressLine}
               />
             </Reveal>
           </Container>

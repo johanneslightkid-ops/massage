@@ -10,15 +10,15 @@ export const seedContentEs: SiteContent = {
   journeys: journeysEs,
   site: {
     brandName: 'Massage Playero',
-    brandMark: 'Masajes & Spa de Playa · Bávaro',
+    brandMark: 'Masajes a domicilio · Bávaro y Punta Cana',
     tagline:
-      'Masajes sin prisas en Los Corales — en nuestro estudio, sobre la arena o en tu habitación.',
+      'Masajes sin prisas, donde te estés quedando en Bávaro y Punta Cana.',
 
-    heroKicker: 'Los Corales · El Cortecito · Playa de Bávaro',
+    heroKicker: 'Bávaro · El Cortecito · Punta Cana · Cap Cana',
     heroTitle: 'Baja el ritmo',
     heroHighlight: 'al tiempo caribeño',
     heroSubtitle:
-      'Un pequeño estudio de masajes dirigido por mujeres, a dos minutos de la arena en Los Corales. También vamos a tu silla de playa o a tu habitación de hotel — con nuestra propia camilla, aceites y música.',
+      'Un pequeño equipo de mujeres que va hasta donde estás. Tu habitación de hotel, tu villa, tu terraza — llegamos con la camilla, las sábanas, los aceites y la música, y no tienes que salir del alojamiento.',
     heroImage: '',
     heroCtaPrimary: 'Reserva por WhatsApp',
     heroCtaSecondary: 'Ver tratamientos y precios',
@@ -27,7 +27,7 @@ export const seedContentEs: SiteContent = {
     ownerRole: 'Propietaria y terapeuta principal',
     ownerQuote: 'Un buen masaje debería sentirse como si el mar se hubiera metido en tus hombros.',
     ownerStory:
-      'Crecí en Higüey y llevo catorce años trabajando con mis manos — primero en los grandes spas de resorts de Bávaro y después por mi cuenta. En 2019 abrí este pequeño estudio detrás del camino de la playa de Los Corales para que los visitantes pudieran recibir un trabajo de calidad de resort sin precios de resort, y para que mi equipo pudiera cobrar justamente. Hoy somos cinco terapeutas. Todas somos dominicanas, todas estamos certificadas y todavía nos hace ilusión cuando alguien se queda dormido sobre la camilla.',
+      'Crecí en Higüey y llevo catorce años trabajando con mis manos — primero en los grandes spas de resorts de Bávaro y después por mi cuenta. En 2019 dejé de esperar a que la gente encontrara un spa y empecé a llevarles la camilla yo misma, para que los visitantes pudieran recibir un trabajo de calidad de resort sin precios de resort, y para que mi equipo pudiera cobrar justamente. Hoy somos cinco terapeutas. Todas somos dominicanas, todas estamos certificadas y todavía nos hace ilusión cuando alguien se queda dormido sobre la camilla.',
     ownerPhoto: '',
 
     whatsapp: '18095550123',
@@ -36,7 +36,7 @@ export const seedContentEs: SiteContent = {
     phoneDisplay: '+1 809 555 0123',
     email: 'hola@olaserena.do',
 
-    addressLine: 'Calle Los Corales, detrás del camino de la playa',
+    addressLine: 'Vamos hasta ti — no hay estudio al que ir',
     neighborhood: 'Los Corales / El Cortecito',
     city: 'Bávaro, Punta Cana',
     mapUrl: 'https://maps.google.com/?q=Los+Corales+Bavaro+Punta+Cana',
@@ -45,7 +45,7 @@ export const seedContentEs: SiteContent = {
     hours: [
       { label: 'Lunes – sábado', value: '9:00 – 21:00' },
       { label: 'Domingo', value: '10:00 – 19:00' },
-      { label: 'Visitas a hoteles y playa', value: 'Hasta las 22:00, última reserva 20:30' },
+      { label: 'Visitas tardías', value: 'Hasta las 22:00, última reserva 20:30' },
     ],
     languages: ['Español', 'English', 'Deutsch (básico)', 'Français (básico)', 'Русский (básico)'],
 
@@ -58,43 +58,43 @@ export const seedContentEs: SiteContent = {
       'Normalmente podemos atender el mismo día — escríbenos por WhatsApp y respondemos en minutos.',
 
     currency: 'USD',
-    hotelSurcharge:
-      'Visitas a hoteles y villas: +$10 dentro de Bávaro / El Cortecito, +$20 para Cap Cana, Uvero Alto y Punta Cana Village.',
-    beachNote:
-      'Los masajes en la playa se realizan bajo nuestro toldo en Playa Los Corales — toallas, sábanas y música incluidas.',
+    travelNote:
+      'Vamos hasta ti: +$10 dentro de Bávaro / El Cortecito, +$20 para Cap Cana, Uvero Alto y Punta Cana Village.',
+    setupNote:
+      'Llevamos camilla plegable, sábanas limpias, toallas, aceites y un pequeño altavoz, y nos lo llevamos todo al terminar. Solo hace falta despejar unos dos metros de piso.',
     cancellationPolicy:
       'Los planes cambian durante las vacaciones. Cancela o cambia tu cita sin coste hasta 3 horas antes.',
   },
 
   venues: [
     {
-      id: 'venue-studio',
-      name: 'Nuestro estudio en Los Corales',
-      subtitle: 'A dos minutos de la arena',
+      id: 'venue-room',
+      name: 'Tu habitación de hotel o resort',
+      subtitle: 'En todo Bávaro y Punta Cana',
       description:
-        'Una sala fresca y tranquila detrás del camino de la playa — aire acondicionado, ducha privada y té de hierbas después. La opción más cómoda si quieres un trabajo profundo o una sesión más larga.',
-      icon: 'home',
-      note: 'Agua filtrada y té gratis · zona privada para cambiarte · aceptamos tarjetas',
+        'La opción más común. Llegamos con camilla plegable, sábanas limpias, aceites y un pequeño altavoz, montamos al lado de la cama y dejamos la habitación tal como la encontramos. El aire y la ducha ya están ahí, que es casi todo lo que hace falta.',
+      icon: 'bed',
+      note: 'Dinos el nombre del resort y el edificio al reservar para facilitar el acceso por recepción',
       order: 1,
     },
     {
-      id: 'venue-beach',
-      name: 'En la playa',
-      subtitle: 'Los Corales y El Cortecito',
+      id: 'venue-villa',
+      name: 'Tu villa o apartamento',
+      subtitle: 'Alquileres, Airbnbs y casas privadas',
       description:
-        'Montamos un toldo con una camilla profesional directamente sobre la arena, para que escuches el mar durante toda la sesión. Ideal por la mañana o durante la hora dorada antes del atardecer.',
-      icon: 'palm',
-      note: 'Los horarios de amanecer y atardecer se llenan primero — reserva con un día de antelación si puedes',
+        'Más espacio en el piso, así que es el sitio más fácil para parejas, cuatro manos o un grupo pequeño — en casi cualquier sala caben dos camillas lado a lado. Cocina y ducha cerca para un exfoliante o una envoltura.',
+      icon: 'home',
+      note: 'Grupos de tres o más: escríbenos antes para mandar suficientes terapeutas',
       order: 2,
     },
     {
-      id: 'venue-hotel',
-      name: 'Tu hotel o villa',
-      subtitle: 'En habitación, en todo Bávaro y Punta Cana',
+      id: 'venue-terrace',
+      name: 'Tu terraza, balcón o jardín',
+      subtitle: 'Al aire libre, pero en tu propio espacio',
       description:
-        'Llegamos con camilla plegable, sábanas limpias, aceites y un pequeño altavoz. Funciona en habitaciones de resort, Airbnbs y villas — las parejas pueden recibir el masaje lado a lado en la misma habitación.',
-      icon: 'bed',
-      note: 'Dinos el nombre del resort y el edificio al reservar para facilitar el acceso por recepción',
+        'Terraza con sombra, balcón o junto a la piscina dentro de tu alojamiento — al aire libre sin quedar a la vista de nadie. Mejor por la mañana o en la hora dorada antes del atardecer, cuando la luz hace la mitad del trabajo.',
+      icon: 'palm',
+      note: 'Vigilamos el viento y la lluvia, y te pasamos bajo techo si el tiempo cambia',
       order: 3,
     },
   ],
@@ -198,7 +198,7 @@ export const seedContentEs: SiteContent = {
       slug: 'couples',
       tagline: 'Dos terapeutas, dos camillas, lado a lado',
       description:
-        'Dos de nosotras llegamos juntas y trabajamos al mismo tiempo, en la misma habitación o bajo el mismo toldo de playa. Es lo que más hacemos para lunas de miel y aniversarios — terminamos con agua con gas y un plato de fruta.',
+        'Dos de nosotras llegamos juntas y trabajamos al mismo tiempo, en dos camillas lado a lado en tu habitación o en tu terraza. Es lo que más hacemos para lunas de miel y aniversarios — terminamos con agua con gas y un plato de fruta.',
       benefits: [
         'La misma habitación y la misma hora',
         'Perfecto para lunas de miel',
@@ -397,9 +397,9 @@ export const seedContentEs: SiteContent = {
       id: 'pkg-honeymoon',
       name: 'Atardecer de Luna de Miel',
       description:
-        'Dos terapeutas, dos camillas bajo nuestro toldo en Playa Los Corales mientras la luz se vuelve dorada, seguido de agua con gas fría y fruta local.',
+        'Dos terapeutas, dos camillas montadas en tu terraza o junto a la ventana mientras la luz se vuelve dorada, seguido de agua con gas fría y fruta local.',
       includes: [
-        '90 min de masaje en pareja en la playa',
+        '90 min de masaje en pareja, lado a lado',
         'Horario de atardecer reservado para ustedes',
         'Pétalos de flores y plato de fruta',
         'Foto del montaje si quieren',
@@ -450,7 +450,7 @@ export const seedContentEs: SiteContent = {
         'Hasta 5 personas',
         '60 min por persona',
         'Llevamos 2–3 terapeutas',
-        'Villa, suite o playa',
+        'Villa, suite o terraza',
       ],
       price: 240,
       duration: 'Medio día · grupos',
@@ -515,10 +515,10 @@ export const seedContentEs: SiteContent = {
     {
       id: 'team-dahiana',
       name: 'Dahiana',
-      role: 'Sesiones en playa y cuatro manos',
+      role: 'Madrugadas y cuatro manos',
       bio:
-        'La que lleva el toldo hasta la arena antes del amanecer. Le encanta trabajar en la playa, los grupos grandes y ser una de las dos manos de una sesión a cuatro manos.',
-      specialties: ['Masaje en playa', 'Cuatro manos', 'Relajación'],
+        'La que carga la camioneta antes del amanecer para la primera cita del día. Le encantan los grupos grandes, las terrazas y ser una de las dos manos de una sesión a cuatro manos.',
+      specialties: ['Relajación', 'Cuatro manos', 'Grupos'],
       languages: ['Español', 'English', 'Deutsch (básico)'],
       years: '4 años',
       photo: '',
@@ -572,7 +572,7 @@ export const seedContentEs: SiteContent = {
       id: 'ben-nomove',
       title: 'Tú no tienes que moverte',
       description:
-        'Silla de playa, habitación de hotel o terraza de villa — nosotras llevamos la camilla, las sábanas, los aceites y la música. Tu único trabajo es estar tumbado.',
+        'Habitación de hotel, villa o terraza — nosotras te llevamos la camilla, las sábanas, los aceites y la música. Tu único trabajo es estar tumbado.',
       icon: 'palm',
       order: 6,
     },
@@ -840,7 +840,7 @@ export const seedContentEs: SiteContent = {
       blurb:
         'El sargazo llega a esta costa sobre todo entre mayo y agosto; los equipos limpian las playas principales cada mañana. Los rayos UV son muy fuertes entre las 11:00 y las 15:00 incluso con nubes.',
       tip:
-        'Nada temprano, busca sombra al mediodía y reserva tu masaje en la playa para la hora dorada en lugar del mediodía.',
+        'Nada temprano, busca sombra al mediodía y reserva tu masaje para la hora dorada en lugar del mediodía.',
       walkMinutes: 0,
       priceLevel: '—',
       mapUrl: '',
@@ -856,7 +856,7 @@ export const seedContentEs: SiteContent = {
       name: 'Hannah & Tom',
       country: 'Reino Unido',
       quote:
-        'Reservamos el masaje en pareja al atardecer durante nuestra luna de miel y terminó siendo de lo que más hablamos del viaje. Dos terapeutas, un toldo sobre la arena y el cielo poniéndose rosa. Valió cada dólar.',
+        'Reservamos el masaje en pareja al atardecer durante nuestra luna de miel y terminó siendo de lo que más hablamos del viaje. Dos terapeutas en la terraza de la villa, el cielo poniéndose rosa y nada que organizar. Valió cada dólar.',
       rating: 5,
       service: 'Masaje en Pareja',
       stayedAt: 'Los Corales',
@@ -911,7 +911,7 @@ export const seedContentEs: SiteContent = {
       name: 'Dave',
       country: 'Estados Unidos',
       quote:
-        'La mitad del precio del spa del resort y sinceramente mejor. El estudio es pequeño y sencillo pero impecablemente limpio, y el masaje fue de verdad. Volví dos veces.',
+        'La mitad del precio del spa del resort y sinceramente mejor. Montaron en nuestra habitación en unos cinco minutos, todo impecablemente limpio, y el masaje fue de verdad. Las volvimos a llamar dos veces esa semana.',
       rating: 5,
       service: 'Piedras Calientes',
       stayedAt: 'Punta Cana',
@@ -924,7 +924,7 @@ export const seedContentEs: SiteContent = {
       id: 'faq-book',
       question: '¿Cómo puedo reservar?',
       answer:
-        'WhatsApp es lo más rápido — normalmente respondemos en pocos minutos entre las 9:00 y las 21:00. Envíanos tus fechas, cuántas personas son y si quieres el estudio, la playa o tu habitación. También puedes usar el formulario de reserva de la web; abre WhatsApp con toda la información ya preparada.',
+        'WhatsApp es lo más rápido — normalmente respondemos en pocos minutos entre las 9:00 y las 21:00. Envíanos tus fechas, cuántas personas son y dónde te estás quedando. También puedes usar el formulario de reserva de la web; abre WhatsApp con toda la información ya preparada.',
       order: 1,
     },
     {
@@ -938,7 +938,7 @@ export const seedContentEs: SiteContent = {
       id: 'faq-pay',
       question: '¿Cómo puedo pagar?',
       answer:
-        'En efectivo en dólares estadounidenses o pesos dominicanos, con tarjeta en el estudio o por internet antes de nuestra llegada — enviamos un enlace de Stripe o PayPal por WhatsApp. También aceptamos transferencias locales y pagos con tarjeta mediante Banco Popular / Azul. Lo que te resulte más cómodo.',
+        'Tres formas, la que te resulte más cómoda: en efectivo el mismo día, en dólares estadounidenses o pesos dominicanos; con tarjeta, por adelantado con un enlace de pago seguro que te mandamos por WhatsApp o al llegar nosotras; o por PayPal antes de la cita. No hay que pagar nada hasta que hayas acordado una hora con nosotras.',
       order: 3,
     },
     {
@@ -952,14 +952,14 @@ export const seedContentEs: SiteContent = {
       id: 'faq-notice',
       question: '¿Con cuánta antelación debería reservar?',
       answer:
-        'Las citas para el mismo día suelen ser posibles, especialmente en el estudio. Para horarios de playa al atardecer, masajes en pareja y grupos, es mucho más seguro reservar con uno o dos días de antelación — esas horas son las primeras que se llenan en temporada alta.',
+        'Las citas para el mismo día suelen ser posibles, sobre todo por la mañana. Para horarios al atardecer, masajes en pareja y grupos, es mucho más seguro reservar con uno o dos días de antelación — esas horas son las primeras que se llenan en temporada alta.',
       order: 5,
     },
     {
       id: 'faq-bring',
       question: '¿Qué necesito preparar?',
       answer:
-        'Nada. Para las visitas al hotel, solo deja un poco de espacio junto a la cama. Dúchate antes si has estado en el mar — la sal y la arena hacen que el trabajo con aceite sea más áspero sobre la piel. Después bebe agua e intenta no programar nada exigente durante una hora.',
+        'Nada. Solo despeja unos dos metros de piso — al lado de la cama suele ser perfecto — y nosotras llevamos el resto. Dúchate antes si has estado en el mar: la sal y la arena hacen que el trabajo con aceite sea más áspero sobre la piel. Después bebe agua e intenta no programar nada exigente durante una hora.',
       order: 6,
     },
     {
@@ -981,56 +981,46 @@ export const seedContentEs: SiteContent = {
   payments: [
     {
       id: 'pay-cash',
-      name: 'Efectivo',
+      name: 'Efectivo el mismo día',
       description:
-        'Dólares estadounidenses o pesos dominicanos, pagados después de la sesión. No tienes que preparar nada por adelantado.',
+        'Dólares estadounidenses o pesos dominicanos, al terminar la sesión. No hay que organizar nada por adelantado ni dar datos de tarjeta en ningún sitio.',
       icon: 'cash',
       url: '',
       enabled: true,
       order: 1,
     },
     {
-      id: 'pay-stripe',
-      name: 'Tarjeta mediante Stripe',
+      id: 'pay-card',
+      name: 'Tarjeta — antes o al llegar',
       description:
-        'Visa, Mastercard y Amex. Te enviamos un enlace seguro de Stripe por WhatsApp — puedes pagar antes de que lleguemos o sobre la camilla.',
-      icon: 'stripe',
+        'Visa, Mastercard y Amex. Paga por adelantado con un enlace de pago seguro que te mandamos por WhatsApp, o pasa la tarjeta cuando lleguemos. Como prefieras.',
+      icon: 'card',
       url: '',
       enabled: true,
       order: 2,
     },
     {
-      id: 'pay-azul',
-      name: 'Banco Popular · Azul',
-      description:
-        'Pagos con tarjeta y transferencias locales mediante Banco Popular Azul. La opción más sencilla si tienes una cuenta dominicana.',
-      icon: 'bank',
-      url: '',
-      enabled: true,
-      order: 3,
-    },
-    {
       id: 'pay-paypal',
-      name: 'PayPal',
+      name: 'PayPal, por adelantado',
       description:
-        'Envía el pago a nuestra dirección de PayPal o pídenos una solicitud de pago. Útil si prefieres no introducir los datos de tu tarjeta.',
+        'Envíalo a nuestra dirección de PayPal antes de la cita, o pídenos una solicitud de pago. Útil si prefieres no dar una tarjeta.',
       icon: 'paypal',
       url: '',
       enabled: true,
-      order: 4,
+      order: 3,
     },
   ],
 
   gallery: [
     {
       id: 'gal-1',
-      caption: 'Montaje al amanecer en la playa de Los Corales',
+      caption: 'Montaje al amanecer en una terraza de Bávaro',
       image: '',
       order: 1,
     },
     {
       id: 'gal-2',
-      caption: 'El estudio, cinco minutos antes de abrir',
+      caption: 'La camilla montándose junto a la cama',
       image: '',
       order: 2,
     },
@@ -1054,7 +1044,7 @@ export const seedContentEs: SiteContent = {
     },
     {
       id: 'gal-6',
-      caption: 'El camino desde nuestra puerta hasta la arena',
+      caption: 'Todo recogido, camino de la siguiente habitación',
       image: '',
       order: 6,
     },

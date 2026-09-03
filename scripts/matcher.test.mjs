@@ -23,6 +23,7 @@ import { matchJourneys, offeredDurations, leadService, alternativeServices } fro
 import { journeys } from '../shared/journeys.ts'
 import { journeysEs } from '../shared/journeys-es.ts'
 import { seedContent } from '../shared/seed.ts'
+import { VENUE_TAGS } from '../shared/journey-tags.ts'
 
 const services = seedContent.services
 const top = (result) => result.matches[0]?.journey.slug
@@ -34,7 +35,7 @@ test('long flight + relaxing → an arrival journey', () => {
   const result = matchJourneys(journeys, {
     moment: 'just-arrived',
     intensity: 'relaxing',
-    venue: 'hotel',
+    venue: 'room',
   })
   assert.equal(result.outcome, 'ok')
   assert.equal(result.fallback, false)
@@ -48,7 +49,7 @@ test('long flight, in the evening, before sleep → Jet Lag Reset specifically',
   const result = matchJourneys(journeys, {
     moment: 'just-arrived',
     intensity: 'relaxing',
-    venue: 'hotel',
+    venue: 'room',
     timing: 'before-sleep',
   })
   assert.equal(top(result), 'jet-lag-reset')
@@ -58,7 +59,7 @@ test('adventure + firm → After Adventure Recovery', () => {
   const result = matchJourneys(journeys, {
     moment: 'after-adventure',
     intensity: 'firm',
-    venue: 'hotel',
+    venue: 'room',
   })
   assert.equal(top(result), 'after-adventure-recovery')
 })
@@ -67,7 +68,7 @@ test('honeymoon + together → Couples Honeymoon Ritual', () => {
   const result = matchJourneys(journeys, {
     moment: 'celebrating',
     intensity: 'relaxing',
-    venue: 'hotel',
+    venue: 'room',
     occasion: 'honeymoon',
   })
   assert.equal(top(result), 'couples-honeymoon-ritual')
@@ -77,7 +78,7 @@ test('sleep + relaxing → Sleep & Unwind', () => {
   const result = matchJourneys(journeys, {
     moment: 'switch-off',
     intensity: 'relaxing',
-    venue: 'hotel',
+    venue: 'room',
     timing: 'before-sleep',
   })
   assert.equal(top(result), 'sleep-and-unwind')
@@ -87,7 +88,7 @@ test('neck/shoulders + focused → Neck & Shoulder Rescue', () => {
   const result = matchJourneys(journeys, {
     moment: 'targeted',
     intensity: 'firm',
-    venue: 'studio',
+    venue: 'room',
   })
   assert.equal(top(result), 'neck-and-shoulder-rescue')
 })
@@ -96,7 +97,7 @@ test('pregnancy → Prenatal Comfort, and nothing else at all', () => {
   const result = matchJourneys(journeys, {
     moment: 'expecting',
     intensity: 'gentle',
-    venue: 'hotel',
+    venue: 'room',
     concerns: ['pregnant'],
   })
   assert.deepEqual(slugs(result), ['prenatal-comfort'])
@@ -109,7 +110,7 @@ for (const concern of ['fever', 'swelling', 'intoxicated', 'sunburn']) {
     const result = matchJourneys(journeys, {
       moment: 'switch-off',
       intensity: 'relaxing',
-      venue: 'hotel',
+      venue: 'room',
       concerns: [concern],
     })
     assert.equal(result.outcome, 'rest')
@@ -122,7 +123,7 @@ test('a red flag outranks a perfect match on every other answer', () => {
   const result = matchJourneys(journeys, {
     moment: 'after-adventure',
     intensity: 'firm',
-    venue: 'hotel',
+    venue: 'room',
     occasion: 'friends',
     timing: 'after-excursion',
     concerns: ['fever'],
@@ -139,7 +140,7 @@ for (const concern of ['recent-surgery', 'acute-injury', 'blood-thinners']) {
       const result = matchJourneys(journeys, {
         moment,
         intensity: 'firm',
-        venue: 'hotel',
+        venue: 'room',
         concerns: [concern],
       })
       assert.equal(result.outcome, 'care')
@@ -157,9 +158,9 @@ for (const concern of ['recent-surgery', 'acute-injury', 'blood-thinners']) {
 
 test('a prenatal journey is never suggested to someone who has not said she is pregnant', () => {
   for (const answers of [
-    { moment: 'gentle', intensity: 'gentle', venue: 'studio' },
+    { moment: 'gentle', intensity: 'gentle', venue: 'room' },
     { moment: 'unsure', intensity: 'gentle' },
-    { moment: 'switch-off', intensity: 'gentle', venue: 'hotel' },
+    { moment: 'switch-off', intensity: 'gentle', venue: 'room' },
   ]) {
     const result = matchJourneys(journeys, answers)
     for (const match of result.matches) {
@@ -222,8 +223,8 @@ test('an empty answer set falls back rather than showing nothing', () => {
 })
 
 test('a venue nothing supports still returns options rather than an empty screen', () => {
-  const beachOnly = journeys.filter((j) => j.slug === 'coconut-island-ritual') // studio only
-  const result = matchJourneys(beachOnly, { venue: 'beach' })
+  const indoorOnly = journeys.filter((j) => j.slug === 'coconut-island-ritual') // room / villa only
+  const result = matchJourneys(indoorOnly, { venue: 'terrace' })
   assert.ok(result.matches.length > 0)
   assert.equal(result.fallback, true)
 })
@@ -231,7 +232,7 @@ test('a venue nothing supports still returns options rather than an empty screen
 /* -------------------------------------------------------------- ranking */
 
 test('venue incompatibility pushes a journey down', () => {
-  const studioOnly = matchJourneys(journeys, { moment: 'switch-off', venue: 'studio' })
+  const studioOnly = matchJourneys(journeys, { moment: 'switch-off', venue: 'room' })
   const beach = matchJourneys(journeys, { moment: 'switch-off', venue: 'beach' })
   // The coconut ritual is studio-only, so it must never lead a beach request.
   assert.notEqual(top(beach), 'coconut-island-ritual')
@@ -269,7 +270,7 @@ test('reasons are dictionary keys, never sentences', () => {
   const result = matchJourneys(journeys, {
     moment: 'after-adventure',
     intensity: 'firm',
-    venue: 'hotel',
+    venue: 'room',
     timing: 'after-excursion',
   })
   const keys = result.matches[0].reasonKeys
@@ -282,7 +283,7 @@ test('reasons are dictionary keys, never sentences', () => {
 /* ------------------------------------------------------------- language */
 
 test('Spanish content ranks identically to English', () => {
-  const answers = { moment: 'after-adventure', intensity: 'firm', venue: 'hotel' }
+  const answers = { moment: 'after-adventure', intensity: 'firm', venue: 'room' }
   assert.deepEqual(slugs(matchJourneys(journeysEs, answers)), slugs(matchJourneys(journeys, answers)))
 })
 

@@ -102,9 +102,9 @@ export const MOMENT_ICONS: Record<MomentTag, MotifName> = {
 }
 
 export const VENUE_ICONS: Record<VenueTag, MotifName> = {
-  hotel: 'bed',
-  beach: 'palm',
-  studio: 'home',
+  room: 'bed',
+  villa: 'home',
+  terrace: 'palm',
 }
 
 export const INTENSITY_ICONS: Record<IntensityChoice, MotifName> = {

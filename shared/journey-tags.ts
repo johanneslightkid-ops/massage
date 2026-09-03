@@ -69,11 +69,16 @@ export type TimingTag = (typeof TIMING_TAGS)[number]
 /* ---------------------------------------------------------------- venues */
 
 /**
- * Deliberately three, matching the three venue records the studio actually
- * works from. `venueSlugFromName` maps the owner's editable venue names onto
- * these, so renaming "Our studio in Los Corales" never breaks matching.
+ * Every massage happens where the guest already is. There is no studio to
+ * travel to and, for now, no service on the public beach — so these are not
+ * *our* locations, they are the kinds of space we carry a table into.
+ *
+ * The distinction still earns its place in the matcher: a scrub wants a shower
+ * a few steps away, two tables need floor space, and a stone heater needs an
+ * outlet. `venueTagFromName` maps the owner's editable venue names onto these,
+ * so renaming "Your hotel or resort room" never breaks matching.
  */
-export const VENUE_TAGS = ['studio', 'beach', 'hotel'] as const
+export const VENUE_TAGS = ['room', 'villa', 'terrace'] as const
 export type VenueTag = (typeof VENUE_TAGS)[number]
 
 /* ------------------------------------------------------------- intensity */
@@ -173,8 +178,8 @@ export const isConcernTag = membership(CONCERN_TAGS)
  */
 export function venueTagFromName(name: string): VenueTag | undefined {
   const text = name.toLowerCase()
-  if (/hotel|villa|room|habitaci|resort|alojamiento/.test(text)) return 'hotel'
-  if (/beach|playa|sand|arena|orilla/.test(text)) return 'beach'
-  if (/studio|estudio|salón|salon|cabina|local/.test(text)) return 'studio'
+  if (/terrace|terraza|balcon|balcón|garden|jard|patio|poolside|piscina/.test(text)) return 'terrace'
+  if (/villa|apartment|apartamento|airbnb|casa|penthouse/.test(text)) return 'villa'
+  if (/room|hotel|resort|habitaci|suite|cuarto/.test(text)) return 'room'
   return undefined
 }

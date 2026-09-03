@@ -286,7 +286,7 @@ export function Book() {
                     </OptionButton>
                   ))}
                 </div>
-                <p className="mt-4 text-[0.82rem] leading-relaxed text-ocean-800/85">{site.hotelSurcharge}</p>
+                <p className="mt-4 text-[0.82rem] leading-relaxed text-ocean-800/85">{site.travelNote}</p>
               </Reveal>
 
               {/* --------------------------------------------------- when */}
@@ -410,6 +410,16 @@ export function Book() {
                     <span className="font-display text-3xl text-flamingo-700">{formatPrice(price, currency)}</span>
                   </p>
                 )}
+
+                {/*
+                  Answered here rather than only further down the page: "how do
+                  I pay a stranger who comes to my hotel room" is the question
+                  that stops a booking, and it is asked at exactly this moment.
+                */}
+                <p className="mt-4 rounded-3xl bg-sand-100/80 px-4 py-3 text-[0.78rem] leading-relaxed text-ocean-800/85">
+                  <span className="font-bold text-ocean-950">{t('book.pay_label')}</span>{' '}
+                  {t('book.pay_summary')}
+                </p>
 
                 <button
                   type="button"

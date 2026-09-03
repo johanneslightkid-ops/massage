@@ -1,9 +1,10 @@
-# Ola Serena — massage studio site for Los Corales, Bávaro
+# Ola Serena — mobile massage site for Bávaro & Punta Cana
 
-A mobile-first website for a small, women-run massage business in Los Corales / El Cortecito
-(Bávaro, Punta Cana): treatments and prices, a local tourist guide to the neighbourhood,
-WhatsApp reservations, payment options, and a password-protected admin where the owner can
-edit **every** piece of content on the site.
+A mobile-first website for a small, women-run massage business that travels to the guest —
+hotel room, villa or terrace anywhere in Bávaro and Punta Cana. There is no studio and no
+beach service: treatments and prices, a local tourist guide to the neighbourhood, WhatsApp
+reservations, payment options, and a password-protected admin where the owner can edit
+**every** piece of content on the site.
 
 Built on Cloudflare Pages: a React front end served as static assets, a Pages **Function**
 for the API, and a **KV namespace** as the content store.

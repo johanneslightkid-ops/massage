@@ -54,7 +54,7 @@ export function VenueSection() {
         <Reveal delay={0.2}>
           <div className="mt-8 flex flex-col gap-3 rounded-5xl border border-white/70 bg-white/65 p-6 text-[0.88rem] leading-relaxed text-ocean-800/85 shadow-soft sm:flex-row sm:items-center sm:gap-6">
             <Wallet className="size-5 shrink-0 text-lagoon-600" />
-            <p>{content.site.hotelSurcharge}</p>
+            <p>{content.site.travelNote}</p>
           </div>
         </Reveal>
       </Container>
@@ -221,12 +221,15 @@ export function TestimonialsSection() {
 
 /* -------------------------------------------------------------- payments */
 
+/*
+ * Deliberately generic. Which processor moves the money is our business, not
+ * the guest's — they only need to know the three ways they can pay.
+ */
 const paymentGlyphs: Record<string, string> = {
   cash: 'Cash',
-  stripe: 'Stripe',
-  bank: 'Azul',
-  paypal: 'PayPal',
   card: 'Card',
+  paypal: 'PayPal',
+  link: 'Link',
 }
 
 export function PaymentsSection({ id }: { id?: string }) {
@@ -244,7 +247,7 @@ export function PaymentsSection({ id }: { id?: string }) {
           lead={t('payments.lead')}
         />
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {methods.map((method, index) => (
             <Reveal key={method.id} delay={index * 0.06} className="h-full">
               <div className="flex h-full flex-col rounded-5xl border border-white/70 bg-white/70 p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift">
@@ -388,7 +391,7 @@ export function CtaBand() {
                 </Link>
               </div>
 
-              <p className="mt-7 text-[0.8rem] text-ocean-800/85">{site.beachNote}</p>
+              <p className="mt-7 text-[0.8rem] text-ocean-800/85">{site.setupNote}</p>
             </div>
           </div>
         </Reveal>

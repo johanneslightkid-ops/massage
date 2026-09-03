@@ -71,7 +71,7 @@ const en: Dict = {
   /* hero ----------------------------------------------------------------- */
   'hero.rating': '{count} guest reviews',
   'hero.therapists': '{count} certified therapists',
-  'hero.where': 'Studio · Beach · Your hotel room',
+  'hero.where': 'Your room · Your villa · Your terrace',
   'hero.rating_label': 'Guest rating',
   'hero.team_label': 'Team size',
   'hero.where_label': 'Where we work',
@@ -88,7 +88,7 @@ const en: Dict = {
   'home.packages.title': 'For honeymoons, groups',
   'home.packages.script': 'and whole weeks',
   'home.packages.lead':
-    'Fixed prices, no surprises. Every package can be moved to the beach, the studio or your room.',
+    'Fixed prices, no surprises. Every package is set up wherever you are staying — room, villa or terrace.',
 
   'home.team.eyebrow': 'The hands',
   'home.team.title': 'The women who',
@@ -103,11 +103,11 @@ const en: Dict = {
   'home.discover.all': 'Open the guide',
 
   /* shared sections ------------------------------------------------------ */
-  'venues.eyebrow': 'Three ways to be massaged',
-  'venues.title': 'Come to us, or',
-  'venues.script': 'we come to you',
+  'venues.eyebrow': 'We come to you',
+  'venues.title': 'Wherever you',
+  'venues.script': 'are staying',
   'venues.lead':
-    'The same therapists and the same table wherever you are — the only difference is the soundtrack.',
+    'The same therapists and the same table whichever you pick — all we need is a couple of metres of floor and somewhere to plug in.',
 
   'benefits.eyebrow': 'Why bother, on holiday?',
   'benefits.title': 'Because a week goes fast and',
@@ -162,7 +162,7 @@ const en: Dict = {
   'discover.title': 'The guide we give',
   'discover.script': 'our own friends',
   'discover.lead':
-    'We live and work on this beach. Here is what is genuinely worth your time within a short walk of the studio — plus the practical things that make a first trip to the Dominican Republic easier.',
+    'We live and work on this coast. Here is what is genuinely worth your time around Bávaro and El Cortecito — plus the practical things that make a first trip to the Dominican Republic easier.',
   'discover.walkable': '{count} places within a 10-minute walk',
   'discover.tips': '{count} local tips',
   'discover.search_placeholder': 'Search beaches, food, tips…',
@@ -185,7 +185,7 @@ const en: Dict = {
   /* team page ------------------------------------------------------------ */
   'team.kicker': 'The people',
   'team.title': 'Dominican women,',
-  'team.script': 'one small studio',
+  'team.script': 'one small team',
   'team.lead':
     'We are not an agency and there is no call centre. When you write, you are writing to one of us.',
   'team.badge_certified': 'Certified therapists',
@@ -198,7 +198,7 @@ const en: Dict = {
     'If you have never booked a massage outside a resort spa, here is exactly what happens.',
   'team.step1.title': 'You write on WhatsApp',
   'team.step1.body':
-    'Tell us the day, the hour, how many people, and whether you want the studio, the beach or your room. We confirm in minutes.',
+    'Tell us the day, the hour, how many people and where you are staying. We confirm in minutes.',
   'team.step2.title': 'We arrive prepared',
   'team.step2.body':
     'Table, fresh linens, towels, oils and a small speaker. For hotel visits we text when we reach reception.',
@@ -207,7 +207,7 @@ const en: Dict = {
     'We ask before we start and check during. Draping is used the whole time — say the word and we adjust anything.',
   'team.step4.title': 'Pay however suits you',
   'team.step4.body':
-    'Cash, card in the studio, or a Stripe, PayPal or Azul link over WhatsApp. Tipping is welcome but never expected.',
+    'Card upfront or when we arrive, cash on the day, or PayPal in advance. Tipping is welcome but never expected.',
   'team.languages': 'Languages we work in',
   'team.speaks': 'Speaks {languages}',
 
@@ -242,6 +242,9 @@ const en: Dict = {
   'book.summary_date': 'Date',
   'book.summary_time': 'Time',
   'book.summary_people': 'People',
+  'book.pay_label': 'Paying:',
+  'book.pay_summary':
+    'card upfront through a secure link or on the spot when we arrive, cash on the day, or PayPal in advance. Nothing is due until we have confirmed your time.',
   'book.flexible': 'Flexible',
   'book.estimated': 'Estimated',
   'book.send': 'Send on WhatsApp',
@@ -287,7 +290,7 @@ const en: Dict = {
 
   /* 404 ------------------------------------------------------------------ */
   'notfound.title': 'This page drifted out with the tide.',
-  'notfound.lead': 'Nothing here — but the beach is still two minutes away.',
+  'notfound.lead': 'Nothing here — but the sea is still two minutes away.',
   'notfound.cta': 'Back to the start',
   'notfound.seo': 'Page not found',
 
@@ -448,10 +451,10 @@ const en: Dict = {
   'ai.reset': 'Start over',
 
   /* map ------------------------------------------------------------------ */
-  'map.eyebrow': 'Find the studio',
-  'map.title': 'Two minutes from',
-  'map.script': 'the sand',
-  'map.lead': 'We are behind the beach path in {neighborhood}. Message us and we will send a pin.',
+  'map.eyebrow': 'Where we work',
+  'map.title': 'All over',
+  'map.script': 'this coast',
+  'map.lead': 'We travel across {neighborhood} and the rest of Bávaro and Punta Cana. Message us and tell us where you are staying.',
   'map.open': 'Open in Google Maps',
 
   /* misc ----------------------------------------------------------------- */
@@ -509,14 +512,14 @@ const en: Dict = {
   'find.feel.surprise': 'Surprise me',
   'find.feel.surprise.sub': 'You choose — you do this all day.',
 
-  'find.q_venue': 'Where would you like your little escape?',
-  'find.q_venue_sub': 'We bring the table, the oils and the music.',
-  'find.venue.hotel': 'Your hotel room',
-  'find.venue.hotel.sub': 'We come to you, anywhere in Bávaro.',
-  'find.venue.beach': 'The beach',
-  'find.venue.beach.sub': 'Our table, in the shade, by the water.',
-  'find.venue.studio': 'Our studio',
-  'find.venue.studio.sub': 'Two minutes from the sand in Los Corales.',
+  'find.q_venue': 'Where should we set up?',
+  'find.q_venue_sub': 'We come to you and bring the table, the oils and the music.',
+  'find.venue.room': 'Your hotel room',
+  'find.venue.room.sub': 'Beside the bed, air conditioning on.',
+  'find.venue.villa': 'Your villa or apartment',
+  'find.venue.villa.sub': 'More floor space, easy for two tables.',
+  'find.venue.terrace': 'Your terrace or balcony',
+  'find.venue.terrace.sub': 'Open air, still your own space.',
 
   'find.q_comfort': 'One little comfort check…',
   'find.q_comfort_sub':
@@ -550,9 +553,9 @@ const en: Dict = {
   'find.because_feel.relaxing': 'you want it slow and relaxing',
   'find.because_feel.balanced': 'you want it balanced',
   'find.because_feel.firm': 'you want it firm',
-  'find.because_venue.hotel': 'you would rather stay in your room',
-  'find.because_venue.beach': 'you want to be on the sand',
-  'find.because_venue.studio': 'you are happy to come to the studio',
+  'find.because_venue.room': 'you would rather stay in your room',
+  'find.because_venue.villa': 'you have the space at your villa',
+  'find.because_venue.terrace': 'you want to be out in the open air',
   'find.because_care': 'you asked us to keep it gentle',
   'find.because_prenatal': 'this one is given by a therapist trained for pregnancy',
 
@@ -654,7 +657,7 @@ const es: Dict = {
   /* hero ----------------------------------------------------------------- */
   'hero.rating': '{count} reseñas de huéspedes',
   'hero.therapists': '{count} terapeutas certificadas',
-  'hero.where': 'Estudio · Playa · Tu habitación',
+  'hero.where': 'Tu habitación · Tu villa · Tu terraza',
   'hero.rating_label': 'Valoración de huéspedes',
   'hero.team_label': 'Tamaño del equipo',
   'hero.where_label': 'Dónde trabajamos',
@@ -671,7 +674,7 @@ const es: Dict = {
   'home.packages.title': 'Para lunas de miel, grupos',
   'home.packages.script': 'y semanas enteras',
   'home.packages.lead':
-    'Precios cerrados, sin sorpresas. Cualquier paquete se puede hacer en la playa, en el estudio o en tu habitación.',
+    'Precios cerrados, sin sorpresas. Cualquier paquete se monta donde te estés quedando: habitación, villa o terraza.',
 
   'home.team.eyebrow': 'Las manos',
   'home.team.title': 'Las mujeres que',
@@ -686,11 +689,11 @@ const es: Dict = {
   'home.discover.all': 'Abrir la guía',
 
   /* shared sections ------------------------------------------------------ */
-  'venues.eyebrow': 'Tres formas de recibir tu masaje',
-  'venues.title': 'Ven a vernos, o',
-  'venues.script': 'vamos nosotras',
+  'venues.eyebrow': 'Vamos hasta ti',
+  'venues.title': 'Donde te estés',
+  'venues.script': 'quedando',
   'venues.lead':
-    'Las mismas terapeutas y la misma camilla estés donde estés — lo único que cambia es el sonido de fondo.',
+    'Las mismas terapeutas y la misma camilla elijas donde elijas — solo hacen falta un par de metros de piso y un enchufe cerca.',
 
   'benefits.eyebrow': '¿Por qué, estando de vacaciones?',
   'benefits.title': 'Porque la semana vuela y',
@@ -746,7 +749,7 @@ const es: Dict = {
   'discover.title': 'La guía que le damos',
   'discover.script': 'a nuestras amigas',
   'discover.lead':
-    'Vivimos y trabajamos en esta playa. Esto es lo que de verdad vale tu tiempo a pocos pasos del estudio — más las cosas prácticas que hacen más fácil un primer viaje a la República Dominicana.',
+    'Vivimos y trabajamos en esta costa. Esto es lo que de verdad vale tu tiempo por Bávaro y El Cortecito — más las cosas prácticas que hacen más fácil un primer viaje a la República Dominicana.',
   'discover.walkable': '{count} lugares a menos de 10 minutos a pie',
   'discover.tips': '{count} consejos locales',
   'discover.search_placeholder': 'Busca playas, comida, consejos…',
@@ -769,7 +772,7 @@ const es: Dict = {
   /* team page ------------------------------------------------------------ */
   'team.kicker': 'Las personas',
   'team.title': 'Mujeres dominicanas,',
-  'team.script': 'un estudio pequeño',
+  'team.script': 'un equipo pequeño',
   'team.lead':
     'No somos una agencia ni tenemos un centro de llamadas. Cuando escribes, le escribes a una de nosotras.',
   'team.badge_certified': 'Terapeutas certificadas',
@@ -782,7 +785,7 @@ const es: Dict = {
     'Si nunca has reservado un masaje fuera del spa de un resort, esto es exactamente lo que pasa.',
   'team.step1.title': 'Nos escribes por WhatsApp',
   'team.step1.body':
-    'Dinos el día, la hora, cuántas personas y si prefieres el estudio, la playa o tu habitación. Confirmamos en minutos.',
+    'Dinos el día, la hora, cuántas personas y dónde te estás quedando. Confirmamos en minutos.',
   'team.step2.title': 'Llegamos con todo',
   'team.step2.body':
     'Camilla, sábanas limpias, toallas, aceites y una bocina pequeña. En los hoteles te escribimos al llegar a recepción.',
@@ -791,7 +794,7 @@ const es: Dict = {
     'Preguntamos antes de empezar y comprobamos durante la sesión. Usamos toalla de cobertura todo el tiempo — dilo y ajustamos lo que sea.',
   'team.step4.title': 'Pagas como prefieras',
   'team.step4.body':
-    'Efectivo, tarjeta en el estudio, o un enlace de Stripe, PayPal o Azul por WhatsApp. La propina se agradece, pero nunca se espera.',
+    'Tarjeta por adelantado o al llegar, efectivo el mismo día, o PayPal antes de la cita. La propina se agradece, pero nunca se espera.',
   'team.languages': 'Idiomas en los que trabajamos',
   'team.speaks': 'Habla {languages}',
 
@@ -827,6 +830,9 @@ const es: Dict = {
   'book.summary_date': 'Fecha',
   'book.summary_time': 'Hora',
   'book.summary_people': 'Personas',
+  'book.pay_label': 'Pago:',
+  'book.pay_summary':
+    'con tarjeta por adelantado con un enlace seguro o al llegar nosotras, en efectivo el mismo día, o por PayPal antes de la cita. No se paga nada hasta que confirmemos tu hora.',
   'book.flexible': 'Flexible',
   'book.estimated': 'Estimado',
   'book.send': 'Enviar por WhatsApp',
@@ -1042,10 +1048,10 @@ const es: Dict = {
   'ai.reset': 'Empezar de nuevo',
 
   /* map ------------------------------------------------------------------ */
-  'map.eyebrow': 'Encuentra el estudio',
-  'map.title': 'A dos minutos',
-  'map.script': 'de la arena',
-  'map.lead': 'Estamos detrás del camino de la playa en {neighborhood}. Escríbenos y te mandamos la ubicación.',
+  'map.eyebrow': 'Dónde trabajamos',
+  'map.title': 'Por toda',
+  'map.script': 'esta costa',
+  'map.lead': 'Vamos por {neighborhood} y por el resto de Bávaro y Punta Cana. Escríbenos y dinos dónde te estás quedando.',
   'map.open': 'Abrir en Google Maps',
 
   /* misc ----------------------------------------------------------------- */
@@ -1103,14 +1109,14 @@ const es: Dict = {
   'find.feel.surprise': 'Sorpréndanme',
   'find.feel.surprise.sub': 'Elijan ustedes, que en eso trabajan.',
 
-  'find.q_venue': '¿Dónde quiere su ratito de escape?',
-  'find.q_venue_sub': 'Llevamos la camilla, los aceites y la música.',
-  'find.venue.hotel': 'Su habitación',
-  'find.venue.hotel.sub': 'Vamos a donde esté, en todo Bávaro.',
-  'find.venue.beach': 'La playa',
-  'find.venue.beach.sub': 'Nuestra camilla, a la sombra, junto al agua.',
-  'find.venue.studio': 'Nuestro estudio',
-  'find.venue.studio.sub': 'A dos minutos de la arena, en Los Corales.',
+  'find.q_venue': '¿Dónde montamos la camilla?',
+  'find.q_venue_sub': 'Vamos hasta usted y llevamos la camilla, los aceites y la música.',
+  'find.venue.room': 'Su habitación de hotel',
+  'find.venue.room.sub': 'Al lado de la cama, con el aire puesto.',
+  'find.venue.villa': 'Su villa o apartamento',
+  'find.venue.villa.sub': 'Más espacio, fácil para dos camillas.',
+  'find.venue.terrace': 'Su terraza o balcón',
+  'find.venue.terrace.sub': 'Al aire libre, pero en su propio espacio.',
 
   'find.q_comfort': 'Una preguntita de comodidad…',
   'find.q_comfort_sub':
@@ -1144,9 +1150,9 @@ const es: Dict = {
   'find.because_feel.relaxing': 'la quiere lenta y relajante',
   'find.because_feel.balanced': 'la quiere equilibrada',
   'find.because_feel.firm': 'la quiere firme',
-  'find.because_venue.hotel': 'prefiere quedarse en su habitación',
-  'find.because_venue.beach': 'quiere estar en la arena',
-  'find.because_venue.studio': 'puede venir al estudio',
+  'find.because_venue.room': 'prefiere quedarse en su habitación',
+  'find.because_venue.villa': 'tiene el espacio en su villa',
+  'find.because_venue.terrace': 'quiere estar al aire libre',
   'find.because_care': 'nos pidió mantenerla suave',
   'find.because_prenatal': 'esta la da una terapeuta con formación en embarazo',
 

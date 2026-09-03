@@ -106,8 +106,8 @@ export const schemaEs: Record<string, SchemaTranslation> = {
     label: 'Código de moneda',
     help: 'Se usa para mostrar los precios, por ejemplo USD.',
   },
-  'settings.policy.hotelSurcharge': { label: 'Nota sobre el recargo por desplazamiento' },
-  'settings.policy.beachNote': { label: 'Nota sobre los masajes en la playa' },
+  'settings.policy.travelNote': { label: 'Nota sobre desplazamiento y zonas' },
+  'settings.policy.setupNote': { label: 'Qué llevamos y cómo montamos' },
   'settings.policy.cancellationPolicy': { label: 'Política de cancelación' },
 
   /* --------------------------------------------------------- collections */

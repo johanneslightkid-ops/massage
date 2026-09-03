@@ -168,8 +168,8 @@ export const settingsGroups: SettingsGroup[] = [
     description: 'The small print that saves you WhatsApp messages.',
     fields: [
       { key: 'currency', label: 'Currency code', type: 'text', help: 'Used for price display, e.g. USD.' },
-      { key: 'hotelSurcharge', label: 'Travel / hotel surcharge note', type: 'textarea', rows: 2, full: true },
-      { key: 'beachNote', label: 'Beach session note', type: 'textarea', rows: 2, full: true },
+      { key: 'travelNote', label: 'Travel note (zones and any surcharge)', type: 'textarea', rows: 2, full: true },
+      { key: 'setupNote', label: 'What we bring and how we set up', type: 'textarea', rows: 2, full: true },
       { key: 'cancellationPolicy', label: 'Cancellation policy', type: 'textarea', rows: 2, full: true },
     ],
   },
@@ -504,7 +504,7 @@ export const collectionSchemas: CollectionSchema[] = [
     fields: [
       { key: 'name', label: 'Name', type: 'text' },
       { key: 'description', label: 'Description', type: 'textarea', rows: 3, full: true },
-      { key: 'icon', label: 'Icon', type: 'select', options: ['cash', 'stripe', 'bank', 'paypal', 'card'] },
+      { key: 'icon', label: 'Icon', type: 'select', options: ['cash', 'card', 'paypal', 'link'] },
       { key: 'url', label: 'Payment link', type: 'url', full: true, help: 'Optional. A Stripe payment link, PayPal.me link or Azul checkout URL.' },
       { key: 'enabled', label: 'Show on the site', type: 'boolean' },
       orderField,

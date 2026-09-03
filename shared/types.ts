@@ -59,8 +59,8 @@ export interface SiteSettings {
   announcementText: string
 
   currency: string
-  hotelSurcharge: string
-  beachNote: string
+  travelNote: string
+  setupNote: string
   cancellationPolicy: string
 }
 
