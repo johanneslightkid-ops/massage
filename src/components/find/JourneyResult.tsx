@@ -88,7 +88,7 @@ export function JourneyResult({
       <h3 className={cn('font-display text-ocean-950', primary ? 'text-[1.85rem] sm:text-[2.35rem]' : 'text-[1.35rem]')}>
         {journey.name}
       </h3>
-      <p className="mt-1.5 script text-[1.05rem] text-lagoon-700">{journey.tagline}</p>
+      <p className="mt-1.5 script text-[1.05rem] text-lagoon-800">{journey.tagline}</p>
 
       {because && primary && (
         <p className="mt-5 rounded-[1.4rem] bg-gradient-to-br from-seafoam-50 to-sky-50 p-4 text-[0.95rem] leading-relaxed text-ocean-900">
@@ -96,11 +96,11 @@ export function JourneyResult({
         </p>
       )}
 
-      <p className="mt-4 leading-relaxed text-ocean-800/75">{journey.description}</p>
+      <p className="mt-4 leading-relaxed text-ocean-800/85">{journey.description}</p>
 
       {primary && journey.whyItFits.length > 0 && (
         <section className="mt-6">
-          <h4 className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">{t('find.why')}</h4>
+          <h4 className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">{t('find.why')}</h4>
           <ul className="mt-3 space-y-2">
             {journey.whyItFits.map((reason) => (
               <li key={reason} className="flex gap-2.5 text-[0.92rem] leading-relaxed text-ocean-800/80">
@@ -114,7 +114,7 @@ export function JourneyResult({
 
       {primary && journey.whatToExpect.length > 0 && (
         <section className="mt-6">
-          <h4 className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">{t('find.what')}</h4>
+          <h4 className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">{t('find.what')}</h4>
           <ul className="mt-3 space-y-2">
             {journey.whatToExpect.map((step) => (
               <li key={step} className="flex gap-2.5 text-[0.92rem] leading-relaxed text-ocean-800/80">
@@ -128,11 +128,11 @@ export function JourneyResult({
 
       {/* The professional name, kept below the human explanation rather than above it. */}
       {service && (
-        <p className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.85rem] text-ocean-800/60">
+        <p className="mt-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.85rem] text-ocean-800/85">
           <Motif name={service.icon} className="size-4 text-lagoon-600" />
           {t('find.based_on', { service: service.name })}
           {price !== undefined && (
-            <span className="font-bold text-lagoon-700">{t('find.from', { price: formatPrice(price, currency) })}</span>
+            <span className="font-bold text-lagoon-800">{t('find.from', { price: formatPrice(price, currency) })}</span>
           )}
         </p>
       )}

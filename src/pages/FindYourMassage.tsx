@@ -212,13 +212,13 @@ export function FindYourMassage() {
                   <button
                     type="button"
                     onClick={back}
-                    className="inline-flex h-10 items-center gap-1.5 rounded-full border border-ocean-900/12 bg-white/70 px-4 text-[0.85rem] font-semibold text-ocean-800/75 transition-colors hover:border-lagoon-400/60 hover:text-ocean-950"
+                    className="inline-flex h-10 items-center gap-1.5 rounded-full border border-ocean-900/12 bg-white/70 px-4 text-[0.85rem] font-semibold text-ocean-800/85 transition-colors hover:border-lagoon-400/60 hover:text-ocean-950"
                   >
                     <ArrowLeft className="size-4" />
                     {t('find.back')}
                   </button>
                 )}
-                <p className="text-[0.78rem] font-bold tracking-[0.16em] text-lagoon-700 uppercase">
+                <p className="text-[0.78rem] font-bold tracking-[0.16em] text-lagoon-800 uppercase">
                   {t('find.step_of', { current: questionIndex, total: QUESTION_COUNT })}
                 </p>
               </div>
@@ -323,7 +323,7 @@ export function FindYourMassage() {
                 <>
                   <Heading ref={headingRef} title={t('find.q_comfort')} sub={t('find.q_comfort_sub')} />
 
-                  <p className="mt-5 flex items-start gap-2.5 rounded-[1.4rem] bg-seafoam-50 p-4 text-[0.85rem] leading-relaxed text-ocean-800/75 ring-1 ring-lagoon-200/60">
+                  <p className="mt-5 flex items-start gap-2.5 rounded-[1.4rem] bg-seafoam-50 p-4 text-[0.85rem] leading-relaxed text-ocean-800/85 ring-1 ring-lagoon-200/60">
                     <ShieldCheck className="mt-0.5 size-4 shrink-0 text-lagoon-600" aria-hidden />
                     {t('find.comfort_privacy')}
                   </p>
@@ -348,7 +348,7 @@ export function FindYourMassage() {
                             'min-h-12 rounded-full border px-5 text-[0.9rem] font-semibold transition-colors',
                             on
                               ? 'border-lagoon-400 bg-white text-ocean-950 shadow-soft'
-                              : 'border-ocean-900/12 bg-white/60 text-ocean-800/70 hover:border-lagoon-400/60',
+                              : 'border-ocean-900/12 bg-white/60 text-ocean-800/80 hover:border-lagoon-400/60',
                           )}
                         >
                           {t(`find.concern.${tag}`)}
@@ -405,8 +405,8 @@ export function FindYourMassage() {
 
           {step === 'moment' && (
             <>
-              <p className="mt-10 text-center text-[0.88rem] text-ocean-800/60">
-                <Link to="/treatments" className="font-semibold text-lagoon-700 underline-offset-4 hover:underline">
+              <p className="mt-10 text-center text-[0.88rem] text-ocean-800/85">
+                <Link to="/treatments" className="font-semibold text-lagoon-800 underline-offset-4 hover:underline">
                   {t('find.intro_note')}
                 </Link>
               </p>
@@ -424,14 +424,14 @@ export function FindYourMassage() {
               {journeys.length > 0 && (
                 <section className="mt-16 border-t border-ocean-900/8 pt-10">
                   <h2 className="font-display text-[1.4rem] text-ocean-950">{t('find.all_title')}</h2>
-                  <p className="mt-2 max-w-2xl text-[0.92rem] leading-relaxed text-ocean-800/70">
+                  <p className="mt-2 max-w-2xl text-[0.92rem] leading-relaxed text-ocean-800/80">
                     {t('find.all_lead')}
                   </p>
                   <ul className="mt-6 grid gap-x-8 gap-y-5 sm:grid-cols-2">
                     {journeys.map((journey) => (
                       <li key={journey.id}>
                         <h3 className="font-display text-[1.05rem] text-ocean-950">{journey.name}</h3>
-                        <p className="mt-0.5 text-[0.88rem] leading-relaxed text-ocean-800/65">
+                        <p className="mt-0.5 text-[0.88rem] leading-relaxed text-ocean-800/78">
                           {journey.tagline} {journey.description}
                         </p>
                       </li>
@@ -454,7 +454,7 @@ const Heading = forwardRef<HTMLHeadingElement, { kicker?: string; title: string;
     return (
       <header>
         {kicker && (
-          <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">{kicker}</p>
+          <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">{kicker}</p>
         )}
         <h1
           ref={ref}
@@ -463,7 +463,7 @@ const Heading = forwardRef<HTMLHeadingElement, { kicker?: string; title: string;
         >
           {title}
         </h1>
-        {sub && <p className="mt-3 max-w-2xl leading-relaxed text-ocean-800/70">{sub}</p>}
+        {sub && <p className="mt-3 max-w-2xl leading-relaxed text-ocean-800/80">{sub}</p>}
       </header>
     )
   },
@@ -548,7 +548,7 @@ function Results({
   return (
     <div>
       <header className="mb-7">
-        <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+        <p className="mb-2 text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
           {t('find.result_kicker')}
         </p>
         <h1
@@ -578,7 +578,7 @@ function Results({
       )}
 
       {result.fallback && result.matches.length > 0 && (
-        <p className="mb-6 rounded-[1.4rem] bg-sky-50 p-4 text-[0.9rem] leading-relaxed text-ocean-800/75 ring-1 ring-sky-200/70">
+        <p className="mb-6 rounded-[1.4rem] bg-sky-50 p-4 text-[0.9rem] leading-relaxed text-ocean-800/85 ring-1 ring-sky-200/70">
           {t('find.fallback_note')}
         </p>
       )}
@@ -595,7 +595,7 @@ function Results({
       )}
 
       {result.matches.length === 0 && (
-        <p className="rounded-[1.4rem] bg-sky-50 p-5 text-center leading-relaxed text-ocean-800/75">
+        <p className="rounded-[1.4rem] bg-sky-50 p-5 text-center leading-relaxed text-ocean-800/85">
           {t('find.fallback_note')}
         </p>
       )}
@@ -617,7 +617,7 @@ function Results({
         <button
           type="button"
           onClick={onRestart}
-          className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[0.88rem] font-semibold text-ocean-800/60 transition-colors hover:text-ocean-950"
+          className="inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-[0.88rem] font-semibold text-ocean-800/85 transition-colors hover:text-ocean-950"
         >
           {t('find.restart')}
         </button>

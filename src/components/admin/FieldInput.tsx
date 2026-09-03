@@ -120,7 +120,7 @@ function DurationEditor({ value, onChange }: { value: DurationRow[]; onChange: (
             type="button"
             onClick={() => onChange(rows.filter((_, i) => i !== index))}
             aria-label={t('field.remove_duration')}
-            className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/50 hover:border-coral-400 hover:text-coral-500"
+            className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/80 hover:border-coral-400 hover:text-coral-500"
           >
             <X className="size-4" />
           </button>
@@ -173,7 +173,7 @@ function PairEditor({ value, onChange }: { value: PairRow[]; onChange: (next: Pa
             type="button"
             onClick={() => onChange(rows.filter((_, i) => i !== index))}
             aria-label={t('field.remove_row')}
-            className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/50 hover:border-coral-400 hover:text-coral-500"
+            className="grid size-12 shrink-0 place-items-center rounded-2xl border border-ocean-900/12 text-ocean-800/80 hover:border-coral-400 hover:text-coral-500"
           >
             <X className="size-4" />
           </button>
@@ -334,7 +334,7 @@ function ChipPicker({
   }
 
   if (options.length === 0) {
-    return <p className="text-[0.82rem] text-ocean-800/50">{empty ?? '—'}</p>
+    return <p className="text-[0.82rem] text-ocean-800/80">{empty ?? '—'}</p>
   }
 
   return (
@@ -352,7 +352,7 @@ function ChipPicker({
               'rounded-full border px-3.5 py-2 text-[0.82rem] font-semibold transition-colors',
               on
                 ? 'border-lagoon-400 bg-gradient-to-r from-seafoam-100 to-sky-100 text-ocean-950'
-                : 'border-ocean-900/12 bg-white/60 text-ocean-800/60 hover:border-lagoon-400/60',
+                : 'border-ocean-900/12 bg-white/60 text-ocean-800/85 hover:border-lagoon-400/60',
             )}
           >
             {labels?.[index] ?? option}
@@ -519,7 +519,7 @@ export function FieldInput({
 
   return (
     <div className={cn(field.full && 'sm:col-span-2')}>
-      <label className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/70 uppercase">
+      <label className="mb-2 block text-[0.78rem] font-bold tracking-wide text-ocean-800/80 uppercase">
         {field.label}
       </label>
       {control}

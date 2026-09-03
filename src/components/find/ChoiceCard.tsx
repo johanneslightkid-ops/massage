@@ -64,7 +64,7 @@ export function ChoiceCard({
           {title}
         </span>
         {subtitle && (
-          <span className="mt-1 block text-[0.85rem] leading-snug text-ocean-800/60">{subtitle}</span>
+          <span className="mt-1 block text-[0.85rem] leading-snug text-ocean-800/85">{subtitle}</span>
         )}
       </span>
 

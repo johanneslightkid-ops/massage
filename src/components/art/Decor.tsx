@@ -225,13 +225,26 @@ export function OilSheen({
  * an arbitrary wash. Warmed towards the new palette — brighter sky blues, a
  * lusher green and a flamingo option among the warm tones.
  */
+/**
+ * Six daylight scenes, one per treatment card.
+ *
+ * These used to bottom out at #04212f — near-black — and that single value
+ * painted the sky, the sea *and* the palm, so a grid of cards read as a wall of
+ * dark blue-green. Every scene is now lit for midday: a pale sky, turquoise
+ * water, warm sand and a green (never black) palm.
+ *
+ *   sky   top of the sky, the lightest value
+ *   sea   the water, and the deeper end of the sky gradient
+ *   warm  sand and the glow around the sun
+ *   palm  the tree — foliage green, so it never silhouettes
+ */
 const PALETTES = [
-  { deep: '#083c55', mid: '#2f9fdd', warm: '#fdd274' },
-  { deep: '#06301b', mid: '#2fb972', warm: '#fde3a3' },
-  { deep: '#04212f', mid: '#10abb8', warm: '#fb9cbb' },
-  { deep: '#0d4569', mid: '#55b8ec', warm: '#fdc0d3' },
-  { deep: '#0d4a2a', mid: '#1e9a5c', warm: '#f5bd42' },
-  { deep: '#076a78', mid: '#2ec9d4', warm: '#f89a80' },
+  { sky: '#d8f1fd', sea: '#2ec9d4', warm: '#fdefc9', palm: '#1e9a5c' },
+  { sky: '#e3f9ed', sea: '#10abb8', warm: '#fde3a3', palm: '#16794a' },
+  { sky: '#eaf8fe', sea: '#55b8ec', warm: '#ffdbe7', palm: '#2fb972' },
+  { sky: '#fff0f5', sea: '#63dee6', warm: '#fdd274', palm: '#1e9a5c' },
+  { sky: '#e9fcfb', sea: '#2fb972', warm: '#f5bd42', palm: '#0f6239' },
+  { sky: '#d0eefd', sea: '#2f9fdd', warm: '#f89a80', palm: '#16794a' },
 ]
 
 /**
@@ -241,28 +254,28 @@ const PALETTES = [
  */
 export function GeneratedScene({ seed, className }: { seed: string; className?: string }) {
   const unit = seededUnit(seed)
-  const { deep, mid, warm } = PALETTES[Math.floor(unit * PALETTES.length) % PALETTES.length]
+  const { sky, sea, warm, palm } = PALETTES[Math.floor(unit * PALETTES.length) % PALETTES.length]
   const sunX = 70 + unit * 190
-  const horizon = 148 + unit * 26
+  const horizon = 116 + unit * 24
   const id = seed.replace(/[^a-zA-Z0-9]/g, '')
 
   return (
     <svg viewBox="0 0 320 240" preserveAspectRatio="xMidYMid slice" aria-hidden="true" className={className}>
       <defs>
         <linearGradient id={`sky-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={deep} />
-          <stop offset="46%" stopColor={mid} />
+          <stop offset="0%" stopColor={sky} />
+          <stop offset="52%" stopColor="#FFFFFF" />
           <stop offset="100%" stopColor={warm} />
         </linearGradient>
         <radialGradient id={`glow-${id}`} cx="50%" cy="50%">
           <stop offset="0%" stopColor="#FFF6E2" stopOpacity="0.9" />
-          <stop offset="45%" stopColor={warm} stopOpacity="0.45" />
+          <stop offset="45%" stopColor={warm} stopOpacity="0.6" />
           <stop offset="100%" stopColor={warm} stopOpacity="0" />
         </radialGradient>
         <linearGradient id={`sea-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={mid} />
-          <stop offset="70%" stopColor={deep} />
-          <stop offset="100%" stopColor={deep} />
+          <stop offset="0%" stopColor="#c4f4f6" />
+          <stop offset="38%" stopColor={sea} />
+          <stop offset="100%" stopColor={sea} />
         </linearGradient>
       </defs>
 
@@ -277,8 +290,8 @@ export function GeneratedScene({ seed, className }: { seed: string; className?: 
         <path
           key={i}
           d={`M0 ${horizon + 22 + i * 19}c40 0 40-7 80-7s40 7 80 7 40-7 80-7 40 7 80 7`}
-          stroke="#DFF3FB"
-          strokeOpacity={0.2 - i * 0.035}
+          stroke="#FFFFFF"
+          strokeOpacity={0.55 - i * 0.09}
           strokeWidth="2"
           fill="none"
         />
@@ -287,12 +300,12 @@ export function GeneratedScene({ seed, className }: { seed: string; className?: 
       <path d={`M0 ${horizon + 92}c60-12 120-4 180 6s90 8 140-4v150H0Z`} fill="#FDF8EF" opacity="0.94" />
 
       <g transform={`translate(${16 + unit * 26} ${horizon + 74}) scale(${0.4 + unit * 0.12})`} opacity="0.9">
-        <path d="M40 180C40 110 36 60 20 6" stroke={deep} strokeWidth="7" strokeLinecap="round" fill="none" />
+        <path d="M40 180C40 110 36 60 20 6" stroke={palm} strokeWidth="7" strokeLinecap="round" fill="none" />
         {[0, 1, 2, 3, 4].map((i) => (
           <path
             key={i}
             d={`M20 6c${-40 + i * 22} ${-24 + i * 4}, ${-60 + i * 30} ${6 + i * 8}, ${-52 + i * 34} ${34 + i * 6}`}
-            stroke={deep}
+            stroke={palm}
             strokeWidth="6"
             strokeLinecap="round"
             fill="none"
@@ -320,4 +333,112 @@ export function SceneImage({
     return <img src={src} alt={alt} loading="lazy" decoding="async" className={cn('size-full object-cover', className)} />
   }
   return <GeneratedScene seed={seed} className={cn('size-full', className)} />
+}
+
+/* ------------------------------------------------- bright tropical extras */
+
+/**
+ * A hibiscus, the flower that is actually everywhere in Bávaro.
+ *
+ * Five petals off a common centre with a long stamen. Drawn rather than
+ * photographed so it tints to whatever the section around it needs.
+ */
+export function Hibiscus({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" fill="none" className={cn('shrink-0', className)} aria-hidden="true">
+      <g fill="currentColor">
+        {[0, 72, 144, 216, 288].map((angle) => (
+          <ellipse
+            key={angle}
+            cx="32"
+            cy="19"
+            rx="11"
+            ry="14"
+            transform={`rotate(${angle} 32 32)`}
+            opacity="0.85"
+          />
+        ))}
+      </g>
+      <circle cx="32" cy="32" r="5.5" fill="currentColor" opacity="0.45" />
+      <path d="M32 32 46 46" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+      <circle cx="47" cy="47" r="2.6" fill="currentColor" opacity="0.7" />
+    </svg>
+  )
+}
+
+/**
+ * A soft sunburst. Rays are individually rotated wedges rather than a conic
+ * gradient, so they stay crisp at any size and can be animated as one group.
+ */
+export function SunBurst({ className, rays = 12 }: { className?: string; rays?: number }) {
+  return (
+    <svg viewBox="0 0 200 200" fill="none" className={cn('shrink-0', className)} aria-hidden="true">
+      <g className="origin-center">
+        {Array.from({ length: rays }, (_, i) => (
+          <path
+            key={i}
+            d="M100 8 L106 52 L94 52 Z"
+            fill="currentColor"
+            opacity={0.28}
+            transform={`rotate(${(360 / rays) * i} 100 100)`}
+          />
+        ))}
+      </g>
+      <circle cx="100" cy="100" r="34" fill="currentColor" opacity="0.22" />
+      <circle cx="100" cy="100" r="22" fill="currentColor" opacity="0.3" />
+    </svg>
+  )
+}
+
+/**
+ * Scattered dots — sand grains, sea spray, confetti, depending on where it
+ * lands. Seeded so a given section always scatters the same way and the layout
+ * never jumps between renders.
+ */
+export function ScatterDots({ className, count = 22, seed = 'scatter' }: { className?: string; count?: number; seed?: string }) {
+  let n = 0
+  for (let i = 0; i < seed.length; i++) n = (n * 31 + seed.charCodeAt(i)) >>> 0
+  const next = () => {
+    n = (n * 1664525 + 1013904223) >>> 0
+    return n / 4294967296
+  }
+  const dots = Array.from({ length: count }, () => ({
+    x: next() * 100,
+    y: next() * 100,
+    r: 1 + next() * 2.6,
+    o: 0.18 + next() * 0.4,
+  }))
+  return (
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={cn('pointer-events-none', className)} aria-hidden="true">
+      {dots.map((d, i) => (
+        <circle key={i} cx={d.x} cy={d.y} r={d.r} fill="currentColor" opacity={d.o} />
+      ))}
+    </svg>
+  )
+}
+
+/**
+ * A single lazy bubble column — used behind watery sections. Each bubble has
+ * its own delay so they never rise in lockstep.
+ */
+export function Bubbles({ className, count = 6 }: { className?: string; count?: number }) {
+  return (
+    <div className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)} aria-hidden="true">
+      {Array.from({ length: count }, (_, i) => (
+        <span
+          key={i}
+          className="animate-rise-slow absolute rounded-full bg-current"
+          style={{
+            left: `${(i * 100) / count + 4}%`,
+            bottom: '-12%',
+            width: `${6 + (i % 3) * 5}px`,
+            height: `${6 + (i % 3) * 5}px`,
+            opacity: 0.18 + (i % 3) * 0.08,
+            animationDelay: `${i * 1.6}s`,
+            animationDuration: `${11 + (i % 4) * 3}s`,
+          }}
+        />
+      ))}
+    </div>
+  )
 }

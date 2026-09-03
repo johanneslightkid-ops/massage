@@ -71,8 +71,8 @@ export function LanguageToggle({ variant = 'inline', className }: LanguageToggle
                     className={cn(
                       'flex w-full items-center justify-between px-4 py-2.5 text-left text-[0.85rem] font-medium transition-colors',
                       language === option.code
-                        ? 'bg-sky-50 text-lagoon-700'
-                        : 'text-ocean-800/70 hover:bg-sand-100',
+                        ? 'bg-sky-50 text-lagoon-800'
+                        : 'text-ocean-800/80 hover:bg-sand-100',
                     )}
                   >
                     <span>{option.native}</span>
@@ -105,7 +105,7 @@ export function LanguageToggle({ variant = 'inline', className }: LanguageToggle
             'relative rounded-full px-3 py-1.5 text-[0.75rem] font-bold transition-all duration-300',
             language === option.code
               ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
-              : 'text-ocean-800/60 hover:text-ocean-950',
+              : 'text-ocean-800/85 hover:text-ocean-950',
           )}
         >
           {option.code.toUpperCase()}

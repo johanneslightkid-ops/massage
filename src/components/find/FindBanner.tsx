@@ -55,13 +55,13 @@ export function FindBanner({ journeys }: { journeys: MassageJourney[] }) {
           </div>
 
           <div className="relative max-w-2xl lg:max-w-[34rem]">
-            <p className="text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+            <p className="text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
               {t('find.home_kicker')}
             </p>
             <h2 className="mt-3 font-display text-[2rem] leading-[1.1] text-ocean-950 sm:text-[2.8rem]">
               {t('find.home_title')}
             </h2>
-            <p className="mt-4 leading-relaxed text-ocean-800/75">{t('find.home_lead')}</p>
+            <p className="mt-4 leading-relaxed text-ocean-800/85">{t('find.home_lead')}</p>
 
             <Link
               to="/find-your-massage"
@@ -74,7 +74,7 @@ export function FindBanner({ journeys }: { journeys: MassageJourney[] }) {
 
           {quickPaths.length > 0 && (
             <div className="relative mt-9">
-              <p className="text-[0.78rem] font-semibold text-ocean-800/55">{t('find.quick_paths')}</p>
+              <p className="text-[0.78rem] font-semibold text-ocean-800/85">{t('find.quick_paths')}</p>
               <div className="no-scrollbar edge-fade -mx-7 mt-3 flex gap-2.5 overflow-x-auto px-7 sm:mx-0 sm:flex-wrap sm:px-0">
                 {quickPaths.map(({ moment, journey }) => {
                   const mood = moodFor(moment as never)
@@ -118,7 +118,7 @@ export function FindPrompt() {
       >
         <span className="min-w-0 flex-1">
           <span className="block font-display text-[1.2rem] text-ocean-950">{t('find.treatments_prompt')}</span>
-          <span className="mt-0.5 block text-[0.9rem] text-ocean-800/70">{t('find.treatments_lead')}</span>
+          <span className="mt-0.5 block text-[0.9rem] text-ocean-800/80">{t('find.treatments_lead')}</span>
         </span>
         <span className="inline-flex h-12 shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-6 text-[0.9rem] font-bold whitespace-nowrap text-sand-50 shadow-soft transition-transform group-hover:scale-[1.02]">
           {t('find.home_cta')}

@@ -169,7 +169,7 @@ export function Book() {
 
   const fieldBase =
     'h-12 w-full rounded-2xl border border-ocean-900/12 bg-white/85 px-4 text-ocean-950 transition-colors focus:border-lagoon-400 focus:outline-none'
-  const labelBase = 'mb-2 block text-[0.82rem] font-semibold text-ocean-800/70'
+  const labelBase = 'mb-2 block text-[0.82rem] font-semibold text-ocean-800/80'
 
   return (
     <>
@@ -187,7 +187,7 @@ export function Book() {
               <p className="mb-8 flex flex-wrap items-center gap-x-2 gap-y-1 rounded-[1.4rem] bg-gradient-to-br from-seafoam-50 to-sky-50 p-4 text-[0.92rem] text-ocean-900 ring-1 ring-lagoon-200/60">
                 <Sparkles className="size-4 shrink-0 text-lagoon-600" aria-hidden />
                 {t('book.from_journey', { journey: journeyName })}
-                <Link to="/find-your-massage" className="font-semibold text-lagoon-700 underline-offset-4 hover:underline">
+                <Link to="/find-your-massage" className="font-semibold text-lagoon-800 underline-offset-4 hover:underline">
                   {t('book.change_journey')}
                 </Link>
               </p>
@@ -211,8 +211,8 @@ export function Book() {
                         </span>
                         <span>
                           <span className="block font-semibold text-ocean-950">{service.name}</span>
-                          <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{service.tagline}</span>
-                          <span className="mt-1.5 block text-[0.8rem] font-bold text-lagoon-700">
+                          <span className="mt-0.5 block text-[0.8rem] text-ocean-800/85">{service.tagline}</span>
+                          <span className="mt-1.5 block text-[0.8rem] font-bold text-lagoon-800">
                             {t('book.from', {
                               price: formatPrice(service.durations[0]?.price ?? 0, currency),
                             })}
@@ -225,7 +225,7 @@ export function Book() {
 
                 {packages.length > 0 && (
                   <>
-                    <p className="mt-7 text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-700 uppercase">
+                    <p className="mt-7 text-[0.7rem] font-bold tracking-[0.18em] text-lagoon-800 uppercase">
                       {t('book.or_package')}
                     </p>
                     <div className="mt-3 grid gap-3 sm:grid-cols-2">
@@ -236,8 +236,8 @@ export function Book() {
                           onClick={() => setServiceName(item.name)}
                         >
                           <span className="block font-semibold text-ocean-950">{item.name}</span>
-                          <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{item.duration}</span>
-                          <span className="mt-1.5 block text-[0.8rem] font-bold text-flamingo-600">
+                          <span className="mt-0.5 block text-[0.8rem] text-ocean-800/85">{item.duration}</span>
+                          <span className="mt-1.5 block text-[0.8rem] font-bold text-flamingo-700">
                             {formatPrice(item.price, currency)}
                           </span>
                         </OptionButton>
@@ -263,7 +263,7 @@ export function Book() {
                           <Clock className="size-4 text-lagoon-600" />
                           {t('book.minutes', { minutes: duration.minutes })}
                         </span>
-                        <span className="mt-1 block text-[0.85rem] font-bold text-lagoon-700">
+                        <span className="mt-1 block text-[0.85rem] font-bold text-lagoon-800">
                           {formatPrice(duration.price, currency)}
                         </span>
                       </OptionButton>
@@ -282,11 +282,11 @@ export function Book() {
                         <Motif name={option.icon} className="size-4.5" />
                       </span>
                       <span className="mt-3 block font-semibold text-ocean-950">{option.name}</span>
-                      <span className="mt-0.5 block text-[0.8rem] text-ocean-800/60">{option.subtitle}</span>
+                      <span className="mt-0.5 block text-[0.8rem] text-ocean-800/85">{option.subtitle}</span>
                     </OptionButton>
                   ))}
                 </div>
-                <p className="mt-4 text-[0.82rem] leading-relaxed text-ocean-800/60">{site.hotelSurcharge}</p>
+                <p className="mt-4 text-[0.82rem] leading-relaxed text-ocean-800/85">{site.hotelSurcharge}</p>
               </Reveal>
 
               {/* --------------------------------------------------- when */}
@@ -294,7 +294,7 @@ export function Book() {
                 <StepLabel index={selectedService ? 4 : 3}>{t('book.step_when')}</StepLabel>
                 <div className="mt-5 grid gap-4 sm:grid-cols-2">
                   <label className="block">
-                    <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/70">
+                    <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/80">
                       <CalendarDays className="size-4 text-lagoon-600" />
                       {t('book.date')}
                     </span>
@@ -307,7 +307,7 @@ export function Book() {
                     />
                   </label>
                   <label className="block">
-                    <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/70">
+                    <span className="mb-2 flex items-center gap-2 text-[0.82rem] font-semibold text-ocean-800/80">
                       <Users className="size-4 text-lagoon-600" />
                       {t('book.people')}
                     </span>
@@ -325,7 +325,7 @@ export function Book() {
                   </label>
                 </div>
 
-                <p className="mt-5 mb-2 text-[0.82rem] font-semibold text-ocean-800/70">{t('book.preferred_time')}</p>
+                <p className="mt-5 mb-2 text-[0.82rem] font-semibold text-ocean-800/80">{t('book.preferred_time')}</p>
                 <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
                   {TIME_SLOTS.map((slot) => (
                     <button
@@ -336,7 +336,7 @@ export function Book() {
                         'shrink-0 rounded-full px-5 py-2.5 text-[0.85rem] font-semibold transition-all duration-300',
                         time === slot
                           ? 'bg-gradient-to-r from-sky-700 to-lagoon-600 text-sand-50 shadow-soft'
-                          : 'border border-ocean-900/12 bg-white/50 text-ocean-800/70 hover:border-lagoon-400/60',
+                          : 'border border-ocean-900/12 bg-white/50 text-ocean-800/80 hover:border-lagoon-400/60',
                       )}
                     >
                       {slot}
@@ -384,7 +384,7 @@ export function Book() {
             {/* ---------------------------------------------------- summary */}
             <div className="min-w-0 lg:sticky lg:top-24">
               <div className="rounded-5xl border border-white/70 bg-white/85 p-6 shadow-lift ring-1 ring-sky-900/5 backdrop-blur-sm">
-                <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-700 uppercase">
+                <p className="text-[0.7rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
                   {t('book.summary')}
                 </p>
 
@@ -398,7 +398,7 @@ export function Book() {
                     [t('book.summary_people'), people],
                   ].map(([label, value]) => (
                     <div key={label} className="flex justify-between gap-4 border-b border-ocean-900/6 pb-2.5">
-                      <dt className="text-ocean-800/55">{label}</dt>
+                      <dt className="text-ocean-800/85">{label}</dt>
                       <dd className="text-right font-semibold text-ocean-950">{value}</dd>
                     </div>
                   ))}
@@ -406,8 +406,8 @@ export function Book() {
 
                 {price !== null && (
                   <p className="mt-5 flex items-baseline justify-between">
-                    <span className="text-[0.82rem] font-semibold text-ocean-800/55">{t('book.estimated')}</span>
-                    <span className="font-display text-3xl text-flamingo-600">{formatPrice(price, currency)}</span>
+                    <span className="text-[0.82rem] font-semibold text-ocean-800/85">{t('book.estimated')}</span>
+                    <span className="font-display text-3xl text-flamingo-700">{formatPrice(price, currency)}</span>
                   </p>
                 )}
 
@@ -431,10 +431,10 @@ export function Book() {
                 </button>
 
                 {!ready && (
-                  <p className="mt-3 text-center text-[0.78rem] text-ocean-800/50">{t('book.not_ready')}</p>
+                  <p className="mt-3 text-center text-[0.78rem] text-ocean-800/80">{t('book.not_ready')}</p>
                 )}
                 {sent && (
-                  <p className="mt-3 rounded-2xl bg-seafoam-50 p-3 text-center text-[0.82rem] font-semibold text-lagoon-700">
+                  <p className="mt-3 rounded-2xl bg-seafoam-50 p-3 text-center text-[0.82rem] font-semibold text-lagoon-800">
                     {t('book.sent')}
                   </p>
                 )}
@@ -445,15 +445,15 @@ export function Book() {
                 )}
 
                 <details className="mt-5 rounded-2xl bg-sky-50 p-4 ring-1 ring-sky-200/60">
-                  <summary className="cursor-pointer text-[0.8rem] font-semibold text-ocean-800/70">
+                  <summary className="cursor-pointer text-[0.8rem] font-semibold text-ocean-800/80">
                     {t('book.preview')}
                   </summary>
-                  <pre className="mt-3 text-[0.76rem] leading-relaxed whitespace-pre-wrap text-ocean-800/70">
+                  <pre className="mt-3 text-[0.76rem] leading-relaxed whitespace-pre-wrap text-ocean-800/80">
                     {message}
                   </pre>
                 </details>
 
-                <p className="mt-5 text-[0.76rem] leading-relaxed text-ocean-800/50">{site.cancellationPolicy}</p>
+                <p className="mt-5 text-[0.76rem] leading-relaxed text-ocean-800/80">{site.cancellationPolicy}</p>
               </div>
             </div>
           </div>

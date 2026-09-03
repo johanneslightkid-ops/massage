@@ -106,7 +106,7 @@ export function TabBar() {
                   : 'text-sand-200/55 hover:text-sand-100'
                 : active
                   ? 'text-sky-800'
-                  : 'text-ocean-800/50 hover:text-ocean-950',
+                  : 'text-ocean-800/80 hover:text-ocean-950',
             )
 
             return (

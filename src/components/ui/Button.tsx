@@ -25,7 +25,7 @@ const sizes: Record<Size, string> = {
 }
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50'
+  'sheen-hover inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-all duration-300 ease-[cubic-bezier(.22,1,.36,1)] active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50'
 
 interface CommonProps {
   variant?: Variant

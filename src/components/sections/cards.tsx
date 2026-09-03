@@ -40,7 +40,7 @@ export function ServiceCard({
   const venueTags = [...new Set(uses.flatMap((journey) => journey.venueTags ?? []))]
 
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+    <Card as="article" className="lift-hover group flex h-full flex-col hover:border-lagoon-300">
       <div className="relative aspect-16/10 overflow-hidden">
         <SceneImage
           src={service.image}
@@ -48,9 +48,9 @@ export function ServiceCard({
           alt={service.name}
           className="transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/72 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/85 via-ocean-950/25 to-transparent" />
 
-        <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-sand-50/92 text-sky-800 backdrop-blur-sm">
+        <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-white/94 text-lagoon-800 shadow-soft backdrop-blur-sm transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
           <Motif name={service.icon} className="size-5" />
         </span>
 
@@ -71,7 +71,7 @@ export function ServiceCard({
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-lagoon-700 uppercase">{service.category}</p>
+        <p className="text-[0.78rem] font-bold tracking-[0.12em] text-lagoon-800 uppercase">{service.category}</p>
         <p className="mt-2 text-[0.98rem] leading-relaxed text-ocean-800/80">
           {compact ? service.tagline : service.description}
         </p>
@@ -79,7 +79,7 @@ export function ServiceCard({
         {/* Human purpose, straight after the description and before the technique. */}
         {uses.length > 0 && (
           <div className="mt-5">
-            <p className="text-[0.7rem] font-bold tracking-[0.16em] text-lagoon-700 uppercase">
+            <p className="text-[0.7rem] font-bold tracking-[0.16em] text-lagoon-800 uppercase">
               {t('card.good_for')}
             </p>
             <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -87,7 +87,7 @@ export function ServiceCard({
                 <Link
                   key={journey.id}
                   to={`/find-your-massage?m=${journey.guestTags?.[0] ?? 'unsure'}`}
-                  className="rounded-full bg-seafoam-100 px-3 py-1.5 text-[0.78rem] font-semibold text-lagoon-800 transition-colors hover:bg-seafoam-200"
+                  className="rounded-full bg-seafoam-100 px-3 py-1.5 text-[0.78rem] font-semibold text-lagoon-800 transition-all duration-300 hover:-translate-y-0.5 hover:bg-palm-100 hover:text-palm-800"
                 >
                   {journey.name}
                 </Link>
@@ -100,7 +100,7 @@ export function ServiceCard({
           <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[0.82rem]">
             {intensities.length > 0 && (
               <div className="flex items-center gap-1.5">
-                <dt className="text-ocean-800/55">{t('card.pressure')}</dt>
+                <dt className="text-ocean-800/85">{t('card.pressure')}</dt>
                 <dd className="font-semibold text-ocean-950">
                   {intensities.map((level) => t(`find.feel.${level}`)).join(' · ')}
                 </dd>
@@ -108,7 +108,7 @@ export function ServiceCard({
             )}
             {venueTags.length > 0 && (
               <div className="flex items-center gap-1.5">
-                <dt className="text-ocean-800/55">{t('find.where')}</dt>
+                <dt className="text-ocean-800/85">{t('find.where')}</dt>
                 <dd className="font-semibold text-ocean-950">
                   {venueTags.map((tag) => t(`find.venue.${tag}`)).join(' · ')}
                 </dd>
@@ -178,7 +178,7 @@ export function TherapistCard({ person }: { person: Therapist }) {
   const t = useT()
 
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+    <Card as="article" className="lift-hover group flex h-full flex-col hover:border-lagoon-300">
       <div className="relative aspect-4/5 overflow-hidden">
         {person.photo ? (
           <img
@@ -195,7 +195,7 @@ export function TherapistCard({ person }: { person: Therapist }) {
         <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/78 via-ocean-950/10 to-transparent" />
         <div className="absolute right-5 bottom-5 left-5">
           <h3 className="font-display text-2xl text-sand-50">{person.name}</h3>
-          <p className="mt-1 text-[0.82rem] font-semibold text-seafoam-200">{person.role}</p>
+          <p className="mt-1 text-[0.82rem] font-semibold text-white/90">{person.role}</p>
         </div>
         <span className="absolute top-4 right-4 rounded-full bg-sand-50/92 px-3 py-1 text-[0.68rem] font-bold text-ocean-950 backdrop-blur-sm">
           {person.years}
@@ -213,7 +213,7 @@ export function TherapistCard({ person }: { person: Therapist }) {
           ))}
         </div>
 
-        <p className="mt-auto pt-5 text-[0.78rem] font-medium text-ocean-800/55">
+        <p className="mt-auto pt-5 text-[0.78rem] font-medium text-ocean-800/85">
           {t('team.speaks', { languages: person.languages.join(' · ') })}
         </p>
       </div>
@@ -229,7 +229,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
   const tone: PillTone = key ? spotCategoryTone[key] : 'sand'
 
   return (
-    <Card as="article" className="flex h-full flex-col hover:-translate-y-1.5 hover:shadow-lift">
+    <Card as="article" className="lift-hover group flex h-full flex-col hover:border-lagoon-300">
       <div className="relative aspect-16/9 overflow-hidden">
         <SceneImage
           src={spot.image}
@@ -249,7 +249,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.76rem] font-semibold text-ocean-800/60">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[0.76rem] font-semibold text-ocean-800/85">
           {spot.walkMinutes > 0 && (
             <span className="inline-flex items-center gap-1.5">
               <Footprints className="size-3.5 text-lagoon-600" />
@@ -263,7 +263,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
 
         {spot.tip && (
           <p className="mt-4 rounded-[1.5rem] bg-gradient-to-br from-seafoam-50 to-sky-50 p-4 text-[0.86rem] leading-relaxed text-ocean-800 ring-1 ring-sky-200/60">
-            <span className="font-bold text-lagoon-700">{t('card.tip')}</span>
+            <span className="font-bold text-lagoon-800">{t('card.tip')}</span>
             {spot.tip}
           </p>
         )}
@@ -273,7 +273,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
             {spot.tags.slice(0, 2).map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-sand-200/60 px-2.5 py-1 text-[0.68rem] font-semibold text-ocean-800/70"
+                className="rounded-full bg-sand-200/70 px-2.5 py-1 text-[0.68rem] font-semibold text-ocean-900"
               >
                 {tag}
               </span>
@@ -284,7 +284,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
               href={spot.mapUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex shrink-0 items-center gap-1.5 text-[0.8rem] font-bold text-lagoon-700 hover:text-lagoon-600"
+              className="inline-flex shrink-0 items-center gap-1.5 text-[0.8rem] font-bold text-lagoon-800 hover:text-lagoon-600"
             >
               <MapPin className="size-3.5" />
               {t('card.map')}
@@ -300,13 +300,13 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
 
 export function TestimonialCard({ review }: { review: Testimonial }) {
   return (
-    <figure className="flex h-full flex-col rounded-5xl border border-white/12 bg-white/8 p-7 backdrop-blur-sm">
-      <Quote className="size-7 text-sun-400/75" strokeWidth={1.6} />
-      <blockquote className="mt-4 flex-1 text-[1rem] leading-relaxed text-sand-100/90">“{review.quote}”</blockquote>
-      <figcaption className="mt-6 border-t border-white/12 pt-5">
+    <figure className="lift-hover flex h-full flex-col rounded-5xl border border-white/80 bg-white/85 p-7 shadow-soft ring-1 ring-lagoon-200/50 backdrop-blur-sm">
+      <Quote className="size-7 text-flamingo-400" strokeWidth={1.6} />
+      <blockquote className="mt-4 flex-1 text-[1rem] leading-relaxed text-ocean-900">“{review.quote}”</blockquote>
+      <figcaption className="mt-6 border-t border-ocean-900/10 pt-5">
         <Stars count={review.rating} className="mb-3" />
-        <p className="font-display text-lg text-sand-50">{review.name}</p>
-        <p className="text-[0.8rem] text-sand-200/60">
+        <p className="font-display text-lg text-ocean-950">{review.name}</p>
+        <p className="text-[0.8rem] text-ocean-800/85">
           {review.country}
           {review.service && ` · ${review.service}`}
         </p>
@@ -326,9 +326,9 @@ export function PackageCard({ item, currency }: { item: Package; currency: strin
         <div>
           {item.badge && <Pill tone="flamingo">{item.badge}</Pill>}
           <h3 className="mt-3 font-display text-2xl text-ocean-950">{item.name}</h3>
-          <p className="mt-1 text-[0.8rem] font-semibold tracking-wide text-lagoon-700">{item.duration}</p>
+          <p className="mt-1 text-[0.8rem] font-semibold tracking-wide text-lagoon-800">{item.duration}</p>
         </div>
-        <p className="shrink-0 font-display text-3xl text-flamingo-600">{formatPrice(item.price, currency)}</p>
+        <p className="shrink-0 font-display text-3xl text-flamingo-700">{formatPrice(item.price, currency)}</p>
       </div>
 
       <p className="mt-4 text-[0.95rem] leading-relaxed text-ocean-800/80">{item.description}</p>

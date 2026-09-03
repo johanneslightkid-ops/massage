@@ -146,7 +146,7 @@ export function CollectionEditor({
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-ocean-950">{schema.label}</h1>
-          <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/60">{schema.description}</p>
+          <p className="mt-1.5 max-w-xl text-[0.92rem] text-ocean-800/85">{schema.description}</p>
         </div>
         <button
           type="button"
@@ -198,7 +198,7 @@ export function CollectionEditor({
 
                 <button type="button" onClick={() => setEditing(open ? null : id)} className="min-w-0 flex-1 text-left">
                   <p className="truncate font-semibold text-ocean-950">{title}</p>
-                  {subtitle && <p className="mt-0.5 truncate text-[0.82rem] text-ocean-800/50">{subtitle}</p>}
+                  {subtitle && <p className="mt-0.5 truncate text-[0.82rem] text-ocean-800/80">{subtitle}</p>}
                 </button>
 
                 <div className="flex shrink-0 items-center gap-1">
@@ -263,7 +263,7 @@ export function CollectionEditor({
 
       {sorted.length === 0 && (
         <div className="mt-8 rounded-4xl border border-dashed border-ocean-900/15 p-12 text-center">
-          <p className="text-ocean-800/50">{t('admin.none_yet', { label: schema.label.toLowerCase() })}</p>
+          <p className="text-ocean-800/80">{t('admin.none_yet', { label: schema.label.toLowerCase() })}</p>
           <button
             type="button"
             onClick={addRow}
@@ -300,7 +300,7 @@ export function CollectionEditor({
           <button
             type="button"
             onClick={() => setConfirmReset(true)}
-            className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-5 text-[0.86rem] font-semibold text-ocean-800/70 transition-colors hover:border-ocean-900/25 hover:text-ocean-950"
+            className="inline-flex h-11 items-center gap-2 rounded-full border border-ocean-900/12 bg-white/60 px-5 text-[0.86rem] font-semibold text-ocean-800/80 transition-colors hover:border-ocean-900/25 hover:text-ocean-950"
           >
             <RotateCcw className="size-4" />
             {t('action.restore_defaults')}

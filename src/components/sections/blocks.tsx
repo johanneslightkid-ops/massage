@@ -39,12 +39,12 @@ export function VenueSection() {
                   <Motif name={venue.icon} className="size-7" />
                 </span>
                 <h3 className="mt-6 font-display text-2xl text-ocean-950">{venue.name}</h3>
-                <p className="mt-1 text-[0.82rem] font-bold tracking-wide text-lagoon-700 uppercase">
+                <p className="mt-1 text-[0.82rem] font-bold tracking-wide text-lagoon-800 uppercase">
                   {venue.subtitle}
                 </p>
                 <p className="mt-4 text-[0.96rem] leading-relaxed text-ocean-800/80">{venue.description}</p>
                 {venue.note && (
-                  <p className="mt-auto pt-6 text-[0.82rem] leading-relaxed text-ocean-800/55">{venue.note}</p>
+                  <p className="mt-auto pt-6 text-[0.82rem] leading-relaxed text-ocean-800/85">{venue.note}</p>
                 )}
               </Card>
             </Reveal>
@@ -52,7 +52,7 @@ export function VenueSection() {
         </div>
 
         <Reveal delay={0.2}>
-          <div className="mt-8 flex flex-col gap-3 rounded-5xl border border-white/70 bg-white/65 p-6 text-[0.88rem] leading-relaxed text-ocean-800/75 shadow-soft sm:flex-row sm:items-center sm:gap-6">
+          <div className="mt-8 flex flex-col gap-3 rounded-5xl border border-white/70 bg-white/65 p-6 text-[0.88rem] leading-relaxed text-ocean-800/85 shadow-soft sm:flex-row sm:items-center sm:gap-6">
             <Wallet className="size-5 shrink-0 text-lagoon-600" />
             <p>{content.site.hotelSurcharge}</p>
           </div>
@@ -91,7 +91,7 @@ export function BenefitsSection() {
                 </span>
                 <div>
                   <h3 className="font-display text-[1.28rem] leading-snug text-ocean-950">{benefit.title}</h3>
-                  <p className="mt-2 text-[0.92rem] leading-relaxed text-ocean-800/75">{benefit.description}</p>
+                  <p className="mt-2 text-[0.92rem] leading-relaxed text-ocean-800/85">{benefit.description}</p>
                 </div>
               </div>
             </Reveal>
@@ -138,7 +138,7 @@ export function OwnerSection() {
               </div>
               <div className="absolute -right-3 -bottom-5 max-w-64 rounded-[2rem] bg-ocean-950/95 p-5 text-sand-50 shadow-lift backdrop-blur-sm sm:-right-6">
                 <p className="script text-[1.05rem] leading-snug text-sun-400">“{site.ownerQuote}”</p>
-                <p className="mt-3 text-[0.72rem] font-bold tracking-[0.14em] text-seafoam-300 uppercase">
+                <p className="mt-3 text-[0.72rem] font-bold tracking-[0.14em] text-seafoam-200 uppercase">
                   {site.ownerName} · {site.ownerRole}
                 </p>
               </div>
@@ -195,14 +195,13 @@ export function TestimonialsSection() {
   const reviews = sortByOrder(content.testimonials)
 
   return (
-    <Section tone="ocean" className="grain relative overflow-hidden bg-gradient-to-br from-sky-900 via-ocean-900 to-palm-900 py-20 sm:py-28">
+    <Section className="grain relative overflow-hidden bg-gradient-to-br from-seafoam-100 via-sky-50 to-palm-100 py-20 sm:py-28">
       <OilSheen />
-      <WaveDivider flip from="var(--color-sky-900)" tone="var(--color-lagoon-400)" className="absolute inset-x-0 -top-px" />
-      <MonsteraLeaf mirrored className="pointer-events-none absolute -right-20 bottom-0 h-96 w-72 text-lagoon-300/10" />
+      <WaveDivider flip from="var(--color-seafoam-100)" tone="var(--color-lagoon-300)" className="absolute inset-x-0 -top-px" />
+      <MonsteraLeaf mirrored className="pointer-events-none absolute -right-20 bottom-0 h-96 w-72 text-palm-400/25" />
 
       <Container className="relative z-10 pt-10">
         <SectionHead
-          invert
           eyebrow={t('testimonials.eyebrow')}
           title={t('testimonials.title')}
           script={t('testimonials.script')}
@@ -253,13 +252,13 @@ export function PaymentsSection({ id }: { id?: string }) {
                   {paymentGlyphs[method.icon] ?? method.name}
                 </span>
                 <h3 className="mt-5 font-display text-xl text-ocean-950">{method.name}</h3>
-                <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/75">{method.description}</p>
+                <p className="mt-2 text-[0.9rem] leading-relaxed text-ocean-800/85">{method.description}</p>
                 {method.url && (
                   <a
                     href={method.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="mt-auto pt-5 text-[0.84rem] font-bold text-lagoon-700 hover:text-lagoon-600"
+                    className="mt-auto pt-5 text-[0.84rem] font-bold text-lagoon-800 hover:text-lagoon-600"
                   >
                     {t('payments.open_link')}
                   </a>
@@ -351,25 +350,25 @@ export function CtaBand() {
     <Section className="relative overflow-hidden py-20 sm:py-28">
       <Container>
         <Reveal>
-          <div className="grain relative overflow-hidden rounded-6xl bg-gradient-to-br from-sky-800 via-lagoon-700 to-palm-700 px-7 py-14 text-center shadow-float sm:px-16 sm:py-20">
+          <div className="grain relative overflow-hidden rounded-6xl bg-gradient-to-br from-lagoon-200 via-seafoam-100 to-palm-200 px-7 py-14 text-center shadow-lift ring-1 ring-lagoon-300/50 sm:px-16 sm:py-20">
             <OilSheen />
-            <PalmFrond className="pointer-events-none absolute -top-10 -left-16 h-72 w-56 animate-sway text-sky-950/30" />
+            <PalmFrond className="pointer-events-none absolute -top-10 -left-16 h-72 w-56 animate-sway text-palm-500/35" />
             <MonsteraLeaf
               mirrored
-              className="pointer-events-none absolute -right-14 -bottom-16 h-72 w-60 text-palm-950/25"
+              className="pointer-events-none absolute -right-14 -bottom-16 h-72 w-60 text-lagoon-400/30"
             />
 
             <div className="relative z-10">
-              <p className="text-[0.7rem] font-bold tracking-[0.22em] text-seafoam-200 uppercase">
+              <p className="text-[0.7rem] font-bold tracking-[0.22em] text-palm-700 uppercase">
                 {site.neighborhood} · {site.city}
               </p>
-              <h2 className="mt-5 text-4xl leading-[1.05] text-sand-50 sm:text-5xl">
+              <h2 className="mt-5 text-4xl leading-[1.05] text-ocean-950 sm:text-5xl">
                 {t('cta.title')}{' '}
-                <span className="script bg-gradient-to-r from-sun-300 to-flamingo-300 bg-clip-text text-transparent">
+                <span className="script bg-gradient-to-r from-flamingo-500 to-sun-600 bg-clip-text text-transparent">
                   {t('cta.script')}
                 </span>
               </h2>
-              <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-sand-100/85">{t('cta.lead')}</p>
+              <p className="mx-auto mt-5 max-w-xl text-[1rem] leading-relaxed text-ocean-800/80">{t('cta.lead')}</p>
 
               <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
                 <a
@@ -383,13 +382,13 @@ export function CtaBand() {
                 </a>
                 <Link
                   to="/book"
-                  className="inline-flex h-14 items-center justify-center rounded-full border border-white/25 bg-white/12 px-8 text-[1rem] font-semibold text-sand-50 backdrop-blur-sm transition-colors hover:bg-white/22"
+                  className="inline-flex h-14 items-center justify-center rounded-full border border-ocean-900/10 bg-white/90 px-8 text-[1rem] font-semibold text-ocean-950 shadow-soft backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-white"
                 >
                   {t('cta.form')}
                 </Link>
               </div>
 
-              <p className="mt-7 text-[0.8rem] text-sand-100/60">{site.beachNote}</p>
+              <p className="mt-7 text-[0.8rem] text-ocean-800/85">{site.beachNote}</p>
             </div>
           </div>
         </Reveal>
