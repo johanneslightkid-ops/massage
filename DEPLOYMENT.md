@@ -150,6 +150,7 @@ npm run cf:deploy
 | `booking:*`        | the booking form      | One reservation request, expires after 180d |
 | `session:*`        | admin sign-in         | One admin session, expires after 12h        |
 | `throttle:login:*` | failed sign-ins       | Rate-limit counter, expires after 10m       |
+| `media:*`          | /admin uploads        | One photo or video (≤ 25 MB), served at `/media/<id>` |
 
 **One document per language.** The admin edits whichever language the toggle in
 the top bar is set to, and the AI assistant writes both at once — it translates
@@ -243,15 +244,19 @@ from recording and the assistant is text-only.
 
 ---
 
-## Photo uploads
+## Photo and video uploads
 
-Photo fields upload straight to Cloudinary from the browser, signed by
+Photo fields, and the team's optional video field, upload straight to
+Cloudinary from the browser when it is configured, signed by
 `/api/uploads/sign` so the secret never reaches the client:
 
 ```bash
-npx wrangler pages secret put CLOUDINARY_API_SECRET
+npx wrangler secret put CLOUDINARY_API_SECRET
 ```
 
-With `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` and the secret unset, uploads
-fall back to a resized inline WebP data URL — fine for a couple of photos,
-bad for a gallery.
+Without Cloudinary, uploads go to `POST /api/uploads/media` and are stored in
+the content KV namespace as `media:<id>` (photos resized to WebP first). The
+Worker serves them at `/media/<id>` with byte-range support, which Safari
+needs to play video. KV caps a value at 25 MB — about 20 seconds of phone
+video — and the admin says so before uploading anything larger. Replacing a
+photo or video leaves the old `media:*` key in place.

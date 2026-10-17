@@ -224,6 +224,7 @@ const en: Dict = {
   'team.lead':
     'We are not an agency and there is no call centre. When you write, you are writing to one of us.',
   'team.badge_certified': 'Certified therapists',
+  'team.play_video': 'Play {name}’s video',
   'team.badge_since': 'Women-owned since 2019',
   'team.badge_languages': '{count} languages between us',
   'team.how.eyebrow': 'How a session actually goes',
@@ -459,6 +460,10 @@ const en: Dict = {
   'field.upload': 'Upload image',
   'field.upload_title': 'Upload from device',
   'field.upload_failed': 'Failed to upload image: {message}',
+  'field.upload_video': 'Upload video',
+  'field.uploading': 'Uploading…',
+  'field.video_failed': 'Failed to upload video: {message}',
+  'field.video_too_large': 'That video is {size} MB; the limit is {max} MB. Trim it to a short clip and try again.',
 
   /* admin — bookings ----------------------------------------------------- */
   'admin.bookings_title': 'Reservation requests',

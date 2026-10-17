@@ -211,6 +211,7 @@ export const es: Record<string, string> = {
   'team.lead':
     'No somos una agencia ni tenemos un centro de llamadas. Cuando escribes, le escribes a una de nosotras.',
   'team.badge_certified': 'Terapeutas certificadas',
+  'team.play_video': 'Ver el vídeo de {name}',
   'team.badge_since': 'Dirigido por mujeres desde 2019',
   'team.badge_languages': '{count} idiomas entre nosotras',
   'team.how.eyebrow': 'Cómo es una sesión de verdad',
@@ -454,6 +455,10 @@ export const es: Record<string, string> = {
   'field.upload': 'Subir imagen',
   'field.upload_title': 'Subir desde el dispositivo',
   'field.upload_failed': 'No se pudo subir la imagen: {message}',
+  'field.upload_video': 'Subir vídeo',
+  'field.uploading': 'Subiendo…',
+  'field.video_failed': 'No se pudo subir el vídeo: {message}',
+  'field.video_too_large': 'Ese vídeo pesa {size} MB y el límite es {max} MB. Recórtalo a un clip corto y vuelve a intentarlo.',
 
   /* admin — bookings ----------------------------------------------------- */
   'admin.bookings_title': 'Solicitudes de reserva',

@@ -181,6 +181,10 @@ export const schemaEs: Record<string, SchemaTranslation> = {
   'team.languages': { label: 'Idiomas' },
   'team.years': { label: 'Experiencia', placeholder: '7 años' },
   'team.photo': { label: 'Foto' },
+  'team.video': {
+    label: 'Vídeo',
+    help: 'Opcional. Un clip corto (hasta 25 MB, unos 20 segundos grabados con el móvil). Los clientes pulsan play en la tarjeta; hasta entonces se ve la foto.',
+  },
   'team.accent': { label: 'Color de la tarjeta' },
   'team.order': { label: 'Orden', help: 'Los números más bajos aparecen primero.' },
 

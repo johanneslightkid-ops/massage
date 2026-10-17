@@ -25,7 +25,7 @@ export const seedContent: SiteContent = {
     heroCtaPrimary: 'Reserve on WhatsApp',
     heroCtaSecondary: 'See treatments & prices',
 
-    ownerName: 'Yaritza Mercedes',
+    ownerName: 'Francia',
     ownerRole: 'Owner & lead therapist',
     ownerQuote: 'A good massage should feel like the sea got into your shoulders.',
     ownerStory:
@@ -461,8 +461,8 @@ export const seedContent: SiteContent = {
 
   team: [
     {
-      id: 'team-yaritza',
-      name: 'Yaritza',
+      id: 'team-francia',
+      name: 'Francia',
       role: 'Owner · deep tissue & hot stone',
       bio:
         'Fourteen years of hands, five of them in the biggest resort spas on this coast. She reads a back in about thirty seconds and is the one to ask for if something genuinely hurts.',
@@ -866,7 +866,7 @@ export const seedContent: SiteContent = {
       name: 'Markus',
       country: 'Deutschland',
       quote:
-        'Ich hatte nach dem Flug einen komplett blockierten Nacken. Yaritza hat genau gewusst, wo sie arbeiten muss. Am nächsten Morgen war alles frei. Ganz klare Empfehlung.',
+        'Ich hatte nach dem Flug einen komplett blockierten Nacken. Francia hat genau gewusst, wo sie arbeiten muss. Am nächsten Morgen war alles frei. Ganz klare Empfehlung.',
       rating: 5,
       service: 'Deep Tissue',
       stayedAt: 'Hotel in Bávaro',

@@ -26,7 +26,7 @@ export const seedContentEs: SiteContent = {
     heroCtaPrimary: 'Reserva por WhatsApp',
     heroCtaSecondary: 'Ver tratamientos y precios',
 
-    ownerName: 'Yaritza Mercedes',
+    ownerName: 'Francia',
     ownerRole: 'Propietaria y terapeuta principal',
     ownerQuote: 'Un buen masaje debería sentirse como si el mar se hubiera metido en tus hombros.',
     ownerStory:
@@ -464,8 +464,8 @@ export const seedContentEs: SiteContent = {
 
   team: [
     {
-      id: 'team-yaritza',
-      name: 'Yaritza',
+      id: 'team-francia',
+      name: 'Francia',
       role: 'Propietaria · tejido profundo y piedras calientes',
       bio:
         'Catorce años trabajando con las manos, cinco de ellos en los mayores spas de resorts de esta costa. Lee una espalda en unos treinta segundos y es a quien debes pedir si realmente algo te duele.',
@@ -870,7 +870,7 @@ export const seedContentEs: SiteContent = {
       name: 'Markus',
       country: 'Alemania',
       quote:
-        'Nach dem Flug hatte ich einen komplett blockierten Nacken. Yaritza wusste genau, wo sie arbeiten musste. Am nächsten Morgen war wieder alles frei. Klare Empfehlung.',
+        'Nach dem Flug hatte ich einen komplett blockierten Nacken. Francia wusste genau, wo sie arbeiten musste. Am nächsten Morgen war wieder alles frei. Klare Empfehlung.',
       rating: 5,
       service: 'Tejido Profundo',
       stayedAt: 'Hotel en Bávaro',

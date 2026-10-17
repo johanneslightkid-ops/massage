@@ -22,6 +22,7 @@ export type FieldType =
   | 'boolean'
   | 'list'
   | 'image'
+  | 'video'
   | 'select'
   | 'durations'
   | 'pairs'
@@ -411,6 +412,13 @@ export const collectionSchemas: CollectionSchema[] = [
       { key: 'languages', label: 'Languages', type: 'list', full: true },
       { key: 'years', label: 'Experience', type: 'text', placeholder: '7 years' },
       { key: 'photo', label: 'Photo', type: 'image', full: true },
+      {
+        key: 'video',
+        label: 'Video',
+        type: 'video',
+        full: true,
+        help: 'Optional. A short clip (up to 25 MB, about 20 seconds from a phone). Guests tap play on the card; the photo is shown until then.',
+      },
       { key: 'accent', label: 'Card accent', type: 'select', options: ['ocean', 'coral', 'palm', 'sun', 'seafoam'] },
       orderField,
     ],

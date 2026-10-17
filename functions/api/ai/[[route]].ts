@@ -433,9 +433,9 @@ Shapes:
   {"kind":"none"}                                    — you are only asking or answering
   {"kind":"set_setting","field":"whatsapp","value":"18095550123"}
   {"kind":"create","collection":"services","fields":{"name":"...","tagline":"..."}}
-  {"kind":"update","collection":"team","id":"team-yaritza","fields":{"bio":"..."}}
+  {"kind":"update","collection":"team","id":"team-francia","fields":{"bio":"..."}}
   {"kind":"delete","collection":"faqs","id":"faq-late"}
-  {"kind":"manual","task":"photo","collection":"team","id":"team-yaritza","label":"Yaritza"}
+  {"kind":"manual","task":"photo","collection":"team","id":"team-francia","label":"Francia"}
   {"kind":"done"}                                    — everything is covered, wrap up
 
 RULES

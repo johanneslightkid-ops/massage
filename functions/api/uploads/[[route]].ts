@@ -7,9 +7,14 @@
  *                                 exposing the API secret (auth required).
  *   GET  /api/uploads/config    → returns cloud_name + api_key + folder so
  *                                 the client knows where to POST.
+ *   POST /api/uploads/media     → stores the raw request body (a photo or a
+ *                                 video) in KV and returns its `/media/<id>`
+ *                                 URL — the fallback without Cloudinary
+ *                                 (auth required; see shared/media.ts).
  */
 
 import { fail, isAuthed, json } from '../../../shared/server'
+import { MEDIA_MAX_BYTES, isAllowedMediaType, mediaKey, mediaUrl, type MediaMetadata } from '../../../shared/media'
 
 interface Env {
   CONTENT: KVNamespace
@@ -75,6 +80,21 @@ export const onRequest: PagesFunction<Env> = async (context) => {
       uploadUrl: `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
       publicId: paramsToSign.public_id,
     })
+  }
+
+  if (path === 'media' && method === 'POST') {
+    const type = (request.headers.get('Content-Type') ?? '').split(';')[0].trim().toLowerCase()
+    if (!isAllowedMediaType(type)) return fail(415, `Photos and videos only (got ${type || 'no type'}).`)
+    const tooLarge = `Over the ${MEDIA_MAX_BYTES / 1024 / 1024} MB limit — trim the clip and try again.`
+    if (Number(request.headers.get('Content-Length') ?? 0) > MEDIA_MAX_BYTES) return fail(413, tooLarge)
+
+    const body = await request.arrayBuffer()
+    if (body.byteLength === 0) return fail(400, 'The file is empty.')
+    if (body.byteLength > MEDIA_MAX_BYTES) return fail(413, tooLarge)
+
+    const id = crypto.randomUUID()
+    await env.CONTENT.put(mediaKey(id), body, { metadata: { type } satisfies MediaMetadata })
+    return json({ url: mediaUrl(id) })
   }
 
   return fail(404, 'Unknown endpoint.')

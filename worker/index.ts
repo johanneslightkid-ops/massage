@@ -21,6 +21,7 @@ import { onRequestGet as sitemap } from '../functions/sitemap.xml.ts'
 import { onRequestGet as robots } from '../functions/robots.txt.ts'
 import { readContent } from '../shared/server'
 import { parseBlocks } from '../shared/markdown'
+import { MEDIA_ID, mediaKey, type MediaMetadata } from '../shared/media'
 import type { BlogPost, SiteContent } from '../shared/types'
 
 export interface Env {
@@ -217,6 +218,46 @@ async function renderPage(request: Request, env: Env, url: URL): Promise<Respons
     .transform(response)
 }
 
+/**
+ * An uploaded photo or video from KV. Byte ranges are honoured because Safari
+ * will not play a video from a server that ignores them.
+ */
+async function serveMedia(request: Request, env: Env, id: string): Promise<Response> {
+  if (!MEDIA_ID.test(id)) return new Response('Not found', { status: 404 })
+  const { value, metadata } = await env.CONTENT.getWithMetadata<MediaMetadata>(mediaKey(id), {
+    type: 'arrayBuffer',
+    cacheTtl: 60 * 60 * 24,
+  })
+  if (!value) return new Response('Not found', { status: 404 })
+
+  const total = value.byteLength
+  const headers = new Headers({
+    'Content-Type': metadata?.type ?? 'application/octet-stream',
+    // Every upload gets a new id, so a URL never changes what it points at.
+    'Cache-Control': 'public, max-age=31536000, immutable',
+    'Accept-Ranges': 'bytes',
+    'X-Content-Type-Options': 'nosniff',
+    'Content-Security-Policy': "default-src 'none'; sandbox",
+  })
+  const body = (bytes: ArrayBuffer) => (request.method === 'HEAD' ? null : bytes)
+
+  const range = request.headers.get('Range')?.match(/^bytes=(\d*)-(\d*)$/)
+  if (range && (range[1] || range[2])) {
+    const start = range[1] ? Number(range[1]) : Math.max(0, total - Number(range[2]))
+    const end = range[1] && range[2] ? Math.min(Number(range[2]), total - 1) : total - 1
+    if (start >= total || start > end) {
+      headers.set('Content-Range', `bytes */${total}`)
+      return new Response(null, { status: 416, headers })
+    }
+    headers.set('Content-Range', `bytes ${start}-${end}/${total}`)
+    headers.set('Content-Length', String(end - start + 1))
+    return new Response(body(value.slice(start, end + 1)), { status: 206, headers })
+  }
+
+  headers.set('Content-Length', String(total))
+  return new Response(body(value), { headers })
+}
+
 export default {
   async fetch(request, env, ctx): Promise<Response> {
     const url = new URL(request.url)
@@ -228,6 +269,9 @@ export default {
       if (rest[0] === 'uploads') return callPages(uploads as Handler, request, env, ctx, rest.slice(1))
       return callPages(api as Handler, request, env, ctx, rest)
     }
+
+    const media = pathname.match(/^\/media\/([^/]+)$/)
+    if (media && (request.method === 'GET' || request.method === 'HEAD')) return serveMedia(request, env, media[1])
 
     if (pathname === '/sitemap.xml') return callPages(sitemap as Handler, request, env, ctx, [])
     if (pathname === '/robots.txt') return callPages(robots as Handler, request, env, ctx, [])

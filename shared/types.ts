@@ -168,6 +168,8 @@ export interface Therapist {
   languages: string[]
   years: string
   photo: string
+  /** Optional short clip. The card shows the photo until a guest taps play. */
+  video?: string
   accent: string
   order: number
 }

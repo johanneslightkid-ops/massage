@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Plus, X, Upload } from 'lucide-react'
+import { Plus, X, Upload, Film, Loader2 } from 'lucide-react'
 import type { Field } from '@shared/schema'
+import { MEDIA_MAX_BYTES } from '@shared/media'
 import { useT } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 
@@ -265,42 +266,161 @@ async function processImage(file: File): Promise<string> {
 }
 
 /**
- * Uploads an image to Cloudinary using a signed upload (server-issued signature).
- * Falls back to a local resized WebP data-URL if Cloudinary isn't configured.
+ * Uploads to Cloudinary using a signed upload (server-issued signature).
+ * Returns null when Cloudinary isn't configured.
  */
-async function uploadToCloudinaryOrFallback(file: File): Promise<string> {
-  try {
-    const cfgRes = await fetch('/api/uploads/config', { credentials: 'include' })
-    const cfg = (await cfgRes.json()) as { configured: boolean }
-    if (!cfg.configured) return processImage(file)
+async function uploadToCloudinary(file: Blob): Promise<string | null> {
+  const cfgRes = await fetch('/api/uploads/config', { credentials: 'include' })
+  const cfg = (await cfgRes.json()) as { configured: boolean }
+  if (!cfg.configured) return null
 
-    const signRes = await fetch('/api/uploads/sign', {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ folder: 'massage-playero' }),
-    })
-    if (!signRes.ok) throw new Error(await signRes.text())
-    const sig = (await signRes.json()) as {
-      cloudName: string; apiKey: string; timestamp: number; signature: string; folder: string; uploadUrl: string
-    }
-
-    const form = new FormData()
-    form.append('file', file)
-    form.append('api_key', sig.apiKey)
-    form.append('timestamp', String(sig.timestamp))
-    form.append('signature', sig.signature)
-    form.append('folder', sig.folder)
-
-    const up = await fetch(sig.uploadUrl, { method: 'POST', body: form })
-    const body = (await up.json()) as { secure_url?: string; error?: { message?: string } }
-    if (!up.ok || !body.secure_url) throw new Error(body.error?.message ?? 'Cloudinary upload failed')
-    return body.secure_url
-  } catch (err) {
-    // Silent fallback keeps the admin usable even if the endpoint is unreachable.
-    console.warn('Cloudinary unavailable, falling back to inline WebP:', err)
-    return processImage(file)
+  const signRes = await fetch('/api/uploads/sign', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ folder: 'massage-playero' }),
+  })
+  if (!signRes.ok) throw new Error(await signRes.text())
+  const sig = (await signRes.json()) as {
+    cloudName: string; apiKey: string; timestamp: number; signature: string; folder: string; uploadUrl: string
   }
+
+  const form = new FormData()
+  form.append('file', file)
+  form.append('api_key', sig.apiKey)
+  form.append('timestamp', String(sig.timestamp))
+  form.append('signature', sig.signature)
+  form.append('folder', sig.folder)
+
+  const up = await fetch(sig.uploadUrl, { method: 'POST', body: form })
+  const body = (await up.json()) as { secure_url?: string; error?: { message?: string } }
+  if (!up.ok || !body.secure_url) throw new Error(body.error?.message ?? 'Cloudinary upload failed')
+  return body.secure_url
+}
+
+/** Stores the file in the site's own KV and returns its `/media/<id>` URL. */
+async function uploadToSite(file: Blob): Promise<string> {
+  const res = await fetch('/api/uploads/media', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': file.type },
+    body: file,
+  })
+  const body = (await res.json().catch(() => ({}))) as { url?: string; error?: string }
+  if (!res.ok || !body.url) throw new Error(body.error ?? `Upload failed (${res.status})`)
+  return body.url
+}
+
+/**
+ * Photos: Cloudinary when configured, else a resized WebP stored on the site.
+ * If both are unreachable the WebP is inlined as a data URL, which keeps the
+ * admin usable at the cost of a heavier content document.
+ */
+async function uploadImage(file: File): Promise<string> {
+  try {
+    const url = await uploadToCloudinary(file)
+    if (url) return url
+  } catch (err) {
+    console.warn('Cloudinary unavailable, storing the photo on the site:', err)
+  }
+  const dataUrl = await processImage(file)
+  try {
+    return await uploadToSite(await (await fetch(dataUrl)).blob())
+  } catch (err) {
+    console.warn('Site media store unavailable, inlining the photo:', err)
+    return dataUrl
+  }
+}
+
+/** Videos: Cloudinary when configured, else stored on the site (size-capped). */
+async function uploadVideo(file: File, tooLarge: (sizeMb: string) => string): Promise<string> {
+  try {
+    const url = await uploadToCloudinary(file)
+    if (url) return url
+  } catch (err) {
+    console.warn('Cloudinary unavailable, storing the video on the site:', err)
+  }
+  if (file.size > MEDIA_MAX_BYTES) throw new Error(tooLarge((file.size / 1024 / 1024).toFixed(0)))
+  return uploadToSite(file)
+}
+
+/** A URL box, an upload button and a preview — for `image` and `video` fields. */
+function MediaField({ kind, value, onChange }: { kind: 'image' | 'video'; value: unknown; onChange: (next: unknown) => void }) {
+  const t = useT()
+  const [uploading, setUploading] = useState(false)
+  const url = typeof value === 'string' ? value.trim() : ''
+  const maxMb = String(MEDIA_MAX_BYTES / 1024 / 1024)
+
+  return (
+    <div className="space-y-3">
+      <div className="flex gap-2">
+        <input
+          type="url"
+          value={String(value ?? '')}
+          placeholder="https://…"
+          onChange={(event) => onChange(event.target.value)}
+          className={cn(inputBase, 'flex-1')}
+        />
+        <label
+          className={cn(
+            'cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-pearl transition-colors hover:from-lagoon-600 hover:to-palm-600',
+            uploading && 'pointer-events-none opacity-70',
+          )}
+          title={t('field.upload_title')}
+        >
+          <span className="sr-only">{uploading ? t('field.uploading') : t(kind === 'video' ? 'field.upload_video' : 'field.upload')}</span>
+          {uploading ? <Loader2 className="size-4 animate-spin" /> : kind === 'video' ? <Film className="size-4" /> : <Upload className="size-4" />}
+          <input
+            type="file"
+            accept={kind === 'video' ? 'video/*' : 'image/*'}
+            capture={kind === 'image' ? 'environment' : undefined}
+            className="hidden"
+            disabled={uploading}
+            onChange={async (e) => {
+              const input = e.currentTarget
+              const file = input.files?.[0]
+              if (!file) return
+              setUploading(true)
+              try {
+                onChange(
+                  kind === 'video'
+                    ? await uploadVideo(file, (size) => t('field.video_too_large', { size, max: maxMb }))
+                    : await uploadImage(file),
+                )
+              } catch (err) {
+                console.error(err)
+                const message = err instanceof Error ? err.message : String(err)
+                alert(t(kind === 'video' ? 'field.video_failed' : 'field.upload_failed', { message }))
+              } finally {
+                setUploading(false)
+                input.value = ''
+              }
+            }}
+          />
+        </label>
+      </div>
+      {uploading && <p className="text-[0.78rem] font-medium text-lagoon-600">{t('field.uploading')}</p>}
+      {url !== '' &&
+        (kind === 'video' ? (
+          <video
+            src={url}
+            controls
+            playsInline
+            preload="metadata"
+            className="h-48 w-full rounded-2xl border border-ocean-900/10 bg-abyss-950 object-contain"
+          />
+        ) : (
+          <img
+            src={url}
+            alt=""
+            className="h-32 w-full rounded-2xl border border-ocean-900/10 object-cover"
+            onError={(event) => {
+              event.currentTarget.style.display = 'none'
+            }}
+          />
+        ))}
+    </div>
+  )
 }
 
 /**
@@ -459,50 +579,8 @@ export function FieldInput({
         )
 
       case 'image':
-        return (
-          <div className="space-y-3">
-            <div className="flex gap-2">
-              <input
-                type="url"
-                value={String(value ?? '')}
-                placeholder="https://…"
-                onChange={(event) => onChange(event.target.value)}
-                className={cn(inputBase, 'flex-1')}
-              />
-              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-pearl transition-colors hover:from-lagoon-600 hover:to-palm-600" title={t('field.upload_title')}>
-                <span className="sr-only">{t('field.upload')}</span>
-                <Upload className="size-4" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  capture="environment"
-                  className="hidden"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0]
-                    if (!file) return
-                    try {
-                      const url = await uploadToCloudinaryOrFallback(file)
-                      onChange(url)
-                    } catch (err) {
-                      console.error(err)
-                      alert(t('field.upload_failed', { message: err instanceof Error ? err.message : String(err) }))
-                    }
-                  }}
-                />
-              </label>
-            </div>
-            {typeof value === 'string' && value.trim() !== '' && (
-              <img
-                src={value}
-                alt=""
-                className="h-32 w-full rounded-2xl border border-ocean-900/10 object-cover"
-                onError={(event) => {
-                  event.currentTarget.style.display = 'none'
-                }}
-              />
-            )}
-          </div>
-        )
+      case 'video':
+        return <MediaField kind={field.type} value={value} onChange={onChange} />
 
       default:
         return (

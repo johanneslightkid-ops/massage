@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Clock, Footprints, MapPin, Quote } from 'lucide-react'
+import { Clock, Footprints, MapPin, Play, Quote } from 'lucide-react'
 import type { DiscoverSpot, MassageJourney, Package, Service, Testimonial, Therapist } from '@shared/types'
 import { journeysForService } from '@shared/matcher'
 import { cn, formatPrice } from '@/lib/utils'
@@ -177,11 +178,23 @@ const accents: Record<string, string> = {
 
 export function TherapistCard({ person }: { person: Therapist }) {
   const t = useT()
+  // The clip loads only once a guest asks for it: a page of autoplaying team
+  // videos is a lot to pull over hotel Wi-Fi.
+  const [playing, setPlaying] = useState(false)
 
   return (
     <Card as="article" className="lift-hover group flex h-full flex-col hover:border-lagoon-300">
       <div className="relative aspect-4/5 overflow-hidden">
-        {person.photo ? (
+        {playing && person.video ? (
+          <video
+            src={person.video}
+            poster={person.photo || undefined}
+            controls
+            autoPlay
+            playsInline
+            className="relative z-10 size-full bg-abyss-950 object-cover"
+          />
+        ) : person.photo ? (
           <img
             src={person.photo}
             alt={person.name}
@@ -201,6 +214,16 @@ export function TherapistCard({ person }: { person: Therapist }) {
         <span className="absolute top-4 right-4 rounded-full bg-white/92 px-3 py-1 text-[0.68rem] font-bold text-ocean-950 backdrop-blur-sm">
           {person.years}
         </span>
+        {person.video && !playing && (
+          <button
+            type="button"
+            onClick={() => setPlaying(true)}
+            aria-label={t('team.play_video', { name: person.name })}
+            className="absolute top-1/2 left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-ocean-950 shadow-lg backdrop-blur-sm transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
+            <Play className="ml-1 size-6 fill-current" />
+          </button>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-6">

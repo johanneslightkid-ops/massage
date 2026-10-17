@@ -57,6 +57,7 @@ const NEVER_TRANSLATE = new Set([
   'slug',
   'image',
   'photo',
+  'video',
   'icon',
   'accent',
   'url',
