@@ -29,7 +29,7 @@ export function LanguageToggle({ variant = 'inline', className }: LanguageToggle
         aria-label={t('lang.select')}
       >
         <Globe className="size-5 transition-transform duration-500 group-hover:rotate-12" />
-        <span className="absolute -right-1 -bottom-1 grid size-4 place-items-center rounded-full bg-gradient-to-br from-lagoon-500 to-sky-600 text-[0.55rem] font-bold text-white">
+        <span className="absolute -right-1 -bottom-1 grid size-4 place-items-center rounded-full bg-gradient-to-br from-lagoon-500 to-sky-600 text-[0.55rem] font-bold text-pearl">
           {language.toUpperCase()}
         </span>
       </button>

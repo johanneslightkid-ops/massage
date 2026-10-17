@@ -386,6 +386,30 @@ export const schemaEs: Record<string, SchemaTranslation> = {
   'journeys.featured': { label: 'Mostrar como acceso rápido en la portada' },
   'journeys.order': { label: 'Orden' },
 
+  /* --------------------------------------------------------------- blog */
+  posts: {
+    label: 'Blog',
+    singular: 'artículo',
+    description:
+      'Artículos para huéspedes: consejos, historias, el barrio. La escritora con IA de arriba te prepara uno en todos los idiomas.',
+  },
+  'posts.title': { label: 'Título' },
+  'posts.slug': { label: 'Slug', help: 'Se usa en la URL. Minúsculas y guiones en vez de espacios.' },
+  'posts.category': { label: 'Categoría' },
+  'posts.excerpt': { label: 'Resumen', help: 'Una o dos frases; se muestran en el blog y en las vistas previas de enlaces.' },
+  'posts.body': {
+    label: 'Artículo',
+    help: 'Deja una línea en blanco entre párrafos. ## para un título, - para una lista, > para una cita, **negrita**, *cursiva*.',
+  },
+  'posts.tags': { label: 'Etiquetas' },
+  'posts.coverImage': { label: 'Foto de portada', help: 'Opcional. Si la dejas vacía pintamos la ilustración tropical.' },
+  'posts.author': { label: 'Autora' },
+  'posts.publishedAt': { label: 'Fecha de publicación', help: 'AAAA-MM-DD.' },
+  'posts.readMinutes': { label: 'Tiempo de lectura (minutos)' },
+  'posts.published': { label: 'Publicado (visible en el sitio)' },
+  'posts.featured': { label: 'Destacar arriba en el blog' },
+  'posts.order': { label: 'Orden', help: 'Los números más bajos aparecen primero.' },
+
 }
 
 function overlay(lang: string, id: string): SchemaTranslation | undefined {

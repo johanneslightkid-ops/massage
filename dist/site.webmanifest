@@ -1,9 +1,9 @@
 {
-  "name": "Ola Serena · Massage & Beach Spa",
-  "short_name": "Ola Serena",
+  "name": "Massage Playero · Mobile massage in Bávaro & Punta Cana",
+  "short_name": "Massage Playero",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FDFAF6",
-  "theme_color": "#0A302E",
+  "background_color": "#FFFFFF",
+  "theme_color": "#1a82c4",
   "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

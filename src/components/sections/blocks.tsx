@@ -7,10 +7,12 @@ import { useContent } from '@/lib/content-store'
 import { useT } from '@/lib/translations/LanguageProvider'
 import { cn, sortByOrder, whatsappLink } from '@/lib/utils'
 import { Motif } from '@/components/art/Motif'
-import { LeafBlob, MonsteraLeaf, OilSheen, PalmFrond, WaveDivider } from '@/components/art/Decor'
+import { LeafBlob, MonsteraLeaf, OilSheen, PalmFrond } from '@/components/art/Decor'
 import { Container, Section, SectionHead } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
 import { Card, Pill } from '@/components/ui/Bits'
+import { Parallax } from '@/components/ui/Parallax'
+import { Coqui, TainoBand, TainoFace, TainoSpiral, TainoSun } from '@/components/art/Taino'
 import { TestimonialCard } from './cards'
 
 /* ---------------------------------------------------------- where we work */
@@ -21,10 +23,12 @@ export function VenueSection() {
   const venues = sortByOrder(content.venues)
 
   return (
-    <Section tone="cream" className="grain relative overflow-hidden py-20 sm:py-28">
+    <Section tone="cream" cut="top" className="grain overflow-hidden pb-20 sm:pb-28">
       <OilSheen soft blend="normal" />
+      <TainoBand className="absolute inset-x-0 top-[4vw] text-flamingo-400/40" />
       <Container className="relative z-10">
         <SectionHead
+          chapter="II"
           eyebrow={t('venues.eyebrow')}
           title={t('venues.title')}
           script={t('venues.script')}
@@ -33,9 +37,20 @@ export function VenueSection() {
 
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {venues.map((venue, index) => (
-            <Reveal key={venue.id} delay={index * 0.08} className="h-full">
-              <Card className="flex h-full flex-col bg-white/80 p-7 hover:-translate-y-1.5 hover:shadow-lift">
-                <span className="grid size-14 place-items-center rounded-[46%_54%_50%_50%/50%_46%_54%_50%] bg-gradient-to-br from-sky-600 via-lagoon-600 to-palm-500 text-white shadow-soft transition-transform duration-500 group-hover:rotate-6">
+            <Reveal key={venue.id} delay={index * 0.08} from={index % 2 ? 'down' : 'up'} className="h-full">
+              <Card
+                className={cn(
+                  'flex h-full flex-col bg-white/80 p-7 hover:-translate-y-1.5 hover:rotate-0 hover:shadow-lift',
+                  index % 2 ? 'md:rotate-[1.2deg]' : 'md:-rotate-[1.2deg]',
+                )}
+              >
+                <span
+                  aria-hidden="true"
+                  className="display-wonk text-outline pointer-events-none absolute -top-3 right-4 text-[5.5rem] text-lagoon-400/30 italic"
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="grid size-14 place-items-center rounded-[46%_54%_50%_50%/50%_46%_54%_50%] bg-gradient-to-br from-sky-600 via-lagoon-600 to-palm-500 text-pearl shadow-soft transition-transform duration-500 group-hover:rotate-6">
                   <Motif name={venue.icon} className="size-7" />
                 </span>
                 <h3 className="mt-6 font-display text-2xl text-ocean-950">{venue.name}</h3>
@@ -73,9 +88,14 @@ export function BenefitsSection() {
     <Section className="relative overflow-hidden py-20 sm:py-28">
       <LeafBlob className="pointer-events-none absolute -top-24 -right-24 size-96 text-lagoon-500" />
       <MonsteraLeaf className="pointer-events-none absolute -bottom-20 -left-24 h-80 w-64 text-palm-500/12" />
+      <Parallax speed={-0.4} className="pointer-events-none absolute top-1/3 left-[46%] hidden lg:block">
+        <TainoSpiral className="animate-spiral size-40 text-sun-500/25" strokeWidth={1.4} />
+      </Parallax>
 
       <Container>
         <SectionHead
+          chapter="III"
+          align="right"
           eyebrow={t('benefits.eyebrow')}
           title={t('benefits.title')}
           script={t('benefits.script')}
@@ -84,9 +104,23 @@ export function BenefitsSection() {
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, index) => (
-            <Reveal key={benefit.id} delay={index * 0.06} className="h-full">
-              <div className="group flex h-full gap-4 rounded-5xl border border-white/70 bg-white/65 p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:bg-white hover:shadow-lift">
-                <span className="grid size-11 shrink-0 place-items-center rounded-[48%_52%_44%_56%/52%_48%_52%_48%] bg-sky-100 text-sky-800 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-flamingo-500 group-hover:to-sun-400 group-hover:text-white">
+            <Reveal
+              key={benefit.id}
+              delay={index * 0.06}
+              from={index % 3 === 0 ? 'right' : index % 3 === 1 ? 'up' : 'left'}
+              className={cn('h-full', index === 0 && 'sm:col-span-2 lg:col-span-1 lg:row-span-2')}
+            >
+              <div
+                className={cn(
+                  'group relative flex h-full gap-4 overflow-hidden border border-white/70 bg-white/65 p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:bg-white hover:shadow-lift',
+                  index % 2 ? 'rounded-[2.75rem_1.25rem_2.75rem_1.25rem]' : 'rounded-[1.25rem_2.75rem_1.25rem_2.75rem]',
+                  index === 0 && 'lg:flex-col lg:justify-end lg:bg-gradient-to-br lg:from-flamingo-100 lg:via-white/80 lg:to-sun-100 lg:p-9',
+                )}
+              >
+                {index === 0 && (
+                  <TainoSun className="pointer-events-none absolute -top-10 -right-10 hidden size-56 text-flamingo-400/30 lg:block" strokeWidth={1.4} />
+                )}
+                <span className="grid size-11 shrink-0 place-items-center rounded-[48%_52%_44%_56%/52%_48%_52%_48%] bg-sky-100 text-sky-800 transition-all duration-500 group-hover:bg-gradient-to-br group-hover:from-flamingo-500 group-hover:to-sun-400 group-hover:text-pearl">
                   <Motif name={benefit.icon} className="size-5" />
                 </span>
                 <div>
@@ -110,11 +144,12 @@ export function OwnerSection() {
   const site = content.site
 
   return (
-    <Section tone="foam" className="grain relative overflow-hidden py-20 sm:py-28">
+    <Section tone="foam" cut="both" className="grain overflow-hidden">
+      <TainoFace className="pointer-events-none absolute right-[4%] bottom-[10%] hidden w-44 text-lagoon-500/20 lg:block" strokeWidth={1.4} />
       <Container>
-        <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.85fr_1fr] lg:gap-20">
           <Reveal from="right">
-            <div className="relative">
+            <Parallax speed={0.15} rotate={-3} className="relative lg:-rotate-2">
               {/* A soft colour field behind the portrait, offset so it reads as light. */}
               <div
                 aria-hidden="true"
@@ -136,19 +171,22 @@ export function OwnerSection() {
                   </div>
                 )}
               </div>
-              <div className="absolute -right-3 -bottom-5 max-w-64 rounded-[2rem] bg-ocean-950/95 p-5 text-sand-50 shadow-lift backdrop-blur-sm sm:-right-6">
+              <div className="absolute -right-3 -bottom-5 max-w-64 rounded-[2rem] bg-abyss-950/95 p-5 text-sand-50 shadow-lift backdrop-blur-sm sm:-right-6">
                 <p className="script text-[1.05rem] leading-snug text-sun-400">“{site.ownerQuote}”</p>
                 <p className="mt-3 text-[0.72rem] font-bold tracking-[0.14em] text-seafoam-200 uppercase">
                   {site.ownerName} · {site.ownerRole}
                 </p>
               </div>
-            </div>
+            </Parallax>
           </Reveal>
 
           <div>
             <SectionHead eyebrow={t('owner.eyebrow')} title={t('owner.title')} script={t('owner.script')} />
             <Reveal delay={0.1}>
-              <p className="mt-6 text-[1.02rem] leading-[1.75] text-ocean-800/80">{site.ownerStory}</p>
+              <p className="mt-6 text-[1.02rem] leading-[1.75] text-ocean-800/80 first-letter:float-left first-letter:mr-3 first-letter:font-display first-letter:text-[4.2rem] first-letter:leading-[0.8] first-letter:text-flamingo-600 first-letter:italic">
+                {site.ownerStory}
+              </p>
+              <p className="hand mt-5 -rotate-2 text-[2rem] text-lagoon-700">— {site.ownerName.split(' ')[0]}</p>
 
               <div className="mt-8 flex flex-wrap gap-2">
                 <Pill tone="lagoon">
@@ -195,12 +233,14 @@ export function TestimonialsSection() {
   const reviews = sortByOrder(content.testimonials)
 
   return (
-    <Section className="grain relative overflow-hidden bg-gradient-to-br from-seafoam-100 via-sky-50 to-palm-100 py-20 sm:py-28">
+    <Section cut="both" className="grain overflow-hidden bg-gradient-to-br from-seafoam-100 via-sky-50 to-palm-100">
       <OilSheen />
-      <WaveDivider flip from="var(--color-seafoam-100)" tone="var(--color-lagoon-300)" className="absolute inset-x-0 -top-px" />
       <MonsteraLeaf mirrored className="pointer-events-none absolute -right-20 bottom-0 h-96 w-72 text-palm-400/25" />
+      <Parallax speed={-0.35} className="pointer-events-none absolute top-[12%] left-[3%] hidden lg:block">
+        <Coqui className="size-28 text-palm-600/25" strokeWidth={1.8} />
+      </Parallax>
 
-      <Container className="relative z-10 pt-10">
+      <Container className="relative z-10">
         <SectionHead
           eyebrow={t('testimonials.eyebrow')}
           title={t('testimonials.title')}
@@ -209,7 +249,15 @@ export function TestimonialsSection() {
 
         <div className="mt-14 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review, index) => (
-            <Reveal key={review.id} delay={index * 0.06} className="h-full">
+            <Reveal
+              key={review.id}
+              delay={index * 0.06}
+              className={cn(
+                'h-full',
+                index % 3 === 1 && 'lg:mt-12',
+                index % 2 ? 'md:rotate-[0.8deg]' : 'md:-rotate-[0.8deg]',
+              )}
+            >
               <TestimonialCard review={review} />
             </Reveal>
           ))}
@@ -251,7 +299,7 @@ export function PaymentsSection({ id }: { id?: string }) {
           {methods.map((method, index) => (
             <Reveal key={method.id} delay={index * 0.06} className="h-full">
               <div className="flex h-full flex-col rounded-5xl border border-white/70 bg-white/70 p-6 shadow-soft transition-all duration-500 hover:-translate-y-1.5 hover:shadow-lift">
-                <span className="inline-flex h-9 w-fit items-center rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-3.5 text-[0.75rem] font-bold tracking-wide text-white">
+                <span className="inline-flex h-9 w-fit items-center rounded-full bg-gradient-to-r from-sky-700 to-lagoon-600 px-3.5 text-[0.75rem] font-bold tracking-wide text-pearl">
                   {paymentGlyphs[method.icon] ?? method.name}
                 </span>
                 <h3 className="mt-5 font-display text-xl text-ocean-950">{method.name}</h3>
@@ -291,7 +339,7 @@ export function FaqSection({ items }: { items?: Faq[] }) {
   const [open, setOpen] = useState<string | null>(faqs[0]?.id ?? null)
 
   return (
-    <Section tone="cream" className="grain py-20 sm:py-28">
+    <Section tone="cream" cut="top" className="grain pb-20 sm:pb-28">
       <Container className="max-w-3xl">
         <SectionHead align="center" eyebrow={t('faq.eyebrow')} title={t('faq.title')} script={t('faq.script')} />
 
@@ -353,8 +401,11 @@ export function CtaBand() {
     <Section className="relative overflow-hidden py-20 sm:py-28">
       <Container>
         <Reveal>
-          <div className="grain relative overflow-hidden rounded-6xl bg-gradient-to-br from-lagoon-200 via-seafoam-100 to-palm-200 px-7 py-14 text-center shadow-lift ring-1 ring-lagoon-300/50 sm:px-16 sm:py-20">
+          <div className="grain relative overflow-hidden rounded-[3.5rem_1.75rem_3.5rem_1.75rem] bg-gradient-to-br from-lagoon-200 via-seafoam-100 to-flamingo-100 px-7 py-14 text-center shadow-float ring-1 ring-lagoon-300/50 sm:px-16 sm:py-20">
             <OilSheen />
+            <TainoBand className="absolute inset-x-0 top-5 text-flamingo-500/35" />
+            <TainoBand className="absolute inset-x-0 bottom-5 rotate-180 text-lagoon-600/30" />
+            <TainoSun className="animate-spiral pointer-events-none absolute top-1/2 left-1/2 size-[34rem] -translate-x-1/2 -translate-y-1/2 text-sun-500/15" strokeWidth={1} />
             <PalmFrond className="pointer-events-none absolute -top-10 -left-16 h-72 w-56 animate-sway text-palm-500/35" />
             <MonsteraLeaf
               mirrored
@@ -365,7 +416,7 @@ export function CtaBand() {
               <p className="text-[0.7rem] font-bold tracking-[0.22em] text-palm-700 uppercase">
                 {site.neighborhood} · {site.city}
               </p>
-              <h2 className="mt-5 text-4xl leading-[1.05] text-ocean-950 sm:text-5xl">
+              <h2 className="display-wonk mt-5 text-[2.7rem] text-ocean-950 sm:text-6xl">
                 {t('cta.title')}{' '}
                 <span className="script bg-gradient-to-r from-flamingo-500 to-sun-600 bg-clip-text text-transparent">
                   {t('cta.script')}

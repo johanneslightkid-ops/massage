@@ -240,6 +240,30 @@ export interface GalleryItem {
   order: number
 }
 
+/**
+ * A blog post. One per language document, same `id` in both — the slug is
+ * per-language so each URL reads naturally in its own language.
+ */
+export interface BlogPost {
+  id: string
+  slug: string
+  title: string
+  excerpt: string
+  /** Light Markdown: ## headings, - lists, > quotes, **bold**, *italic*, [links](url). */
+  body: string
+  category: string
+  tags: string[]
+  coverImage: string
+  author: string
+  /** ISO date, YYYY-MM-DD. */
+  publishedAt: string
+  readMinutes: number
+  /** Unpublished posts are drafts: kept in the admin, hidden from the site. */
+  published: boolean
+  featured: boolean
+  order: number
+}
+
 export interface Booking {
   id: string
   createdAt: string
@@ -269,6 +293,7 @@ export interface SiteContent {
   packages: Package[]
   payments: PaymentMethod[]
   gallery: GalleryItem[]
+  posts: BlogPost[]
 }
 
 /** Keys of SiteContent that hold an array of records — everything CRUD-able. */

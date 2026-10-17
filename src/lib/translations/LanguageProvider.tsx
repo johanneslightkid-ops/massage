@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import type { LanguageCode, TranslateVars } from './index'
-import { isSupportedLanguage, localeTag, otherLanguage, t as translate } from './index'
+import { isLanguageLoaded, isSupportedLanguage, loadLanguage, localeTag, otherLanguage, t as translate } from './index'
 
 const STORAGE_KEY = 'preferred_language'
 
@@ -23,7 +23,7 @@ const LanguageContext = createContext<LanguageState | null>(null)
  *
  * Precedence: `?lang=` in the URL → saved preference → browser language.
  */
-function initialLanguage(): LanguageCode {
+export function initialLanguage(): LanguageCode {
   if (typeof window === 'undefined') return 'en'
 
   const fromUrl = new URLSearchParams(window.location.search).get('lang')
@@ -46,6 +46,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // so a shared link carries the language the sender was reading in.
   useEffect(() => {
     document.documentElement.lang = language
+    // The Worker reads this to inline the right language's content into the
+    // next page it serves, before any JavaScript runs.
+    document.cookie = `lang=${language}; Path=/; Max-Age=31536000; SameSite=Lax`
     try {
       window.localStorage.setItem(STORAGE_KEY, language)
     } catch {
@@ -59,8 +62,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
   }, [language])
 
-  const setLanguage = useCallback((lang: LanguageCode) => setLanguageState(lang), [])
-  const toggleLanguage = useCallback(() => setLanguageState(otherLanguage), [])
+  // A language's dictionary is a separate chunk: fetch it, then switch, so
+  // the page never renders a half-English frame in between.
+  const setLanguage = useCallback((lang: LanguageCode) => {
+    if (isLanguageLoaded(lang)) setLanguageState(lang)
+    else void loadLanguage(lang).then(() => setLanguageState(lang))
+  }, [])
+  const toggleLanguage = useCallback(() => setLanguage(otherLanguage(language)), [language, setLanguage])
 
   const t = useCallback(
     (key: string, vars?: TranslateVars) => translate(key, language, vars),

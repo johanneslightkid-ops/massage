@@ -50,7 +50,7 @@ function OptionButton({
       )}
     >
       {selected && (
-        <span className="absolute top-3 right-3 grid size-5 place-items-center rounded-full bg-lagoon-500 text-white">
+        <span className="absolute top-3 right-3 grid size-5 place-items-center rounded-full bg-lagoon-500 text-pearl">
           <Check className="size-3" strokeWidth={3} />
         </span>
       )}

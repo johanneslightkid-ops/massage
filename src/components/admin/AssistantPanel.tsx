@@ -87,7 +87,7 @@ export function AssistantPanel({
         className={cn(
           'group relative mt-7 flex w-full items-center gap-4 overflow-hidden rounded-5xl p-5 text-left shadow-lift transition-all duration-500 sm:p-6',
           assistant.live
-            ? 'bg-gradient-to-br from-flamingo-600 via-coral-500 to-sun-500 text-white'
+            ? 'bg-gradient-to-br from-flamingo-600 via-coral-500 to-sun-500 text-pearl'
             : 'bg-gradient-to-br from-sky-700 via-lagoon-600 to-palm-600 text-sand-50',
         )}
       >
@@ -103,7 +103,7 @@ export function AssistantPanel({
           <span className="block font-display text-xl leading-tight sm:text-2xl">
             {assistant.live ? t('ai.finish') : t('ai.start')}
           </span>
-          <span className="mt-1 flex items-center gap-2 text-[0.82rem] font-semibold tracking-wide text-white/85 uppercase">
+          <span className="mt-1 flex items-center gap-2 text-[0.82rem] font-semibold tracking-wide text-pearl/85 uppercase">
             <span
               className={cn(
                 'size-2 rounded-full',
@@ -197,7 +197,7 @@ export function AssistantPanel({
                       type="button"
                       disabled={assistant.applying}
                       onClick={() => assistant.pending && void assistant.apply(assistant.pending)}
-                      className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-palm-600 to-lagoon-600 px-5 text-[0.85rem] font-bold text-white disabled:opacity-60"
+                      className="inline-flex h-10 items-center gap-2 rounded-full bg-gradient-to-r from-palm-600 to-lagoon-600 px-5 text-[0.85rem] font-bold text-pearl disabled:opacity-60"
                     >
                       {assistant.applying ? <Loader2 className="size-4 animate-spin" /> : <Check className="size-4" />}
                       {t('ai.confirm')}
@@ -228,8 +228,8 @@ export function AssistantPanel({
                   className={cn(
                     'relative grid size-13 shrink-0 place-items-center rounded-full shadow-soft transition-all duration-300',
                     assistant.listening
-                      ? 'scale-105 bg-gradient-to-br from-flamingo-600 to-coral-500 text-white'
-                      : 'bg-gradient-to-br from-sky-700 to-lagoon-600 text-white hover:scale-105',
+                      ? 'scale-105 bg-gradient-to-br from-flamingo-600 to-coral-500 text-pearl'
+                      : 'bg-gradient-to-br from-sky-700 to-lagoon-600 text-pearl hover:scale-105',
                   )}
                 >
                   {assistant.listening && (
@@ -256,7 +256,7 @@ export function AssistantPanel({
                   onClick={submit}
                   disabled={!draft.trim() || busy}
                   aria-label={t('ai.send')}
-                  className="grid size-12 shrink-0 place-items-center rounded-full bg-ocean-950 text-sand-50 transition-colors hover:bg-ocean-900 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="grid size-12 shrink-0 place-items-center rounded-full bg-abyss-950 text-sand-50 transition-colors hover:bg-abyss-900 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Send className="size-4.5" />
                 </button>

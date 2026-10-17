@@ -8,12 +8,14 @@ import { cn, whatsappLink } from '@/lib/utils'
 import { Motif } from '@/components/art/Motif'
 import { MonsteraLeaf } from '@/components/art/Decor'
 import { LanguageToggle } from '@/components/ui/LanguageToggle'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 /** Route → translation key. Labels are resolved at render, never stored. */
 export const publicNav = [
   { to: '/', key: 'nav.home' },
   { to: '/treatments', key: 'nav.treatments' },
   { to: '/discover', key: 'nav.discover' },
+  { to: '/blog', key: 'nav.blog' },
   { to: '/team', key: 'nav.team' },
   { to: '/book', key: 'nav.book' },
 ]
@@ -58,7 +60,7 @@ export function Header() {
   return (
     <>
       {site.announcementEnabled && site.announcementText && (
-        <div className="relative z-40 overflow-hidden bg-gradient-to-r from-lagoon-200 via-seafoam-200 to-palm-200 px-4 py-2 text-center text-[0.76rem] leading-snug font-semibold tracking-wide text-palm-900">
+        <div className="relative z-40 overflow-hidden bg-gradient-to-r from-lagoon-200 via-seafoam-100 to-palm-200 px-4 py-2 text-center text-[0.76rem] leading-snug font-semibold tracking-wide text-palm-900">
           <span className="mx-auto block max-w-3xl">{site.announcementText}</span>
         </div>
       )}
@@ -72,7 +74,7 @@ export function Header() {
       >
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-3.5 sm:px-8">
           <Link to="/" className="group flex min-w-0 items-center gap-2.5 lg:shrink-0 sm:gap-3" aria-label={site.brandName}>
-            <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[42%_58%_52%_48%/48%_52%_48%_52%] bg-gradient-to-br from-sky-600 via-lagoon-600 to-palm-500 text-white shadow-soft transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105">
+            <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-[42%_58%_52%_48%/48%_52%_48%_52%] bg-gradient-to-br from-sky-600 via-lagoon-600 to-palm-500 text-pearl shadow-soft transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105">
               <Motif name="wave" className="relative size-5" strokeWidth={1.9} />
             </span>
             <span className="min-w-0 leading-tight">
@@ -85,7 +87,7 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-0.5 xl:flex">
             {publicNav.map((item) => (
               <NavLink
                 key={item.to}
@@ -115,6 +117,7 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle />
             <LanguageToggle variant="icon" />
 
             <a
@@ -132,7 +135,7 @@ export function Header() {
               onClick={() => setOpen((value) => !value)}
               aria-label={open ? t('nav.close_menu') : t('nav.open_menu')}
               aria-expanded={open}
-              className="grid size-11 place-items-center rounded-2xl border border-sky-900/12 bg-white/70 text-ocean-950 backdrop-blur-sm transition-colors hover:bg-white lg:hidden"
+              className="grid size-11 place-items-center rounded-2xl border border-sky-900/12 bg-white/70 text-ocean-950 backdrop-blur-sm transition-colors hover:bg-white xl:hidden"
             >
               {open ? <X className="size-5" /> : <Menu className="size-5" />}
             </button>
@@ -143,7 +146,7 @@ export function Header() {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-40 xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -152,11 +155,11 @@ export function Header() {
             <button
               type="button"
               aria-label={t('nav.close_menu')}
-              className="absolute inset-0 bg-ocean-950/45 backdrop-blur-sm"
+              className="absolute inset-0 bg-abyss-950/45 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             />
             <motion.nav
-              className="grain absolute inset-x-0 top-0 overflow-hidden rounded-b-6xl bg-gradient-to-b from-sky-50 via-sand-50 to-seafoam-50 pt-24 pb-8 shadow-lift"
+              className="grain absolute inset-x-0 top-0 overflow-hidden rounded-b-6xl bg-gradient-to-b from-sky-50 via-white to-seafoam-50 pt-24 pb-8 shadow-lift"
               initial={{ y: '-100%' }}
               animate={{ y: 0 }}
               exit={{ y: '-100%' }}

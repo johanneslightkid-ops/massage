@@ -30,7 +30,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
     return json({
       cloudName: env.CLOUDINARY_CLOUD_NAME ?? '',
       apiKey:    env.CLOUDINARY_API_KEY ?? '',
-      folder:    'ola-serena',
+      folder:    'massage-playero',
       configured: Boolean(env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET),
     })
   }
@@ -48,7 +48,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
     const body = (await request.json().catch(() => ({}))) as { folder?: string; publicId?: string }
     const timestamp = Math.floor(Date.now() / 1000)
-    const folder = (body.folder || 'ola-serena').replace(/[^a-zA-Z0-9_\-\/]/g, '').slice(0, 80)
+    const folder = (body.folder || 'massage-playero').replace(/[^a-zA-Z0-9_\-\/]/g, '').slice(0, 80)
 
     // Parameters to sign — alphabetical order per Cloudinary docs.
     const paramsToSign: Record<string, string | number> = { folder, timestamp }

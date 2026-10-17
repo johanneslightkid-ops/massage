@@ -75,7 +75,7 @@ export function Discover() {
       </PageHeader>
 
       {/* Sticky filter rail — the primary control on a phone. */}
-      <div className="sticky top-[var(--header-h,0px)] z-30 border-b border-sky-900/8 bg-sand-50/94 backdrop-blur-xl">
+      <div className="sticky top-[var(--header-h,0px)] z-30 border-b border-sky-900/8 bg-white/94 backdrop-blur-xl">
         <Container className="py-3">
           <div className="flex items-center gap-3">
             <div className="relative flex-1">
@@ -170,7 +170,7 @@ export function Discover() {
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 to="/book"
-                className="inline-flex h-14 items-center rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 px-7 text-[0.95rem] font-bold text-white shadow-soft transition-all hover:shadow-pink hover:brightness-105"
+                className="inline-flex h-14 items-center rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 px-7 text-[0.95rem] font-bold text-pearl shadow-soft transition-all hover:shadow-pink hover:brightness-105"
               >
                 {t('discover.pairs.cta')}
               </Link>

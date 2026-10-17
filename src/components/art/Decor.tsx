@@ -341,9 +341,9 @@ export function SceneImage({
     return <img src={src} alt={alt} loading="lazy" decoding="async" className={cn('size-full object-cover', className)} />
   }
   if (hasServiceScene(slug)) {
-    return <ServiceScene slug={slug!} className={cn('size-full', className)} />
+    return <ServiceScene slug={slug!} className={cn('scene-art size-full', className)} />
   }
-  return <GeneratedScene seed={seed} className={cn('size-full', className)} />
+  return <GeneratedScene seed={seed} className={cn('scene-art size-full', className)} />
 }
 
 /* ------------------------------------------------- bright tropical extras */

@@ -3,6 +3,8 @@ import { RotateCcw } from 'lucide-react'
 import { localizedSettingsGroups } from '@shared/schema-i18n'
 import type { SiteSettings } from '@shared/types'
 import { api } from '@/lib/api'
+import { mirrorSettings, useAutoTranslate } from '@/lib/auto-translate'
+import { getLanguageDisplayName } from '@/lib/translations'
 import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
 import { FieldInput } from './FieldInput'
@@ -17,6 +19,7 @@ export function SettingsEditor({
 }) {
   const { t, language } = useLanguage()
   const groups = useMemo(() => localizedSettingsGroups(language), [language])
+  const autoTranslate = useAutoTranslate()
 
   const [draft, setDraft] = useState<SiteSettings>(settings)
   const [group, setGroup] = useState(groups[0].key)
@@ -35,9 +38,24 @@ export function SettingsEditor({
     setError(null)
     try {
       await api.saveSettings(draft, language)
+      if (autoTranslate.enabled) {
+        setStatus(t('admin.translating'))
+        try {
+          const mirrored = await mirrorSettings(settings, draft, language)
+          setStatus(
+            mirrored.languages.length
+              ? t('admin.saved_translated', { languages: mirrored.languages.map(getLanguageDisplayName).join(', ') })
+              : t('action.saved'),
+          )
+        } catch (cause) {
+          setError(t('admin.translate_failed', { reason: cause instanceof Error ? cause.message : '' }))
+          setStatus(t('action.saved'))
+        }
+      } else {
+        setStatus(t('action.saved'))
+      }
       await onSaved()
-      setStatus(t('action.saved'))
-      setTimeout(() => setStatus(null), 2200)
+      setTimeout(() => setStatus(null), 3200)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('admin.save_error'))
     } finally {
@@ -108,7 +126,7 @@ export function SettingsEditor({
             <button
               type="button"
               onClick={resetToSeed}
-              className="h-9 rounded-full bg-coral-500 px-4 text-[0.82rem] font-bold text-white"
+              className="h-9 rounded-full bg-coral-500 px-4 text-[0.82rem] font-bold text-pearl"
             >
               {t('action.yes_restore')}
             </button>

@@ -5,6 +5,8 @@ import type { CollectionSchema } from '@shared/schema'
 import { blankRecord } from '@shared/schema'
 import type { CollectionKey } from '@shared/types'
 import { api } from '@/lib/api'
+import { mirrorCollection, useAutoTranslate } from '@/lib/auto-translate'
+import { getLanguageDisplayName } from '@/lib/translations'
 import { useContent } from '@/lib/content-store'
 import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { cn } from '@/lib/utils'
@@ -29,6 +31,7 @@ export function CollectionEditor({
 }) {
   const { t, language } = useLanguage()
   const { content } = useContent()
+  const autoTranslate = useAutoTranslate()
 
   /**
    * Choices for any `refs` field in this schema — journeys point at services
@@ -113,9 +116,27 @@ export function CollectionEditor({
       const normalised = sorted.map((row, index) => ({ ...row, order: index + 1 }))
       await api.saveCollection(schema.key as CollectionKey, normalised, language)
       setDraft(normalised)
+
+      // The save above is the one that matters; translation is a follow-on
+      // that can fail (AI busy) without losing the owner's edit.
+      if (autoTranslate.enabled) {
+        setStatus(t('admin.translating'))
+        try {
+          const mirrored = await mirrorCollection(schema.key as CollectionKey, rows, normalised, language)
+          setStatus(
+            mirrored.languages.length
+              ? t('admin.saved_translated', { languages: mirrored.languages.map(getLanguageDisplayName).join(', ') })
+              : t('action.saved'),
+          )
+        } catch (cause) {
+          setError(t('admin.translate_failed', { reason: cause instanceof Error ? cause.message : '' }))
+          setStatus(t('action.saved'))
+        }
+      } else {
+        setStatus(t('action.saved'))
+      }
       await onSaved()
-      setStatus(t('action.saved'))
-      setTimeout(() => setStatus(null), 2200)
+      setTimeout(() => setStatus(null), 3200)
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : t('admin.save_error'))
     } finally {
@@ -284,7 +305,7 @@ export function CollectionEditor({
             <button
               type="button"
               onClick={resetToSeed}
-              className="h-9 rounded-full bg-coral-500 px-4 text-[0.82rem] font-bold text-white"
+              className="h-9 rounded-full bg-coral-500 px-4 text-[0.82rem] font-bold text-pearl"
             >
               {t('action.yes_restore')}
             </button>

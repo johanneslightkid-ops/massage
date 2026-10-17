@@ -57,7 +57,7 @@ function ListEditor({ value, onChange }: { value: string[]; onChange: (next: str
         <button
           type="button"
           onClick={add}
-          className="grid size-12 shrink-0 place-items-center rounded-2xl bg-ocean-900 text-sand-50 transition-colors hover:bg-ocean-800"
+          className="grid size-12 shrink-0 place-items-center rounded-2xl bg-abyss-900 text-sand-50 transition-colors hover:bg-abyss-800"
           aria-label={t('field.add_item')}
         >
           <Plus className="size-4" />
@@ -278,7 +278,7 @@ async function uploadToCloudinaryOrFallback(file: File): Promise<string> {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ folder: 'ola-serena' }),
+      body: JSON.stringify({ folder: 'massage-playero' }),
     })
     if (!signRes.ok) throw new Error(await signRes.text())
     const sig = (await signRes.json()) as {
@@ -469,7 +469,7 @@ export function FieldInput({
                 onChange={(event) => onChange(event.target.value)}
                 className={cn(inputBase, 'flex-1')}
               />
-              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-white transition-colors hover:from-lagoon-600 hover:to-palm-600" title={t('field.upload_title')}>
+              <label className="cursor-pointer grid shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-lagoon-500 to-palm-500 px-5 text-pearl transition-colors hover:from-lagoon-600 hover:to-palm-600" title={t('field.upload_title')}>
                 <span className="sr-only">{t('field.upload')}</span>
                 <Upload className="size-4" />
                 <input

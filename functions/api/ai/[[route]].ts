@@ -4,6 +4,8 @@
  *   GET  /api/ai/status      is the AI binding present, and which models
  *   POST /api/ai/chat        the guided admin conversation (llama-3.1-8b)
  *   POST /api/ai/translate   text or a batch of fields, en ↔ es
+ *                            (`long: true` for whole articles, chunked by paragraph)
+ *   POST /api/ai/blog        drafts a blog post (llama-3.3-70b, 8b fallback)
  *   POST /api/ai/stt         speech → text (whisper)
  *   POST /api/ai/tts         text → speech (melotts, mms-tts fallback)
  *
@@ -20,6 +22,9 @@ interface Env {
 }
 
 const TEXT_MODEL = '@cf/meta/llama-3.1-8b-instruct'
+// Long-form writing needs the bigger model: the 8B one loses the thread of an
+// article after a few paragraphs. It stays the fallback if the 70B is busy.
+const WRITER_MODEL = '@cf/meta/llama-3.3-70b-instruct-fp8-fast'
 const STT_MODEL = '@cf/openai/whisper'
 // MeloTTS gives natural voices in EN + ES; mms-tts is the fallback.
 const TTS_MODEL = '@cf/myshell-ai/melotts'
@@ -40,7 +45,7 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   if (path === 'status' && method === 'GET') {
     return json({
       ready: Boolean(env.AI),
-      models: { text: TEXT_MODEL, stt: STT_MODEL, tts: TTS_MODEL },
+      models: { text: TEXT_MODEL, writer: WRITER_MODEL, stt: STT_MODEL, tts: TTS_MODEL },
     })
   }
 
@@ -107,6 +112,27 @@ export const onRequest: PagesFunction<Env> = async (context) => {
 
       const text = (body.text ?? '').trim()
       if (!text) return json({ translated: '' })
+
+      // Long mode: a whole article. Split on blank lines into ~1,400-character
+      // chunks so no single call is long enough for the model to start
+      // summarising instead of translating, and keep the Markdown marks.
+      if ((body as { long?: boolean }).long) {
+        const chunks: string[] = []
+        let current = ''
+        for (const paragraph of text.slice(0, 24_000).split(/\n{2,}/)) {
+          if (current && current.length + paragraph.length > 1400) {
+            chunks.push(current)
+            current = ''
+          }
+          current = current ? `${current}\n\n${paragraph}` : paragraph
+        }
+        if (current) chunks.push(current)
+
+        const out: string[] = []
+        for (const chunk of chunks) out.push(await translateLong(env.AI, chunk, target))
+        return json({ translated: out.join('\n\n') })
+      }
+
       const out = (await env.AI.run(TEXT_MODEL, {
         messages: [
           {
@@ -119,6 +145,38 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         temperature: 0.1,
       })) as { response?: string }
       return json({ translated: cleanTranslation(out.response ?? '') })
+    }
+
+    /* ------------------------------------------------------------- blog */
+
+    if (path === 'blog' && method === 'POST') {
+      const body = (await request.json().catch(() => ({}))) as {
+        topic?: string
+        keywords?: string
+        tone?: string
+        length?: string
+        language?: string
+        category?: string
+        brand?: string
+        area?: string
+        services?: string[]
+      }
+      const topic = (body.topic ?? '').trim().slice(0, 600)
+      if (!topic) return fail(400, 'Tell the writer what the article is about.')
+
+      const draft = await writeBlog(env.AI, {
+        topic,
+        keywords: (body.keywords ?? '').slice(0, 300),
+        tone: (body.tone ?? 'warm').slice(0, 40),
+        length: body.length === 'short' ? 'short' : body.length === 'long' ? 'long' : 'medium',
+        lang: body.language === 'es' ? 'es' : 'en',
+        category: (body.category ?? '').slice(0, 60),
+        brand: (body.brand ?? 'the studio').slice(0, 80),
+        area: (body.area ?? 'Bávaro, Punta Cana').slice(0, 120),
+        services: (body.services ?? []).slice(0, 14).map((name) => String(name).slice(0, 60)),
+      })
+      if (!draft) return fail(502, 'The writer did not return a usable draft. Try again, or rephrase the topic.')
+      return json(draft)
     }
 
     /* -------------------------------------------------------------- stt */
@@ -193,6 +251,132 @@ async function translateBatch(
     return result
   } catch {
     return {}
+  }
+}
+
+async function translateLong(ai: Ai, text: string, target: string): Promise<string> {
+  const messages = [
+    {
+      role: 'system',
+      content:
+        `Translate the user's article excerpt into ${target}. It is Markdown: keep every "## ", "### ", "- ", "> ", ` +
+        `"**", "*" and [link](url) exactly where they are, and keep the blank lines between paragraphs. ` +
+        `Keep brand names, place names, prices and numbers unchanged. Translate everything else, completely — never summarise. ` +
+        `Reply with the translation only.`,
+    },
+    { role: 'user', content: text },
+  ]
+  for (const model of [WRITER_MODEL, TEXT_MODEL]) {
+    try {
+      const out = (await ai.run(model as Parameters<Ai['run']>[0], { messages, max_tokens: 1800, temperature: 0.15 } as never)) as {
+        response?: string
+      }
+      const value = cleanTranslation(out.response ?? '')
+      if (value) return value
+    } catch {
+      // Try the next model.
+    }
+  }
+  return text
+}
+
+interface BlogBrief {
+  topic: string
+  keywords: string
+  tone: string
+  length: 'short' | 'medium' | 'long'
+  lang: 'en' | 'es'
+  category: string
+  brand: string
+  area: string
+  services: string[]
+}
+
+export interface BlogDraft {
+  title: string
+  excerpt: string
+  category: string
+  tags: string[]
+  body: string
+  model: string
+}
+
+/**
+ * Drafts one article. The model writes a small labelled header and then the
+ * body as Markdown — a format it gets right far more often than a JSON object
+ * with a long string inside, which it tends to break with an unescaped quote.
+ */
+async function writeBlog(ai: Ai, brief: BlogBrief): Promise<BlogDraft | null> {
+  const words = brief.length === 'short' ? '300 to 400' : brief.length === 'long' ? '900 to 1100' : '550 to 700'
+  const language = brief.lang === 'es' ? 'Spanish (Dominican, warm and natural, using "tú")' : 'English'
+
+  const system =
+    `You write the blog for ${brief.brand}, a small women-run mobile massage business that visits guests in their hotel room, villa or terrace in ${brief.area}, Dominican Republic. ` +
+    `Readers are tourists on holiday, often reading on a phone. Write in ${language}.\n\n` +
+    `VOICE: ${brief.tone}, plain, specific and kind. Practical advice a local therapist would really give. Never salesy, never medical claims, no invented prices, no invented reviews, no invented people.\n` +
+    (brief.services.length ? `TREATMENTS WE OFFER (mention only if relevant): ${brief.services.join(', ')}.\n` : '') +
+    `LENGTH: ${words} words in the body.\n\n` +
+    `FORMAT — reply with exactly this, nothing before or after:\n` +
+    `TITLE: <a warm, specific title, max 80 characters>\n` +
+    `EXCERPT: <one or two sentences that make someone want to read it, max 220 characters>\n` +
+    `CATEGORY: <one or two words>\n` +
+    `TAGS: <three to five short tags, comma separated>\n` +
+    `---\n` +
+    `<the article body in Markdown: short paragraphs separated by blank lines, two to four "## " subheadings, ` +
+    `at most one "- " list, at most one "> " quote. Do not repeat the title. End with a gentle line inviting readers to message us on WhatsApp.>`
+
+  const user =
+    `Write an article about: ${brief.topic}` +
+    (brief.keywords ? `\nWork in these phrases naturally: ${brief.keywords}` : '') +
+    (brief.category ? `\nCategory: ${brief.category}` : '')
+
+  for (const model of [WRITER_MODEL, TEXT_MODEL]) {
+    try {
+      const out = (await ai.run(model as Parameters<Ai['run']>[0], {
+        messages: [
+          { role: 'system', content: system },
+          { role: 'user', content: user },
+        ],
+        max_tokens: brief.length === 'long' ? 2400 : 1600,
+        temperature: 0.7,
+      } as never)) as { response?: string }
+      const draft = parseDraft(out.response ?? '', brief)
+      if (draft) return { ...draft, model }
+    } catch {
+      // Try the next model.
+    }
+  }
+  return null
+}
+
+function parseDraft(raw: string, brief: BlogBrief): Omit<BlogDraft, 'model'> | null {
+  const text = raw.replace(/^```(?:markdown|md)?\s*|\s*```$/g, '').trim()
+  const field = (name: string) => {
+    const match = text.match(new RegExp(`^\\**${name}\\**\\s*:\\s*(.+)$`, 'im'))
+    return match ? match[1].replace(/^["“]|["”]$/g, '').trim() : ''
+  }
+  const split = text.search(/^-{3,}\s*$/m)
+  let body = split >= 0 ? text.slice(split).replace(/^-{3,}\s*/, '') : ''
+  if (!body) {
+    // No separator: take everything after the last header line.
+    body = text
+      .split('\n')
+      .filter((line) => !/^\**(TITLE|EXCERPT|CATEGORY|TAGS)\**\s*:/i.test(line.trim()))
+      .join('\n')
+  }
+  body = body.trim()
+  const title = field('TITLE')
+  if (!title || body.length < 200) return null
+  return {
+    title: title.slice(0, 120),
+    excerpt: (field('EXCERPT') || body.replace(/[#>*_-]/g, '').slice(0, 200)).slice(0, 280),
+    category: (field('CATEGORY') || brief.category || (brief.lang === 'es' ? 'Bienestar' : 'Wellbeing')).slice(0, 40),
+    tags: field('TAGS')
+      .split(/[,;]/)
+      .map((tag) => tag.replace(/^#/, '').trim().toLowerCase())
+      .filter(Boolean)
+      .slice(0, 6),
+    body,
   }
 }
 

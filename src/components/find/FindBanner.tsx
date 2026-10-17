@@ -8,6 +8,7 @@ import { Motif } from '@/components/art/Motif'
 import { Container, Section } from '@/components/ui/Section'
 import { Reveal } from '@/components/ui/Reveal'
 import { LeafBlob, MonsteraLeaf, OilSheen } from '@/components/art/Decor'
+import { Coqui, TainoBand } from '@/components/art/Taino'
 
 /**
  * The front door, on the home page directly under the hero.
@@ -38,10 +39,17 @@ export function FindBanner({ journeys }: { journeys: MassageJourney[] }) {
   })()
 
   return (
-    <Section className="relative overflow-hidden py-16 sm:py-24">
+    <Section className="relative z-20 -mt-4 overflow-x-clip pt-0 pb-16 sm:pb-24">
       <OilSheen className="opacity-60" />
       <Container className="relative">
-        <div className="relative overflow-hidden rounded-[2.5rem] border border-white/70 bg-white/80 p-7 shadow-lift ring-1 ring-sky-900/5 backdrop-blur-sm sm:p-11">
+        {/*
+          The concierge card is laid over the shoreline at a slight tilt — the
+          first thing on the page that is not quite square, so the rest of the
+          page is allowed not to be either.
+        */}
+        <div className="relative overflow-hidden rounded-[2.5rem_1.5rem_2.5rem_1.5rem] border border-white/70 bg-white/88 p-7 pl-9 shadow-float ring-1 ring-sky-900/5 backdrop-blur-xl sm:p-11 sm:pl-14 lg:-rotate-1">
+          <div aria-hidden="true" className="larimar absolute inset-y-0 left-0 w-3 sm:w-5" />
+          <Coqui className="pointer-events-none absolute right-5 bottom-5 size-16 text-palm-500/30 sm:size-20 lg:hidden" />
           {/*
             Desktop gets the concierge panel the brief asked for: the questions
             on the left, tropical atmosphere on the right. On a phone the art is
@@ -55,10 +63,11 @@ export function FindBanner({ journeys }: { journeys: MassageJourney[] }) {
           </div>
 
           <div className="relative max-w-2xl lg:max-w-[34rem]">
-            <p className="text-[0.72rem] font-bold tracking-[0.2em] text-lagoon-800 uppercase">
+            <p className="inline-flex items-center gap-3 text-[0.68rem] font-extrabold tracking-[0.24em] text-lagoon-800 uppercase">
+              <TainoBand variant="steps" className="w-9 text-flamingo-500" />
               {t('find.home_kicker')}
             </p>
-            <h2 className="mt-3 font-display text-[2rem] leading-[1.1] text-ocean-950 sm:text-[2.8rem]">
+            <h2 className="display-wonk mt-4 text-[2.2rem] text-ocean-950 sm:text-[3.1rem]">
               {t('find.home_title')}
             </h2>
             <p className="mt-4 leading-relaxed text-ocean-800/85">{t('find.home_lead')}</p>

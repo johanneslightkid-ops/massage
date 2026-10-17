@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ContentProvider } from './lib/content-store'
 import { LanguageProvider } from './lib/translations/LanguageProvider'
+import { ThemeProvider } from './lib/theme'
 import { MobileNavProvider } from './components/layout/mobile-nav'
 import { Layout } from './components/layout/Layout'
 import { Home } from './pages/Home'
@@ -12,6 +13,8 @@ const FindYourMassage = lazy(() =>
   import('./pages/FindYourMassage').then((m) => ({ default: m.FindYourMassage })),
 )
 const Discover = lazy(() => import('./pages/Discover').then((m) => ({ default: m.Discover })))
+const Blog = lazy(() => import('./pages/Blog').then((m) => ({ default: m.Blog })))
+const BlogPost = lazy(() => import('./pages/BlogPost').then((m) => ({ default: m.BlogPost })))
 const Team = lazy(() => import('./pages/Team').then((m) => ({ default: m.Team })))
 const Book = lazy(() => import('./pages/Book').then((m) => ({ default: m.Book })))
 const Admin = lazy(() => import('./pages/Admin').then((m) => ({ default: m.Admin })))
@@ -20,6 +23,7 @@ const NotFound = lazy(() => import('./pages/NotFound').then((m) => ({ default: m
 export function App() {
   return (
     <BrowserRouter>
+      <ThemeProvider>
       <LanguageProvider>
         <MobileNavProvider>
           <ContentProvider>
@@ -47,6 +51,22 @@ export function App() {
                   element={
                     <Suspense fallback={<PageFallback />}>
                       <Discover />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="blog"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <Blog />
+                    </Suspense>
+                  }
+                />
+                <Route
+                  path="blog/:slug"
+                  element={
+                    <Suspense fallback={<PageFallback />}>
+                      <BlogPost />
                     </Suspense>
                   }
                 />
@@ -87,6 +107,7 @@ export function App() {
           </ContentProvider>
         </MobileNavProvider>
       </LanguageProvider>
+      </ThemeProvider>
     </BrowserRouter>
   )
 }

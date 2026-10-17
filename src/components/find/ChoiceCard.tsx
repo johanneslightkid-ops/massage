@@ -76,7 +76,7 @@ export function ChoiceCard({
         aria-hidden
         className={cn(
           'grid size-6 shrink-0 place-items-center rounded-full transition-all duration-300',
-          selected ? 'scale-100 bg-lagoon-500 text-white opacity-100' : 'scale-75 opacity-0',
+          selected ? 'scale-100 bg-lagoon-500 text-pearl opacity-100' : 'scale-75 opacity-0',
         )}
       >
         <Check className="size-3.5" strokeWidth={3} />

@@ -91,5 +91,27 @@ export const api = {
       body: JSON.stringify(payload),
     }),
 
+  aiTranslateLong: (payload: { text: string; targetLang: string }) =>
+    request<{ translated: string }>('/ai/translate', {
+      method: 'POST',
+      body: JSON.stringify({ ...payload, long: true }),
+    }),
+
+  aiBlog: (payload: {
+    topic: string
+    keywords?: string
+    tone?: string
+    length?: 'short' | 'medium' | 'long'
+    language: string
+    category?: string
+    brand?: string
+    area?: string
+    services?: string[]
+  }) =>
+    request<{ title: string; excerpt: string; category: string; tags: string[]; body: string; model: string }>(
+      '/ai/blog',
+      { method: 'POST', body: JSON.stringify(payload) },
+    ),
+
   aiStatus: () => request<{ ready: boolean; models: Record<string, string> }>('/ai/status'),
 }

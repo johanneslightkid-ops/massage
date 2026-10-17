@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'motion/react'
-import { Home, Sparkles, Compass, CalendarHeart, Users } from 'lucide-react'
+import { Home, Sparkles, Compass, CalendarHeart, BookOpen } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { useT } from '@/lib/translations/LanguageProvider'
@@ -20,7 +20,7 @@ const publicTabs: Array<Omit<TabItem, 'label'> & { labelKey: string }> = [
   { key: '/', labelKey: 'tab.home', icon: <Home className="size-[1.15rem]" />, to: '/' },
   { key: '/treatments', labelKey: 'tab.treatments', icon: <Sparkles className="size-[1.15rem]" />, to: '/treatments' },
   { key: '/discover', labelKey: 'tab.discover', icon: <Compass className="size-[1.15rem]" />, to: '/discover' },
-  { key: '/team', labelKey: 'tab.team', icon: <Users className="size-[1.15rem]" />, to: '/team' },
+  { key: '/blog', labelKey: 'tab.blog', icon: <BookOpen className="size-[1.15rem]" />, to: '/blog' },
   { key: '/book', labelKey: 'tab.book', icon: <CalendarHeart className="size-[1.15rem]" />, to: '/book' },
 ]
 
@@ -50,7 +50,7 @@ export function TabBar() {
         className={cn(
           'mx-3 mb-3 rounded-[2rem] border shadow-lift transition-colors duration-500',
           isAdmin
-            ? 'border-white/10 bg-ocean-950/92 backdrop-blur-xl'
+            ? 'border-white/10 bg-abyss-950/92 backdrop-blur-xl'
             : 'border-white/70 bg-white/85 ring-1 ring-sky-900/5 backdrop-blur-xl',
         )}
       >
@@ -89,7 +89,7 @@ export function TabBar() {
                 <span className="relative">
                   {item.icon}
                   {Boolean(item.badge) && (
-                    <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-flamingo-500 px-1 text-[0.6rem] font-bold text-white">
+                    <span className="absolute -top-1.5 -right-2 grid h-4 min-w-4 place-items-center rounded-full bg-flamingo-500 px-1 text-[0.6rem] font-bold text-pearl">
                       {item.badge}
                     </span>
                   )}
@@ -103,7 +103,7 @@ export function TabBar() {
               isAdmin
                 ? active
                   ? 'text-sand-50'
-                  : 'text-sand-200/55 hover:text-sand-100'
+                  : 'text-pearl-200/55 hover:text-pearl-100'
                 : active
                   ? 'text-sky-800'
                   : 'text-ocean-800/80 hover:text-ocean-950',

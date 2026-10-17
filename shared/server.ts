@@ -112,6 +112,7 @@ export const COLLECTION_KEYS: CollectionKey[] = [
   'packages',
   'payments',
   'gallery',
+  'posts',
 ]
 
 export function isCollectionKey(value: string): value is CollectionKey {

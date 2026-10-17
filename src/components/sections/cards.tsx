@@ -49,14 +49,14 @@ export function ServiceCard({
           alt={service.name}
           className="transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/85 via-ocean-950/25 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-abyss-950/85 via-abyss-950/25 to-transparent" />
 
         <span className="absolute top-4 left-4 grid size-10 place-items-center rounded-[46%_54%_48%_52%/52%_48%_52%_48%] bg-white/94 text-lagoon-800 shadow-soft backdrop-blur-sm transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
           <Motif name={service.icon} className="size-5" />
         </span>
 
         {service.popular && (
-          <span className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 px-3 py-1 text-[0.66rem] font-bold tracking-wide text-white uppercase shadow-soft">
+          <span className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 px-3 py-1 text-[0.66rem] font-bold tracking-wide text-pearl uppercase shadow-soft">
             {t('card.popular')}
           </span>
         )}
@@ -64,7 +64,7 @@ export function ServiceCard({
         <div className="absolute right-4 bottom-4 left-4 flex items-end justify-between gap-3">
           <h3 className="font-display text-[1.35rem] leading-tight text-sand-50">{service.name}</h3>
           {cheapest && (
-            <span className="shrink-0 rounded-full bg-sand-50/94 px-3 py-1 text-[0.8rem] font-bold text-ocean-950 backdrop-blur-sm">
+            <span className="shrink-0 rounded-full bg-white/94 px-3 py-1 text-[0.8rem] font-bold text-ocean-950 backdrop-blur-sm">
               {t('card.from', { price: formatPrice(cheapest.price, currency) })}
             </span>
           )}
@@ -193,12 +193,12 @@ export function TherapistCard({ person }: { person: Therapist }) {
             <span className="font-display text-[4.5rem] leading-none text-sand-50/90">{person.name.charAt(0)}</span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/78 via-ocean-950/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-abyss-950/78 via-abyss-950/10 to-transparent" />
         <div className="absolute right-5 bottom-5 left-5">
           <h3 className="font-display text-2xl text-sand-50">{person.name}</h3>
-          <p className="mt-1 text-[0.82rem] font-semibold text-white/90">{person.role}</p>
+          <p className="mt-1 text-[0.82rem] font-semibold text-pearl/90">{person.role}</p>
         </div>
-        <span className="absolute top-4 right-4 rounded-full bg-sand-50/92 px-3 py-1 text-[0.68rem] font-bold text-ocean-950 backdrop-blur-sm">
+        <span className="absolute top-4 right-4 rounded-full bg-white/92 px-3 py-1 text-[0.68rem] font-bold text-ocean-950 backdrop-blur-sm">
           {person.years}
         </span>
       </div>
@@ -238,7 +238,7 @@ export function SpotCard({ spot }: { spot: DiscoverSpot }) {
           alt={spot.name}
           className="transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-ocean-950/68 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-abyss-950/68 to-transparent" />
         <div className="absolute top-3 left-3">
           <Pill tone={tone} className="shadow-soft">
             {spot.category}
@@ -346,7 +346,7 @@ export function PackageCard({ item, currency }: { item: Package; currency: strin
       <div className="mt-auto pt-7">
         <Link
           to={`/book?service=${encodeURIComponent(item.name)}`}
-          className="inline-flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 text-[0.92rem] font-bold text-white shadow-soft transition-all hover:shadow-pink hover:brightness-105"
+          className="inline-flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-r from-flamingo-500 to-coral-500 text-[0.92rem] font-bold text-pearl shadow-soft transition-all hover:shadow-pink hover:brightness-105"
         >
           {t('card.reserve_package')}
         </Link>

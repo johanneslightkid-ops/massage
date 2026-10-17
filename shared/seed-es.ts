@@ -1,4 +1,5 @@
 import { journeysEs } from './journeys-es.ts'
+import { postsEs } from './posts-es.ts'
 import type { SiteContent } from './types'
 
 /**
@@ -8,6 +9,7 @@ import type { SiteContent } from './types'
  */
 export const seedContentEs: SiteContent = {
   journeys: journeysEs,
+  posts: postsEs,
   site: {
     brandName: 'Massage Playero',
     brandMark: 'Masajes a domicilio · Bávaro y Punta Cana',

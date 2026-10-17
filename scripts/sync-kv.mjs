@@ -34,8 +34,15 @@ function namespaceFromWrangler(env) {
 
   // Find `[[<section>]]` and take the first `id = "…"` beneath it, stopping at
   // the next section header so a neighbouring block is never picked up.
-  const start = toml.indexOf(`[[${section}]]`)
-  const body = start >= 0 ? toml.slice(start + section.length + 4) : toml
+  // The Worker config has a single top-level `[[kv_namespaces]]`; the old
+  // Pages config had per-environment blocks. Either is accepted.
+  let header = `[[${section}]]`
+  let start = toml.indexOf(header)
+  if (start < 0) {
+    header = '[[kv_namespaces]]'
+    start = toml.indexOf(header)
+  }
+  const body = start >= 0 ? toml.slice(start + header.length) : ''
   const scoped = body.split(/^\s*\[/m)[0]
   const match = scoped.match(/id\s*=\s*"([0-9a-f]{32})"/i)
 

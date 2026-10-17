@@ -67,6 +67,8 @@ const NEVER_TRANSLATE = new Set([
   'tiktok',
   'heroImage',
   'ownerPhoto',
+  'coverImage',
+  'publishedAt',
   // contact details and money
   'brandName',
   'whatsapp',
@@ -78,12 +80,13 @@ const NEVER_TRANSLATE = new Set([
   'team.name',
   'testimonials.name',
   'discover.name',
+  'posts.author',
   // A journey's lengths are numbers stored in a list field — there is nothing
   // to translate, and asking the model to try produces "sesenta".
   'durationMinutes',
 ])
 
-function isTranslatableField(field: Field, scope: string): boolean {
+export function isTranslatableField(field: Field, scope: string): boolean {
   if (NEVER_TRANSLATE.has(field.key) || NEVER_TRANSLATE.has(`${scope}.${field.key}`)) return false
 
   /*
@@ -522,7 +525,7 @@ async function applyAction(
   }
 }
 
-function settingsFieldFor(lang: LanguageCode, key: string): Field | undefined {
+export function settingsFieldFor(lang: LanguageCode, key: string): Field | undefined {
   for (const group of localizedSettingsGroups(lang)) {
     const field = group.fields.find((candidate) => candidate.key === key)
     if (field) return field
@@ -602,8 +605,11 @@ function coerce(field: Field, value: unknown): unknown {
   }
 }
 
+/** Prose at or above this length is translated on its own, in chunks. */
+const LONG_TEXT = 700
+
 /** Builds the twin record for the other language: prose translated, rest copied. */
-async function mirrorRecord(
+export async function mirrorRecord(
   record: Record<string, unknown>,
   collection: CollectionKey,
   lang: LanguageCode,
@@ -634,8 +640,20 @@ async function mirrorRecord(
   }
 
   let translations: Record<string, string> = {}
+
+  // Whole articles (a blog body, a long owner story) go one by one through the
+  // chunked long-text route: packed into a JSON batch, the model truncates them.
+  for (const [key, value] of Object.entries(toTranslate)) {
+    if (value.length < LONG_TEXT) continue
+    delete toTranslate[key]
+    const { translated } = await api.aiTranslateLong({ text: value, targetLang: alternate })
+    if (translated) translations[key] = translated
+  }
   if (Object.keys(toTranslate).length > 0) {
-    translations = (await api.aiTranslate({ fields: toTranslate, targetLang: alternate })).translated
+    translations = {
+      ...translations,
+      ...(await api.aiTranslate({ fields: toTranslate, targetLang: alternate })).translated,
+    }
   }
 
   const mirrored: Record<string, unknown> = { ...record }

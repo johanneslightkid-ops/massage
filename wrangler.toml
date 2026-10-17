@@ -1,20 +1,34 @@
 "$schema" = "./node_modules/wrangler/config-schema.json"
-name = "ola-serena"
-pages_build_output_dir = "./dist"
+
+# ---------------------------------------------------------------------------
+# mobile-massage — one Worker serving the site, its API and its static assets.
+#
+#   https://mobile-massage.johannes-neugschwentner.workers.dev
+#
+# This replaced the two Pages projects (ola-serena, massage-playero). The KV
+# namespace is the one massage-playero used, so every edit made in /admin,
+# every booking and the admin password carried straight over.
+# ---------------------------------------------------------------------------
+
+name = "mobile-massage"
+main = "worker/index.ts"
 compatibility_date = "2026-08-26"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+preview_urls = true
 
-# ---------------------------------------------------------------------------
-# Bindings are NOT inherited by named environments.
-#
-# Pages deploys every build into `env.preview` or `env.production`, so a
-# binding declared only at the top level is missing from the deployed
-# Functions — the build log says so out loud ("ai exists at the top level,
-# but not on env.production"). Anything the Functions need at runtime has to
-# be repeated in both environments, which is why this file looks redundant.
-# ---------------------------------------------------------------------------
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# Everything except the immutable build output goes through the Worker, so it
+# can inline the content into each page. The hashed assets, icons and the
+# link-preview image never touch it — they are served straight from the edge.
+run_worker_first = ["/*", "!/assets/*", "!/favicon.svg", "!/og.jpg", "!/site.webmanifest"]
 
-# --- Local dev (`wrangler pages dev`) ---
+[observability]
+enabled = true
+
 [ai]
 binding = "AI"
 
@@ -23,29 +37,9 @@ binding = "CONTENT"
 id = "78cfcbe1fc734caea63722f90580297e"
 
 [vars]
-SITE_NAME = "Ola Serena"
+SITE_NAME = "Massage Playero"
 
-# CLOUDINARY_API_SECRET is set as a secret (never in source):
-#   npx wrangler pages secret put CLOUDINARY_API_SECRET
-
-# --- Preview deployments ---
-[env.preview.ai]
-binding = "AI"
-
-[[env.preview.kv_namespaces]]
-binding = "CONTENT"
-id = "78cfcbe1fc734caea63722f90580297e"
-
-[env.preview.vars]
-SITE_NAME = "Ola Serena (preview)"
-
-# --- Production deployments ---
-[env.production.ai]
-binding = "AI"
-
-[[env.production.kv_namespaces]]
-binding = "CONTENT"
-id = "78cfcbe1fc734caea63722f90580297e"
-
-[env.production.vars]
-SITE_NAME = "Ola Serena"
+# Cloudinary (optional — photo uploads fall back to inline WebP without it):
+#   CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY as vars or secrets,
+#   CLOUDINARY_API_SECRET as a secret:
+#     npx wrangler secret put CLOUDINARY_API_SECRET

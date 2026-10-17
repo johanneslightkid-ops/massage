@@ -75,6 +75,40 @@ const en: Dict = {
   'hero.rating_label': 'Guest rating',
   'hero.team_label': 'Team size',
   'hero.where_label': 'Where we work',
+  'hero.greet.dawn': 'Buenos días!',
+  'hero.greet.day': '¡Hola, sunshine!',
+  'hero.greet.dusk': 'Golden hour…',
+  'hero.greet.night': 'Buenas noches',
+
+  /* theme ---------------------------------------------------------------- */
+  'theme.auto': 'Theme follows the clock (now {now}). Tap for day.',
+  'theme.day': 'Day theme. Tap for night.',
+  'theme.night': 'Night theme. Tap to follow the clock.',
+  'theme.now_day': 'day',
+  'theme.now_night': 'night',
+
+  /* blog ----------------------------------------------------------------- */
+  'nav.blog': 'Journal',
+  'tab.blog': 'Journal',
+  'blog.eyebrow': 'The journal',
+  'blog.title': 'Notes from',
+  'blog.script': 'the shoreline',
+  'blog.note': 'written between appointments',
+  'blog.all': 'All articles',
+  'blog.page_title': 'Island journal',
+  'blog.page_lead': 'Tips for your body on a beach holiday, the neighbourhood the way locals know it, and what to expect before you book.',
+  'blog.all_topics': 'All topics',
+  'blog.empty': 'No articles here yet — check back soon.',
+  'blog.read_more': 'Read the article',
+  'blog.read_minutes': '{minutes} min read',
+  'blog.back': 'All articles',
+  'blog.more': 'Keep reading',
+  'blog.cta': 'Questions about a treatment? Ask us directly.',
+
+  /* home notes ----------------------------------------------------------- */
+  'home.treatments.note': 'we bring the table',
+  'home.team.note': 'women-run, since day one',
+  'home.discover.note': 'our favourite corners',
 
   /* home ----------------------------------------------------------------- */
   'home.treatments.eyebrow': 'What we do',
@@ -343,6 +377,51 @@ const en: Dict = {
   'admin.settings_lead': 'Your name, your WhatsApp number, the hero, the hours and the small print.',
   'admin.unsaved': 'Unsaved changes',
   'admin.save_error': 'Could not save.',
+  'admin.auto_translate': 'Auto-translate',
+  'admin.auto_translate_help': 'When on, every save is translated into the other languages automatically. Only what you changed is translated.',
+  'admin.translating': 'Saved — translating into the other languages…',
+  'admin.saved_translated': 'Saved and translated into {languages}',
+  'admin.translate_failed': 'Saved, but the translation did not finish: {reason}. Switch language and check, or save again.',
+
+  /* ai blog writer ------------------------------------------------------- */
+  'writer.title': 'AI blog writer',
+  'writer.lead': 'Tell it what the article is about in one sentence. It drafts the whole post in your voice — you read it, change anything, and save.',
+  'writer.topic': 'What should the article be about?',
+  'writer.topic_placeholder': 'e.g. What to do if you get sunburnt the day before your massage',
+  'writer.idea1': 'Best massage after an excursion to Saona',
+  'writer.idea2': 'How to prepare your room for an in-room massage',
+  'writer.idea3': 'Prenatal massage on holiday: what is safe',
+  'writer.idea4': 'Five quiet beaches near Bávaro',
+  'writer.keywords': 'Phrases to include (optional)',
+  'writer.keywords_placeholder': 'hotel room massage Punta Cana, couples massage',
+  'writer.tone': 'Tone',
+  'writer.tone.warm': 'Warm & personal',
+  'writer.tone.practical': 'Practical & clear',
+  'writer.tone.playful': 'Playful & sunny',
+  'writer.tone.luxurious': 'Calm & luxurious',
+  'writer.length': 'Length',
+  'writer.length.short': 'Short (~350 words)',
+  'writer.length.medium': 'Medium (~600 words)',
+  'writer.length.long': 'Long (~1,000 words)',
+  'writer.write': 'Write the draft',
+  'writer.writing': 'Writing… (about 20 seconds)',
+  'writer.again': 'Write another version',
+  'writer.error': 'The writer could not finish. Try again in a moment.',
+  'writer.draft_in': 'Draft in {language}',
+  'writer.preview': 'Preview',
+  'writer.edit': 'Edit text',
+  'writer.field_title': 'Title',
+  'writer.field_excerpt': 'Summary',
+  'writer.field_category': 'Category',
+  'writer.field_tags': 'Tags, comma separated',
+  'writer.field_body': 'Article',
+  'writer.publish_now': 'Publish straight away',
+  'writer.translate_all': 'Translate into every language',
+  'writer.save_draft': 'Save as draft',
+  'writer.save_publish': 'Save and publish',
+  'writer.saved_draft': 'Saved as a draft — it is in the list below.',
+  'writer.published': 'Published on the blog.',
+  'writer.translated_into': 'Also written in {languages}.',
   'admin.reset_error': 'Could not reset.',
   'admin.restored_settings': 'Restored the starting settings',
   'admin.restored_content': 'Restored the starting content',
@@ -603,602 +682,18 @@ const en: Dict = {
 
 /* ------------------------------------------------------------------ spanish */
 
-const es: Dict = {
-  /* nav ------------------------------------------------------------------ */
-  'nav.home': 'Inicio',
-  'nav.treatments': 'Tratamientos',
-  'nav.discover': 'Descubre Bávaro',
-  'nav.team': 'Nuestro equipo',
-  'nav.book': 'Reservar',
-  'nav.admin': 'Administración',
-  'nav.main': 'Navegación principal',
-  'nav.explore': 'Explora',
-  'nav.payments': 'Formas de pago',
-  'nav.open_menu': 'Abrir el menú',
-  'nav.close_menu': 'Cerrar el menú',
 
-  /* bottom tab bar ------------------------------------------------------- */
-  'tab.home': 'Inicio',
-  'tab.treatments': 'Masajes',
-  'tab.discover': 'Descubre',
-  'tab.team': 'Equipo',
-  'tab.book': 'Reservar',
+const dictionaries: Partial<Record<LanguageCode, Dict>> = { en }
 
-  /* generic actions ------------------------------------------------------ */
-  'action.whatsapp': 'WhatsApp',
-  'action.message_whatsapp': 'Escríbenos por WhatsApp',
-  'action.message_on_whatsapp': 'Escribir por WhatsApp',
-  'action.chat_whatsapp': 'Chatea con nosotras por WhatsApp',
-  'action.view_site': 'Ver el sitio',
-  'action.sign_in': 'Entrar',
-  'action.sign_out': 'Cerrar sesión',
-  'action.save': 'Guardar cambios',
-  'action.saving': 'Guardando…',
-  'action.saved': 'Guardado',
-  'action.cancel': 'Cancelar',
-  'action.discard': 'Descartar',
-  'action.delete': 'Eliminar',
-  'action.edit': 'Editar',
-  'action.close': 'Cerrar',
-  'action.duplicate': 'Duplicar',
-  'action.move_up': 'Subir',
-  'action.move_down': 'Bajar',
-  'action.refresh': 'Actualizar',
-  'action.restore_defaults': 'Restaurar valores iniciales',
-  'action.yes_restore': 'Sí, restaurar',
-  'action.back_to_site': 'Volver al sitio web',
-  'action.loading': 'Cargando…',
-
-  /* language ------------------------------------------------------------- */
-  'lang.select': 'Seleccionar idioma',
-  'lang.en': 'English',
-  'lang.es': 'Español',
-
-  /* hero ----------------------------------------------------------------- */
-  'hero.rating': '{count} reseñas de huéspedes',
-  'hero.therapists': '{count} terapeutas certificadas',
-  'hero.where': 'Tu habitación · Tu villa · Tu terraza',
-  'hero.rating_label': 'Valoración de huéspedes',
-  'hero.team_label': 'Tamaño del equipo',
-  'hero.where_label': 'Dónde trabajamos',
-
-  /* home ----------------------------------------------------------------- */
-  'home.treatments.eyebrow': 'Lo que hacemos',
-  'home.treatments.title': 'Masajes pensados para',
-  'home.treatments.script': 'un cuerpo de vacaciones',
-  'home.treatments.lead':
-    'Todo con aceite tibio, sábanas limpias y la presión que tú elijas. Los precios son por persona, en dólares estadounidenses.',
-  'home.treatments.all': 'Todos los tratamientos',
-
-  'home.packages.eyebrow': 'Ocasiones y paquetes',
-  'home.packages.title': 'Para lunas de miel, grupos',
-  'home.packages.script': 'y semanas enteras',
-  'home.packages.lead':
-    'Precios cerrados, sin sorpresas. Cualquier paquete se monta donde te estés quedando: habitación, villa o terraza.',
-
-  'home.team.eyebrow': 'Las manos',
-  'home.team.title': 'Las mujeres que',
-  'home.team.script': 'lo hacen bien',
-  'home.team.all': 'Conócelas a todas',
-
-  'home.discover.eyebrow': 'Tu guía del barrio',
-  'home.discover.title': 'Lo que de verdad vale la pena',
-  'home.discover.script': 'a pocos pasos',
-  'home.discover.lead':
-    'Vivimos aquí. Esta es la lista que le damos a nuestros amigos — playas, los restaurantes por los que sí vale la pena salir del resort y las cosas prácticas que nadie te cuenta.',
-  'home.discover.all': 'Abrir la guía',
-
-  /* shared sections ------------------------------------------------------ */
-  'venues.eyebrow': 'Vamos hasta ti',
-  'venues.title': 'Donde te estés',
-  'venues.script': 'quedando',
-  'venues.lead':
-    'Las mismas terapeutas y la misma camilla elijas donde elijas — solo hacen falta un par de metros de piso y un enchufe cerca.',
-
-  'benefits.eyebrow': '¿Por qué, estando de vacaciones?',
-  'benefits.title': 'Porque la semana vuela y',
-  'benefits.script': 'tu cuerpo llegó cansado',
-  'benefits.lead':
-    'La mayoría reserva una vez y vuelve dos. Esto es lo que suele cambiar.',
-
-  'owner.eyebrow': 'Con quién estás reservando',
-  'owner.title': 'Un negocio pequeño,',
-  'owner.script': 'unas pocas manos',
-  'owner.badge_certified': 'Terapeutas certificadas',
-  'owner.badge_women': 'Dirigido por mujeres',
-  'owner.badge_linens': 'Sábanas limpias en cada sesión',
-  'owner.meet_team': 'Conoce al equipo',
-  'owner.ask': 'Pregúntanos lo que quieras',
-
-  'testimonials.eyebrow': 'Los huéspedes, después',
-  'testimonials.title': 'Lo mejor de este trabajo es',
-  'testimonials.script': 'cómo se va la gente',
-
-  'payments.eyebrow': 'Pagar es lo fácil',
-  'payments.title': 'Efectivo, tarjeta o un enlace',
-  'payments.script': 'antes de llegar',
-  'payments.lead':
-    'Lo que te resulte más sencillo. Enviamos enlaces de pago por WhatsApp y nunca pedimos datos de tarjeta por chat.',
-  'payments.open_link': 'Abrir el enlace de pago →',
-  'payments.cancellations': 'Cancelaciones · ',
-
-  'faq.eyebrow': 'Antes de escribirnos',
-  'faq.title': 'Preguntas que nos hacen',
-  'faq.script': 'todas las semanas',
-
-  'cta.title': 'Cuando tú quieras.',
-  'cta.script': 'Incluso hoy.',
-  'cta.lead':
-    'Dinos el día, la hora y dónde te alojas. Respondemos por WhatsApp en minutos y llevamos todo con nosotras.',
-  'cta.form': 'Usar el formulario de reserva',
-
-  /* treatments page ------------------------------------------------------ */
-  'treatments.kicker': 'Carta y precios',
-  'treatments.title': 'Cada tratamiento,',
-  'treatments.script': 'cada precio',
-  'treatments.lead':
-    'Sin paquetes que no pediste y sin venderte nada sobre la camilla. Elige la duración, elige el lugar y dinos qué te duele.',
-  'treatments.empty': 'Todavía no hay nada en esta categoría.',
-  'treatments.bundles.eyebrow': 'Paquetes',
-  'treatments.bundles.title': 'Paquetes que valen',
-  'treatments.bundles.script': 'la semana entera',
-  'treatments.bundles.lead':
-    'Sale mejor que reservar sesión por sesión, y te guardamos los horarios del atardecer por adelantado.',
-
-  /* discover page -------------------------------------------------------- */
-  'discover.title': 'La guía que le damos',
-  'discover.script': 'a nuestras amigas',
-  'discover.lead':
-    'Vivimos y trabajamos en esta costa. Esto es lo que de verdad vale tu tiempo por Bávaro y El Cortecito — más las cosas prácticas que hacen más fácil un primer viaje a la República Dominicana.',
-  'discover.walkable': '{count} lugares a menos de 10 minutos a pie',
-  'discover.tips': '{count} consejos locales',
-  'discover.search_placeholder': 'Busca playas, comida, consejos…',
-  'discover.search_label': 'Buscar en la guía',
-  'discover.clear_search': 'Borrar la búsqueda',
-  'discover.count_one': '{count} lugar',
-  'discover.count_other': '{count} lugares',
-  'discover.count_in': ' en {category}',
-  'discover.empty_title': 'No encontramos nada así.',
-  'discover.empty_lead': 'Prueba con otra palabra, o pregúntanos por WhatsApp — nosotras sabemos.',
-  'discover.reset': 'Reiniciar la guía',
-  'discover.pairs.eyebrow': 'Organiza el día alrededor',
-  'discover.pairs.title': 'El masaje combina bien con',
-  'discover.pairs.script': 'un día de excursión',
-  'discover.pairs.lead':
-    'Saona, Macao, Hoyo Azul — son días largos de pie. La tarde siguiente es cuando un masaje hace más bien, y trabajamos hasta tarde.',
-  'discover.pairs.cta': 'Reservar un horario de tarde',
-  'discover.pairs.secondary': 'Ver tratamientos',
-
-  /* team page ------------------------------------------------------------ */
-  'team.kicker': 'Las personas',
-  'team.title': 'Mujeres dominicanas,',
-  'team.script': 'un equipo pequeño',
-  'team.lead':
-    'No somos una agencia ni tenemos un centro de llamadas. Cuando escribes, le escribes a una de nosotras.',
-  'team.badge_certified': 'Terapeutas certificadas',
-  'team.badge_since': 'Dirigido por mujeres desde 2019',
-  'team.badge_languages': '{count} idiomas entre nosotras',
-  'team.how.eyebrow': 'Cómo es una sesión de verdad',
-  'team.how.title': 'Sin sorpresas,',
-  'team.how.script': 'nunca',
-  'team.how.lead':
-    'Si nunca has reservado un masaje fuera del spa de un resort, esto es exactamente lo que pasa.',
-  'team.step1.title': 'Nos escribes por WhatsApp',
-  'team.step1.body':
-    'Dinos el día, la hora, cuántas personas y dónde te estás quedando. Confirmamos en minutos.',
-  'team.step2.title': 'Llegamos con todo',
-  'team.step2.body':
-    'Camilla, sábanas limpias, toallas, aceites y una bocina pequeña. En los hoteles te escribimos al llegar a recepción.',
-  'team.step3.title': 'Tú decides la presión',
-  'team.step3.body':
-    'Preguntamos antes de empezar y comprobamos durante la sesión. Usamos toalla de cobertura todo el tiempo — dilo y ajustamos lo que sea.',
-  'team.step4.title': 'Pagas como prefieras',
-  'team.step4.body':
-    'Tarjeta por adelantado o al llegar, efectivo el mismo día, o PayPal antes de la cita. La propina se agradece, pero nunca se espera.',
-  'team.languages': 'Idiomas en los que trabajamos',
-  'team.speaks': 'Habla {languages}',
-
-  /* booking page --------------------------------------------------------- */
-  'book.from_journey': 'Viene de nuestra sugerencia: {journey}. Abajo ya está todo puesto.',
-  'book.change_journey': 'Elegir otra cosa',
-  'book.kicker': 'Reserva',
-  'book.title': 'Dinos cuándo,',
-  'book.script': 'nosotras llevamos todo',
-  'book.lead':
-    'Rellena esto y se abrirá WhatsApp con tus datos ya escritos. O escríbenos directamente — ambos llegan al mismo teléfono.',
-  'book.step_treatment': '¿Qué tratamiento?',
-  'book.step_duration': '¿Cuánto tiempo?',
-  'book.step_venue': '¿Dónde montamos la camilla?',
-  'book.step_when': '¿Cuándo te viene bien?',
-  'book.step_details': 'Tus datos',
-  'book.or_package': 'O un paquete',
-  'book.from': 'desde {price}',
-  'book.date': 'Fecha',
-  'book.people': 'Cuántas personas',
-  'book.preferred_time': 'Hora preferida',
-  'book.name': 'Tu nombre *',
-  'book.name_placeholder': '¿Cómo te saludamos?',
-  'book.hotel': 'Hotel, villa o número de habitación',
-  'book.hotel_placeholder': 'ej. Nombre del resort, edificio 4, habitación 212',
-  'book.notes': '¿Algo que debamos saber?',
-  'book.notes_placeholder':
-    'Lesiones, embarazo, preferencia de presión, quemaduras de sol, una sorpresa para alguien…',
-  'book.summary': 'Tu solicitud',
-  'book.summary_treatment': 'Tratamiento',
-  'book.summary_duration': 'Duración',
-  'book.summary_where': 'Dónde',
-  'book.summary_date': 'Fecha',
-  'book.summary_time': 'Hora',
-  'book.summary_people': 'Personas',
-  'book.pay_label': 'Pago:',
-  'book.pay_summary':
-    'con tarjeta por adelantado con un enlace seguro o al llegar nosotras, en efectivo el mismo día, o por PayPal antes de la cita. No se paga nada hasta que confirmemos tu hora.',
-  'book.flexible': 'Flexible',
-  'book.estimated': 'Estimado',
-  'book.send': 'Enviar por WhatsApp',
-  'book.sending': 'Enviando…',
-  'book.not_ready': 'Elige un tratamiento y escribe tu nombre para continuar.',
-  'book.sent': 'Solicitud guardada — termina el mensaje en WhatsApp y te confirmamos.',
-  'book.error_suffix': 'Aun así puedes enviar el mensaje de WhatsApp.',
-  'book.preview': 'Ver el mensaje',
-  'book.error_save': 'No pudimos guardar la solicitud.',
-  'book.minutes': '{minutes} min',
-
-  /* whatsapp message ----------------------------------------------------- */
-  'wa.intro': '¡Hola {brand}! Me gustaría reservar un masaje.',
-  'wa.name': 'Nombre',
-  'wa.treatment': 'Tratamiento',
-  'wa.duration': 'Duración',
-  'wa.where': 'Dónde',
-  'wa.hotel': 'Hotel / habitación',
-  'wa.date': 'Fecha',
-  'wa.time': 'Hora',
-  'wa.people': 'Personas',
-  'wa.notes': 'Notas',
-
-  /* cards ---------------------------------------------------------------- */
-  'card.good_for': 'Buena para',
-  'card.pressure': 'Presión',
-  'card.popular': 'Popular',
-  'card.from': 'desde {price}',
-  'card.reserve': 'Reservar este',
-  'card.reserve_package': 'Reservar este paquete',
-  'card.walk': '{minutes} min a pie',
-  'card.tip': 'Nuestro consejo · ',
-  'card.map': 'Mapa',
-  'card.stars': '{count} de 5 estrellas',
-
-  /* filters -------------------------------------------------------------- */
-  'filter.all': 'Todo',
-
-  /* footer --------------------------------------------------------------- */
-  'footer.find_us': 'Encuéntranos',
-  'footer.disclaimer': 'Solo masaje terapéutico y de relajación',
-  'footer.rights': '© {year} {brand} · {city}, República Dominicana',
-
-  /* 404 ------------------------------------------------------------------ */
-  'notfound.title': 'Esta página se fue con la marea.',
-  'notfound.lead': 'Aquí no hay nada — pero la playa sigue a dos minutos.',
-  'notfound.cta': 'Volver al inicio',
-  'notfound.seo': 'Página no encontrada',
-
-  /* admin — shell -------------------------------------------------------- */
-  'admin.title': 'Administración',
-  'admin.sections': 'Secciones de administración',
-  'admin.overview': 'Resumen',
-  'admin.overview_short': 'Inicio',
-  'admin.settings': 'Configuración del sitio',
-  'admin.settings_short': 'Sitio',
-  'admin.bookings': 'Solicitudes',
-  'admin.bookings_short': 'Solicitudes',
-  'admin.security': 'Contraseña y datos',
-  'admin.security_short': 'Contraseña',
-  'admin.assistant': 'Asistente IA',
-  'admin.assistant_short': 'Asistente',
-  'admin.guide_short': 'Guía',
-  'admin.default_password_warning':
-    'Sigues usando la contraseña inicial — toca aquí para cambiarla.',
-
-  /* admin — sign in ------------------------------------------------------ */
-  'admin.login.lead':
-    'Entra para editar el sitio web — tratamientos, precios, la guía, tu equipo y todo lo demás.',
-  'admin.login.password': 'Contraseña',
-  'admin.login.hint_before': '¿Primera vez? La contraseña inicial es',
-  'admin.login.hint_after': '— cámbiala en «Contraseña» en cuanto entres.',
-  'admin.login.failed': 'No pudimos iniciar sesión.',
-
-  /* admin — overview ----------------------------------------------------- */
-  'admin.hello': 'Hola, {name}.',
-  'admin.hello_lead':
-    'Todo lo que hay en el sitio web se edita aquí. Los cambios salen en vivo en cuanto guardas.',
-  'admin.stat.treatments': 'Tratamientos',
-  'admin.stat.tips': 'Consejos locales',
-  'admin.stat.therapists': 'Terapeutas',
-  'admin.stat.requests': 'Solicitudes nuevas',
-  'admin.start_here': 'Empieza por aquí',
-  'admin.start.settings':
-    'Pon tu número real de WhatsApp en Configuración del sitio → Contacto',
-  'admin.start.services': 'Revisa que los precios coincidan con lo que cobras de verdad',
-  'admin.start.team': 'Cambia los nombres del equipo y añade fotos',
-  'admin.start.discover': 'Añade los lugares a los que mandas a tus huéspedes',
-  'admin.start.security': 'Cambia la contraseña inicial de administración',
-  'admin.how_title': 'Cómo funciona la edición',
-  'admin.how1':
-    'Toca cualquier fila para abrirla, edita los campos y pulsa Guardar cambios en la barra de abajo.',
-  'admin.how2':
-    'Las flechas a la izquierda de cada fila cambian el orden en que aparecen en el sitio.',
-  'admin.how3':
-    'Las fotos se añaden subiéndolas desde el móvil o pegando un enlace — si lo dejas vacío dibujamos ilustraciones tropicales.',
-  'admin.how4': 'Cada sección tiene un botón Restaurar valores iniciales por si algo sale mal.',
-  'admin.how_save': 'Guardar cambios',
-  'admin.how_restore': 'Restaurar valores iniciales',
-
-  /* admin — settings / collections --------------------------------------- */
-  'admin.settings_lead':
-    'Tu nombre, tu número de WhatsApp, la portada, los horarios y la letra pequeña.',
-  'admin.unsaved': 'Cambios sin guardar',
-  'admin.save_error': 'No pudimos guardar.',
-  'admin.reset_error': 'No pudimos restaurar.',
-  'admin.restored_settings': 'Se restauró la configuración inicial',
-  'admin.restored_content': 'Se restauró el contenido inicial',
-  'admin.confirm_reset_settings': '¿Reemplazar toda la configuración con los valores iniciales?',
-  'admin.confirm_reset_collection': '¿Reemplazar {label} con el contenido inicial?',
-  'admin.add_one': 'Añadir {singular}',
-  'admin.add_first': 'Añadir el primero',
-  'admin.none_yet': 'Todavía no hay {label}.',
-  'admin.untitled': '{singular} sin título',
-
-  /* admin — field editor ------------------------------------------------- */
-  'field.nothing_added': 'Todavía no has añadido nada.',
-  'field.type_enter': 'Escribe y pulsa Enter',
-  'field.add_item': 'Añadir elemento',
-  'field.remove': 'Quitar {name}',
-  'field.minutes': 'Minutos',
-  'field.price': 'Precio',
-  'field.add_length': 'Añadir una duración',
-  'field.remove_duration': 'Quitar la duración',
-  'field.add_row': 'Añadir una fila',
-  'field.remove_row': 'Quitar la fila',
-  'field.pair_label_placeholder': 'Lunes – sábado',
-  'field.pair_value_placeholder': '9:00 – 21:00',
-  'field.on': 'Sí',
-  'field.off': 'No',
-  'field.refs_empty': 'Todavía no hay nada que enlazar — agrega primero un masaje.',
-  'field.upload': 'Subir imagen',
-  'field.upload_title': 'Subir desde el dispositivo',
-  'field.upload_failed': 'No se pudo subir la imagen: {message}',
-
-  /* admin — bookings ----------------------------------------------------- */
-  'admin.bookings_title': 'Solicitudes de reserva',
-  'admin.bookings_lead':
-    'Todo lo que llega por el formulario del sitio. Las solicitudes se guardan seis meses.',
-  'admin.bookings_empty':
-    'Todavía no hay solicitudes. Aparecen aquí en cuanto alguien usa el formulario de reserva.',
-  'admin.bookings_load_error': 'No pudimos cargar las solicitudes.',
-  'admin.bookings_update_error': 'No pudimos actualizar.',
-  'admin.delete_request': 'Eliminar la solicitud',
-  'status.new': 'Nueva',
-  'status.confirmed': 'Confirmada',
-  'status.done': 'Hecha',
-  'status.cancelled': 'Cancelada',
-
-  /* admin — security ----------------------------------------------------- */
-  'admin.security_lead':
-    'La contraseña de administración protege todo lo de esta página. Cámbiala antes de compartir el sitio.',
-  'admin.security_warning_title': 'Sigues usando la contraseña inicial.',
-  'admin.security_warning_body_before': 'Cualquiera que adivine',
-  'admin.security_warning_body_after':
-    'puede editar todo el sitio. Pon una nueva aquí abajo — se hace en diez segundos.',
-  'admin.change_password': 'Cambiar la contraseña',
-  'admin.current_password': 'Contraseña actual',
-  'admin.new_password': 'Contraseña nueva',
-  'admin.repeat_password': 'Repite la contraseña nueva',
-  'admin.update_password': 'Actualizar la contraseña',
-  'admin.password_changed': 'Contraseña cambiada. Usa la nueva la próxima vez que entres.',
-  'admin.password_too_short': 'Elige una contraseña de al menos 4 caracteres.',
-  'admin.password_mismatch': 'Las dos contraseñas nuevas no coinciden.',
-  'admin.password_error': 'No pudimos cambiar la contraseña.',
-  'admin.restore_all_title': 'Restaurar todo el contenido inicial',
-  'admin.restore_all_lead':
-    'Reemplaza cada tratamiento, consejo, reseña y ajuste con el contenido con el que salió el sitio. Las solicitudes de reserva y tu contraseña no se tocan.',
-  'admin.restore_all_cta': 'Restaurar todo',
-  'admin.restore_all_confirm': 'Sí, reemplazar todo',
-
-  /* admin — AI assistant ------------------------------------------------- */
-  'ai.title': 'Asistente guiado',
-  'ai.subtitle': 'Habla o escribe — actualiza el sitio por ti',
-  'ai.lead':
-    'Empieza una conversación y el asistente te lleva por todo el sitio, una pregunta a la vez. Redacta los textos, guarda los cambios y los traduce al otro idioma por ti.',
-  'ai.start': 'Empezar la conversación',
-  'ai.finish': 'Terminar la conversación',
-  'ai.live': 'Conversación activa',
-  'ai.idle': 'Conversación apagada',
-  'ai.mic_on': 'Detener el micrófono',
-  'ai.mic_off': 'Hablar',
-  'ai.listening': 'Escuchando… habla ahora',
-  'ai.transcribing': 'Anotando lo que dijiste…',
-  'ai.thinking': 'Pensando…',
-  'ai.tap_mic': 'Toca el micrófono, o escribe abajo',
-  'ai.input_placeholder': 'Escribe tu respuesta…',
-  'ai.send': 'Enviar',
-  'ai.mute': 'Silenciar la voz',
-  'ai.unmute': 'Leer las respuestas en voz alta',
-  'ai.greeting':
-    '¡Hola! Puedo actualizar contigo cualquier cosa del sitio — tratamientos y precios, el equipo, la guía, los horarios, la letra pequeña. Dime qué quieres cambiar, o di «dame un recorrido» y vamos sección por sección.',
-  'ai.closing':
-    'Eso es todo guardado. Esto es lo que aún necesita tus manos — el asistente no puede hacerlo por ti.',
-  'ai.applied': 'Guardado: {summary}',
-  'ai.apply_failed': 'No pudimos guardar ese cambio: {message}',
-  'ai.translated': 'También se tradujo al {language}.',
-  'ai.translating': 'Traduciendo al otro idioma…',
-  'ai.manual_title': 'Te queda por hacer a mano',
-  'ai.manual_none': 'No queda nada a mano — todos los cambios están en vivo.',
-  'ai.manual_photo': 'Sube una foto para «{name}» en {section}.',
-  'ai.changes_title': 'Cambios hechos en esta conversación',
-  'ai.no_changes': 'Todavía no ha cambiado nada.',
-  'ai.error': 'Lo siento — eso no salió. Inténtalo otra vez en un momento.',
-  'ai.unsupported_mic':
-    'Este navegador no le da micrófono a la página. Puedes escribir igual, y todo funciona igual.',
-  'ai.mic_denied':
-    'El micrófono está bloqueado. Permítelo en los ajustes del navegador, o simplemente escribe.',
-  'ai.review': 'Revisar',
-  'ai.confirm': 'Sí, guárdalo',
-  'ai.reject': 'No, cámbialo',
-  'ai.section_label': 'Trabajando en',
-  'ai.reset': 'Empezar de nuevo',
-
-  /* map ------------------------------------------------------------------ */
-  'map.eyebrow': 'Dónde trabajamos',
-  'map.title': 'Por toda',
-  'map.script': 'esta costa',
-  'map.lead': 'Vamos por {neighborhood} y por el resto de Bávaro y Punta Cana. Escríbenos y dinos dónde te estás quedando.',
-  'map.open': 'Abrir en Google Maps',
-
-  /* misc ----------------------------------------------------------------- */
-  'seo.home_suffix': 'Masajes en {neighborhood}, {city}',
-  'seo.catalog': 'Tratamientos de masaje',
-  'error.content_load': 'No pudimos cargar el contenido del sitio.',
-  'error.unknown': 'Algo salió mal.',
-  'a11y.loading': 'Cargando',
-
-  /* find your massage — the guided concierge --------------------------- */
-  'find.kicker': 'Sin saber nada de masajes',
-  'find.title': 'Encuentre su',
-  'find.script': 'masaje',
-  'find.lead':
-    'Cuéntenos qué tipo de día está teniendo y le sugerimos algo rico. Tres preguntas, unos veinte segundos.',
-  'find.start': 'Empezar',
-  'find.intro_note': '¿Ya sabe lo que quiere? Vea todos los masajes.',
-  'find.step_of': 'Paso {current} de {total}',
-  'find.back': 'Atrás',
-  'find.restart': 'Empezar de nuevo',
-  'find.skip': 'Saltar',
-  'find.progress': 'Avance de las preguntas',
-
-  'find.q_moment': '¿Qué tipo de día está teniendo?',
-  'find.q_moment_sub': 'Elija lo que más se parezca. No hay respuesta incorrecta.',
-  'find.moment.just-arrived': 'Acabo de llegar',
-  'find.moment.just-arrived.sub': 'Mi cuerpo sigue de viaje.',
-  'find.moment.after-adventure': 'Vengo de una aventura',
-  'find.moment.after-adventure.sub': 'Cuatrimoto, catamarán, snorkel, golf, senderismo…',
-  'find.moment.switch-off': 'Solo quiero desconectar',
-  'find.moment.switch-off.sub': 'Sin planes. Relajarme y ya.',
-  'find.moment.targeted': 'Me molesta el cuello, los hombros o la espalda',
-  'find.moment.targeted.sub': 'Sé exactamente dónde lo siento.',
-  'find.moment.celebrating': 'Estamos celebrando',
-  'find.moment.celebrating.sub': 'Luna de miel, aniversario, una noche especial.',
-  'find.moment.with-someone': 'Vengo acompañada',
-  'find.moment.with-someone.sub': 'Pareja, amiga, familia.',
-  'find.moment.gentle': 'Quisiera algo suave',
-  'find.moment.gentle.sub': 'Comodidad antes que intensidad.',
-  'find.moment.expecting': 'Estoy embarazada',
-  'find.moment.expecting.sub': 'Atención prenatal.',
-  'find.moment.unsure': 'No estoy segura',
-  'find.moment.unsure.sub': 'Ayúdenme a elegir.',
-
-  'find.q_feel': '¿Cómo quiere que se sienta?',
-  'find.q_feel_sub': 'Puede cambiar de opinión en la camilla cuando quiera.',
-  'find.feel.gentle': 'Muy suave',
-  'find.feel.gentle.sub': 'Presión ligera todo el tiempo.',
-  'find.feel.relaxing': 'Lento y relajante',
-  'find.feel.relaxing.sub': 'Tibio, envolvente, sin prisa.',
-  'find.feel.balanced': 'Equilibrado',
-  'find.feel.balanced.sub': 'Un punto intermedio.',
-  'find.feel.firm': 'Firme y dirigido',
-  'find.feel.firm.sub': 'Presión de verdad donde molesta.',
-  'find.feel.surprise': 'Sorpréndanme',
-  'find.feel.surprise.sub': 'Elijan ustedes, que en eso trabajan.',
-
-  'find.q_venue': '¿Dónde montamos la camilla?',
-  'find.q_venue_sub': 'Vamos hasta usted y llevamos la camilla, los aceites y la música.',
-  'find.venue.room': 'Su habitación de hotel',
-  'find.venue.room.sub': 'Al lado de la cama, con el aire puesto.',
-  'find.venue.villa': 'Su villa o apartamento',
-  'find.venue.villa.sub': 'Más espacio, fácil para dos camillas.',
-  'find.venue.terrace': 'Su terraza o balcón',
-  'find.venue.terrace.sub': 'Al aire libre, pero en su propio espacio.',
-
-  'find.q_comfort': 'Una preguntita de comodidad…',
-  'find.q_comfort_sub':
-    'Solo para sugerirle algo que hoy le siente bien. Marque lo que aplique, o nada.',
-  'find.comfort_privacy':
-    'Esto se queda en su teléfono. No se guarda, no se envía con su reserva y no se comparte con nadie.',
-  'find.comfort_none': 'Ninguna de estas',
-  'find.comfort_continue': 'Continuar',
-  'find.concern.pregnant': 'Estoy embarazada',
-  'find.concern.recent-surgery': 'Me operaron hace poco',
-  'find.concern.acute-injury': 'Tengo una lesión reciente',
-  'find.concern.blood-thinners': 'Tomo anticoagulantes',
-  'find.concern.fever': 'Tengo fiebre o me siento mal',
-  'find.concern.swelling': 'Tengo una hinchazón que no sé explicar',
-  'find.concern.sunburn': 'Cogí mucho sol o estoy quemada',
-  'find.concern.intoxicated': 'He estado bebiendo',
-
-  'find.result_kicker': 'Para usted, hoy',
-  'find.result_lead': 'Esto es lo que le sugerimos.',
-  'find.because': 'Como {reasons}, esta le va muy bien.',
-  'find.because.just-arrived': 'acaba de llegar',
-  'find.because.after-adventure': 'viene de una aventura',
-  'find.because.switch-off': 'quiere desconectar',
-  'find.because.targeted': 'sabe dónde le molesta',
-  'find.because.celebrating': 'está celebrando',
-  'find.because.with-someone': 'viajan juntos',
-  'find.because.gentle': 'quisiera algo suave',
-  'find.because.expecting': 'está embarazada',
-  'find.because.unsure': 'prefiere que elijamos nosotras',
-  'find.because_feel.gentle': 'la quiere muy suave',
-  'find.because_feel.relaxing': 'la quiere lenta y relajante',
-  'find.because_feel.balanced': 'la quiere equilibrada',
-  'find.because_feel.firm': 'la quiere firme',
-  'find.because_venue.room': 'prefiere quedarse en su habitación',
-  'find.because_venue.villa': 'tiene el espacio en su villa',
-  'find.because_venue.terrace': 'quiere estar al aire libre',
-  'find.because_care': 'nos pidió mantenerla suave',
-  'find.because_prenatal': 'esta la da una terapeuta con formación en embarazo',
-
-  'find.why': 'Por qué le va bien',
-  'find.what': 'Qué vamos a hacer',
-  'find.good_for': 'Buena para',
-  'find.duration': 'Duración',
-  'find.where': 'Dónde',
-  'find.minutes': '{minutes} min',
-  'find.from': 'desde {price}',
-  'find.based_on': 'Este es nuestro {service}.',
-  'find.cta_book': 'Reservar este masaje',
-  'find.cta_another': 'Muéstrenme otra opción',
-  'find.cta_all': 'Ver todos los masajes',
-  'find.alt_title': 'O una de estas',
-  'find.fallback_note':
-    'Nada encajó del todo, así que estas son las que más gustan. Escríbanos y la ayudamos a elegir.',
-
-  'find.all_title': 'Todas nuestras experiencias',
-  'find.all_lead':
-    'Cada una es un masaje real de nuestra lista, elegido para un tipo de día. Responda las preguntas de arriba y le indicamos cuál, o léalas y elija usted misma.',
-  'find.rest_title': 'Primero cuídese usted.',
-  'find.rest_body':
-    'Esto suena a uno de esos momentos en que descansar, tomar líquido, refrescarse o ver a un médico importa más que un masaje. Cuando se sienta bien otra vez, nos encantará ayudarla a relajarse.',
-  'find.rest_cta': 'Escríbanos cuando se sienta mejor',
-  'find.rest_back': 'Cambiar mis respuestas',
-
-  'find.care_title': 'Hablemos primero.',
-  'find.care_body':
-    'Lo que nos cuenta merece una conversación corta con una terapeuta antes de reservar, y con su médico donde corresponda. Abajo le dejamos lo que le sugeriríamos con cuidado mientras tanto.',
-  'find.care_cta': 'Pregúntenos por WhatsApp',
-
-  'find.quick_paths': 'O empiece por una de estas',
-  'find.home_kicker': '¿No sabe qué reservar?',
-  'find.home_title': 'Cuéntenos de su día',
-  'find.home_lead':
-    'Responda tres preguntas rápidas y le sugerimos el masaje que le va al día que está teniendo de verdad.',
-  'find.home_cta': 'Encuentre su masaje',
-  'find.treatments_prompt': '¿No sabe cuál elegir?',
-  'find.treatments_lead': 'Cuéntenos de su día y le sugerimos algo.',
-  'find.seo_description':
-    'Responda tres preguntas rápidas — cómo le ha ido el día, cómo quiere que se sienta y dónde — y le sugerimos el masaje adecuado en Bávaro, Punta Cana.',
-
+/** Fetches a language's dictionary once. English is always bundled. */
+export async function loadLanguage(code: LanguageCode): Promise<void> {
+  if (dictionaries[code]) return
+  if (code === 'es') dictionaries.es = (await import('./es')).es
 }
 
-export const dictionaries: Record<LanguageCode, Dict> = { en, es }
+export function isLanguageLoaded(code: LanguageCode): boolean {
+  return Boolean(dictionaries[code])
+}
 
 /** Every key the dictionary knows — handy for a completeness test. */
 export const translationKeys = Object.keys(en)

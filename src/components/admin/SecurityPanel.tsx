@@ -162,7 +162,7 @@ export function SecurityPanel({
               type="button"
               onClick={resetEverything}
               disabled={resetting}
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-coral-500 px-5 text-[0.86rem] font-bold text-white disabled:opacity-60"
+              className="inline-flex h-11 items-center gap-2 rounded-full bg-coral-500 px-5 text-[0.86rem] font-bold text-pearl disabled:opacity-60"
             >
               {resetting && <Loader2 className="size-4 animate-spin" />}
               {t('admin.restore_all_confirm')}

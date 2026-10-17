@@ -3,29 +3,51 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0A302E" />
+    <meta name="theme-color" content="#eaf8fe" />
+    <!--
+      Day or night, decided before the first paint so the page never flashes
+      the wrong sky. Same boundaries as phaseAt() in src/lib/theme.tsx.
+    -->
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem('theme_mode') || 'auto'
+          var now = new Date()
+          var h = now.getHours() + now.getMinutes() / 60
+          var phase = h < 5.5 || h >= 19.5 ? 'night' : h < 7.5 ? 'dawn' : h < 17.5 ? 'day' : 'dusk'
+          if (mode === 'day') phase = 'day'
+          if (mode === 'night') phase = 'night'
+          var theme = phase === 'night' ? 'night' : 'day'
+          var root = document.documentElement
+          root.dataset.theme = theme
+          root.dataset.phase = phase
+          root.style.colorScheme = theme === 'night' ? 'dark' : 'light'
+          if (theme === 'night') document.querySelector('meta[name="theme-color"]').setAttribute('content', '#061325')
+        } catch (e) {}
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    <title>Ola Serena · Massage in Los Corales, Bávaro — studio, beach & hotel visits</title>
+    <title>Massage Playero · Mobile massage in Bávaro & Punta Cana — in your hotel room, villa or terrace</title>
     <meta
       name="description"
-      content="A women-run massage studio in Los Corales, Bávaro. Full body, deep tissue, hot stone and couples massage — in our studio, on the beach or in your hotel room. Book on WhatsApp."
+      content="A women-run mobile massage service in Bávaro and Punta Cana. Relaxing, deep tissue, couples and prenatal massage in your hotel room, villa or terrace. Book on WhatsApp."
     />
-    <meta name="keywords" content="massage Bavaro, massage Punta Cana, Los Corales massage, El Cortecito spa, hotel room massage Punta Cana, beach massage Dominican Republic" />
+    <meta name="keywords" content="massage Bavaro, massage Punta Cana, mobile massage Punta Cana, hotel room massage Punta Cana, in-room massage Bavaro, couples massage Punta Cana, masaje a domicilio Punta Cana" />
 
     <meta property="og:type" content="business.business" />
-    <meta property="og:site_name" content="Ola Serena" />
-    <meta property="og:title" content="Ola Serena · Massage & Beach Spa, Bávaro" />
+    <meta property="og:site_name" content="Massage Playero" />
+    <meta property="og:title" content="Massage Playero · Mobile massage, Bávaro & Punta Cana" />
     <meta
       property="og:description"
-      content="Unhurried massage two minutes from the sand in Los Corales — studio, beach tent or your hotel room."
+      content="Unhurried massage that comes to you — your hotel room, villa or terrace in Bávaro and Punta Cana."
     />
     <meta property="og:image" content="/og.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Ola Serena — massage in Los Corales, Bávaro" />
+    <meta property="og:image:alt" content="Massage Playero — mobile massage in Bávaro and Punta Cana" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="es_DO" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -41,18 +63,18 @@
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500..700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
     />
     <link
       rel="stylesheet"
       media="print"
       onload="this.media='all';this.onload=null"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500..700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500..700&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Manrope:wght@300..800&display=swap"
       />
     </noscript>
   </head>

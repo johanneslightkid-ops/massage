@@ -79,7 +79,7 @@ export function JourneyResult({
       )}
     >
       {journey.badge && (
-        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-flamingo-600 to-coral-500 px-3.5 py-1.5 text-[0.7rem] font-bold tracking-[0.12em] text-white uppercase">
+        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-flamingo-600 to-coral-500 px-3.5 py-1.5 text-[0.7rem] font-bold tracking-[0.12em] text-pearl uppercase">
           <Sparkles className="size-3" />
           {journey.badge}
         </span>

@@ -526,6 +526,39 @@ export const collectionSchemas: CollectionSchema[] = [
   },
 ]
 
+/* The blog lives last in the list but first in the owner's week. */
+collectionSchemas.push({
+  key: 'posts',
+  label: 'Blog',
+  singular: 'Post',
+  icon: 'pen',
+  titleField: 'title',
+  subtitleField: 'excerpt',
+  description: 'Articles for guests — tips, stories, the neighbourhood. The AI writer at the top drafts one for you in every language.',
+  fields: [
+    { key: 'title', label: 'Title', type: 'text', full: true },
+    { key: 'slug', label: 'Slug', type: 'text', help: 'Used in the URL. Lowercase, dashes instead of spaces.' },
+    { key: 'category', label: 'Category', type: 'text' },
+    { key: 'excerpt', label: 'Summary', type: 'textarea', rows: 2, full: true, help: 'One or two sentences, shown on the blog page and in link previews.' },
+    {
+      key: 'body',
+      label: 'Article',
+      type: 'textarea',
+      rows: 16,
+      full: true,
+      help: 'Blank line between paragraphs. ## for a heading, - for a list item, > for a quote, **bold**, *italic*.',
+    },
+    { key: 'tags', label: 'Tags', type: 'list', full: true },
+    { key: 'coverImage', label: 'Cover photo', type: 'image', full: true, help: 'Optional. Leave it empty and we paint the tropical artwork instead.' },
+    { key: 'author', label: 'Author', type: 'text' },
+    { key: 'publishedAt', label: 'Publish date', type: 'text', placeholder: '2026-10-20', help: 'YYYY-MM-DD.' },
+    { key: 'readMinutes', label: 'Reading time (minutes)', type: 'number' },
+    { key: 'published', label: 'Published (visible on the site)', type: 'boolean' },
+    { key: 'featured', label: 'Feature at the top of the blog', type: 'boolean' },
+    orderField,
+  ],
+})
+
 export const collectionByKey = Object.fromEntries(
   collectionSchemas.map((c) => [c.key, c]),
 ) as Record<CollectionKey, CollectionSchema>

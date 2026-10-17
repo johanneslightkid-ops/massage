@@ -7,10 +7,10 @@ type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-gradient-to-br from-flamingo-500 to-coral-500 text-white shadow-soft hover:shadow-pink hover:brightness-105',
-  ocean: 'bg-ocean-900 text-sand-50 shadow-soft hover:bg-ocean-800',
-  sky: 'bg-gradient-to-br from-sky-600 to-lagoon-600 text-white shadow-soft hover:brightness-105',
-  palm: 'bg-gradient-to-br from-palm-600 to-lagoon-600 text-white shadow-soft hover:brightness-105',
+    'bg-gradient-to-br from-flamingo-500 to-coral-500 text-pearl shadow-soft hover:shadow-pink hover:brightness-105',
+  ocean: 'bg-abyss-900 text-sand-50 shadow-soft hover:bg-abyss-800',
+  sky: 'bg-gradient-to-br from-sky-600 to-lagoon-600 text-pearl shadow-soft hover:brightness-105',
+  palm: 'bg-gradient-to-br from-palm-600 to-lagoon-600 text-pearl shadow-soft hover:brightness-105',
   whatsapp: 'bg-[#25D366] text-[#062e17] shadow-soft hover:bg-[#1fbb59]',
   outline:
     'border border-ocean-900/15 bg-white/60 text-ocean-900 backdrop-blur-sm hover:border-lagoon-400/60 hover:bg-white',

@@ -10,12 +10,14 @@ import {
   Gift,
   Image as ImageIcon,
   KeyRound,
+  Languages,
   LayoutDashboard,
   Loader2,
   LogOut,
   MapPin,
   MessageSquareQuote,
   Mic,
+  PenLine,
   Settings2,
   Sparkles,
   Star,
@@ -37,6 +39,9 @@ import { CollectionEditor } from '@/components/admin/CollectionEditor'
 import { BookingsPanel } from '@/components/admin/BookingsPanel'
 import { SecurityPanel } from '@/components/admin/SecurityPanel'
 import { AssistantPanel } from '@/components/admin/AssistantPanel'
+import { BlogWriter } from '@/components/admin/BlogWriter'
+import { AutoTranslateProvider, useAutoTranslate } from '@/lib/auto-translate'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 
 const icons: Record<string, ReactNode> = {
   dashboard: <LayoutDashboard className="size-[1.15rem]" />,
@@ -54,6 +59,7 @@ const icons: Record<string, ReactNode> = {
   image: <ImageIcon className="size-[1.15rem]" />,
   bookings: <CalendarCheck className="size-[1.15rem]" />,
   security: <KeyRound className="size-[1.15rem]" />,
+  pen: <PenLine className="size-[1.15rem]" />,
 }
 
 interface AdminSection {
@@ -64,6 +70,52 @@ interface AdminSection {
 }
 
 export function Admin() {
+  return (
+    <AutoTranslateProvider>
+      <AdminScreen />
+    </AutoTranslateProvider>
+  )
+}
+
+/** The switch that decides whether every save is carried into the other languages. */
+function AutoTranslateSwitch() {
+  const { enabled, setEnabled } = useAutoTranslate()
+  const { t } = useLanguage()
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={enabled}
+      onClick={() => setEnabled(!enabled)}
+      title={t('admin.auto_translate_help')}
+      className={cn(
+        'inline-flex h-10 items-center gap-2 rounded-full border px-3 text-[0.78rem] font-bold transition-colors',
+        enabled
+          ? 'border-lagoon-400/60 bg-seafoam-100 text-lagoon-800'
+          : 'border-ocean-900/12 bg-white/60 text-ocean-800/70',
+      )}
+    >
+      <Languages className="size-4" />
+      <span className="hidden md:inline">{t('admin.auto_translate')}</span>
+      <span
+        aria-hidden="true"
+        className={cn(
+          'relative h-5 w-9 rounded-full transition-colors',
+          enabled ? 'bg-gradient-to-r from-lagoon-500 to-palm-500' : 'bg-ocean-900/20',
+        )}
+      >
+        <span
+          className={cn(
+            'absolute top-0.5 size-4 rounded-full bg-pearl shadow transition-all',
+            enabled ? 'left-[1.15rem]' : 'left-0.5',
+          )}
+        />
+      </span>
+    </button>
+  )
+}
+
+function AdminScreen() {
   const { refresh } = useContent()
   const { t, language } = useLanguage()
   useSeo({ path: '/admin', title: t('admin.title'), description: '', noindex: true })
@@ -158,7 +210,7 @@ export function Admin() {
 
   if (checking) {
     return (
-      <div className="grid min-h-dvh place-items-center bg-ocean-950 text-sand-200/60">
+      <div className="grid min-h-dvh place-items-center bg-abyss-950 text-pearl-200/60">
         <Loader2 className="size-6 animate-spin" />
       </div>
     )
@@ -192,6 +244,8 @@ export function Admin() {
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            <AutoTranslateSwitch />
+            <ThemeToggle className="hidden sm:grid" />
             <LanguageToggle variant="inline" />
             <Link
               to="/"
@@ -231,7 +285,7 @@ export function Admin() {
                   {entry.icon}
                   <span className="flex-1 truncate">{entry.label}</span>
                   {entry.key === 'bookings' && newBookings > 0 && (
-                    <span className="grid size-5 place-items-center rounded-full bg-flamingo-500 text-[0.65rem] font-bold text-white">
+                    <span className="grid size-5 place-items-center rounded-full bg-flamingo-500 text-[0.65rem] font-bold text-pearl">
                       {newBookings}
                     </span>
                   )}
@@ -275,6 +329,8 @@ export function Admin() {
               {section === 'settings' && content && (
                 <SettingsEditor settings={content.site} onSaved={loadContent} />
               )}
+
+              {activeSchema?.key === 'posts' && content && <BlogWriter content={content} onSaved={loadContent} />}
 
               {activeSchema && content && (
                 <CollectionEditor
@@ -349,7 +405,7 @@ function Overview({
         </span>
         <span className="min-w-0">
           <span className="block font-display text-xl">{t('ai.title')}</span>
-          <span className="mt-1 block text-[0.88rem] leading-relaxed text-sand-100/85">{t('ai.subtitle')}</span>
+          <span className="mt-1 block text-[0.88rem] leading-relaxed text-pearl-100/85">{t('ai.subtitle')}</span>
         </span>
       </button>
 
