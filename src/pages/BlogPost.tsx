@@ -17,7 +17,7 @@ import { NotFound } from './NotFound'
 export function BlogPost() {
   const { slug = '' } = useParams()
   const { content, loading } = useContent()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const navigate = useNavigate()
   const site = content.site
 
@@ -57,6 +57,11 @@ export function BlogPost() {
             headline: post.title,
             description: post.excerpt,
             datePublished: post.publishedAt,
+            dateModified: post.publishedAt,
+            inLanguage: language === 'es' ? 'es-DO' : 'en-US',
+            mainEntityOfPage: typeof window === 'undefined' ? undefined : window.location.href.split('?')[0],
+            articleSection: post.category,
+            wordCount: post.body.split(/\s+/).length,
             author: { '@type': 'Organization', name: post.author || site.brandName },
             publisher: { '@type': 'Organization', name: site.brandName },
             keywords: post.tags.join(', '),

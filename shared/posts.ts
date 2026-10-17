@@ -43,7 +43,7 @@ Message us on WhatsApp with your hotel and landing time, and we will suggest a s
     publishedAt: '2026-09-02',
     readMinutes: 3,
     published: true,
-    featured: true,
+    featured: false,
     order: 1,
   },
   {

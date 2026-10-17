@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { Check, Languages, Loader2, PenLine, RefreshCw, Sparkles, Wand2 } from 'lucide-react'
+import { Check, Dices, Languages, Loader2, PenLine, RefreshCw, Sparkles, Wand2 } from 'lucide-react'
 import type { BlogPost, SiteContent } from '@shared/types'
 import { api } from '@/lib/api'
 import { mirrorCollection, useAutoTranslate } from '@/lib/auto-translate'
@@ -8,6 +8,46 @@ import { Markdown, readingMinutes } from '@/lib/markdown'
 import { useLanguage } from '@/lib/translations/LanguageProvider'
 import { getLanguageDisplayName } from '@/lib/translations'
 import { cn, slugify, sortByOrder } from '@/lib/utils'
+import { AUDIENCES, FORMATS, OCCASIONS, presetById, type WriterPreset } from '@/lib/writer-presets'
+
+/** A labelled row of one-tap choices; tapping the chosen one clears it. */
+function PresetRow({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string
+  options: Array<{ id: string; label: string }>
+  value: string | null
+  onChange: (id: string | null) => void
+}) {
+  return (
+    <div>
+      <p className="mb-1.5 text-[0.78rem] font-bold text-ocean-900">{label}</p>
+      <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 sm:flex-wrap">
+        {options.map((option) => (
+          <button
+            key={option.id}
+            type="button"
+            aria-pressed={value === option.id}
+            onClick={() => onChange(value === option.id ? null : option.id)}
+            className={cn(
+              'shrink-0 rounded-full px-3.5 py-1.5 text-[0.78rem] font-semibold transition-all',
+              value === option.id
+                ? 'bg-gradient-to-r from-flamingo-600 to-sun-500 text-pearl shadow-soft'
+                : 'border border-ocean-900/12 bg-white/70 text-ocean-900 hover:border-flamingo-300',
+            )}
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const pick = <T,>(list: T[]): T => list[Math.floor(Math.random() * list.length)]
 
 /**
  * The AI writer for the blog.
@@ -46,6 +86,10 @@ export function BlogWriter({ content, onSaved }: { content: SiteContent; onSaved
   const [length, setLength] = useState<Length>('medium')
   const [publish, setPublish] = useState(false)
   const [translate, setTranslate] = useState(autoTranslate.enabled)
+  const [occasion, setOccasion] = useState<string | null>(null)
+  const [audience, setAudience] = useState<string | null>(null)
+  const [treatment, setTreatment] = useState<string | null>(null)
+  const [format, setFormat] = useState<string | null>('guide')
 
   const [draft, setDraft] = useState<Draft | null>(null)
   const [model, setModel] = useState('')
@@ -56,15 +100,43 @@ export function BlogWriter({ content, onSaved }: { content: SiteContent; onSaved
 
   const site = content.site
   const ideas = [t('writer.idea1'), t('writer.idea2'), t('writer.idea3'), t('writer.idea4')]
+  const services = sortByOrder(content.services)
+  const label = (preset: WriterPreset) => preset.label[language]
+
+  const chosenOccasion = presetById(OCCASIONS, occasion)
+  const chosenAudience = presetById(AUDIENCES, audience)
+  const chosenService = services.find((service) => service.id === treatment)
+  const chosenFormat = presetById(FORMATS, format)
+
+  /** The topic the presets imply, for when the owner leaves the box empty. */
+  const impliedTopic = [
+    chosenOccasion?.topic[language] || chosenAudience?.topic[language],
+    chosenService && (language === 'es' ? `con ${chosenService.name}` : `with ${chosenService.name}`),
+    chosenOccasion && chosenAudience && (language === 'es' ? `para viajeros de ${label(chosenAudience)}` : `for travellers from ${label(chosenAudience)}`),
+  ]
+    .filter(Boolean)
+    .join(' ')
+  const effectiveTopic = topic.trim() || impliedTopic
+
+  function surprise() {
+    setOccasion(pick(OCCASIONS).id)
+    setAudience(pick(AUDIENCES).id)
+    setTreatment(services.length ? pick(services).id : null)
+    setFormat(pick(FORMATS).id)
+  }
 
   async function write() {
-    if (!topic.trim()) return
+    if (!effectiveTopic) return
     setBusy('writing')
     setError(null)
     setDone(null)
     try {
       const result = await api.aiBlog({
-        topic,
+        topic: effectiveTopic,
+        occasion: chosenOccasion?.brief,
+        audience: chosenAudience?.brief,
+        treatment: chosenService ? `${chosenService.name} — ${chosenService.tagline}. ${chosenService.description}` : undefined,
+        format: chosenFormat?.brief,
         keywords,
         tone,
         length,
@@ -165,15 +237,56 @@ export function BlogWriter({ content, onSaved }: { content: SiteContent; onSaved
 
       {!draft && (
         <div className="mt-6 space-y-4">
+          <div className="space-y-3 rounded-3xl bg-white/60 p-4 ring-1 ring-white/70">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[0.82rem] font-semibold text-ocean-800/85">{t('writer.presets_lead')}</p>
+              <button
+                type="button"
+                onClick={surprise}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-lagoon-400/50 bg-seafoam-100 px-3 py-1.5 text-[0.76rem] font-bold text-lagoon-800 hover:bg-seafoam-50"
+              >
+                <Dices className="size-3.5" />
+                {t('writer.surprise')}
+              </button>
+            </div>
+            <PresetRow
+              label={t('writer.occasion')}
+              options={OCCASIONS.map((preset) => ({ id: preset.id, label: label(preset) }))}
+              value={occasion}
+              onChange={setOccasion}
+            />
+            <PresetRow
+              label={t('writer.treatment')}
+              options={services.map((service) => ({ id: service.id, label: service.name }))}
+              value={treatment}
+              onChange={setTreatment}
+            />
+            <PresetRow
+              label={t('writer.audience')}
+              options={AUDIENCES.map((preset) => ({ id: preset.id, label: label(preset) }))}
+              value={audience}
+              onChange={setAudience}
+            />
+            <PresetRow
+              label={t('writer.format')}
+              options={FORMATS.map((preset) => ({ id: preset.id, label: label(preset) }))}
+              value={format}
+              onChange={setFormat}
+            />
+          </div>
+
           <label className="block">
             <span className="mb-1.5 block text-[0.8rem] font-bold text-ocean-900">{t('writer.topic')}</span>
             <textarea
               rows={2}
               value={topic}
               onChange={(event) => setTopic(event.target.value)}
-              placeholder={t('writer.topic_placeholder')}
+              placeholder={impliedTopic || t('writer.topic_placeholder')}
               className={field}
             />
+            {!topic.trim() && impliedTopic && (
+              <span className="mt-1.5 block text-[0.76rem] text-ocean-800/70">{t('writer.topic_from_presets')}</span>
+            )}
           </label>
 
           <div className="no-scrollbar -mx-1 flex gap-2 overflow-x-auto px-1">
@@ -224,7 +337,7 @@ export function BlogWriter({ content, onSaved }: { content: SiteContent; onSaved
               <button
                 type="button"
                 onClick={write}
-                disabled={!topic.trim() || busy !== null}
+                disabled={!effectiveTopic || busy !== null}
                 className="sheen-hover inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flamingo-600 to-sun-500 px-6 text-[0.92rem] font-bold text-pearl shadow-soft transition-all hover:brightness-110 disabled:opacity-50"
               >
                 {busy === 'writing' ? <Loader2 className="size-4 animate-spin" /> : <PenLine className="size-4" />}

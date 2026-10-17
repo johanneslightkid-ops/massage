@@ -339,7 +339,7 @@ export function FaqSection({ items }: { items?: Faq[] }) {
   const [open, setOpen] = useState<string | null>(faqs[0]?.id ?? null)
 
   return (
-    <Section tone="cream" cut="top" className="grain pb-20 sm:pb-28">
+    <Section id="faq" tone="cream" cut="top" className="grain pb-20 sm:pb-28">
       <Container className="max-w-3xl">
         <SectionHead align="center" eyebrow={t('faq.eyebrow')} title={t('faq.title')} script={t('faq.script')} />
 

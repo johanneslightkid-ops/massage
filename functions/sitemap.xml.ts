@@ -1,3 +1,4 @@
+import { mergeWithSeed } from '../shared/server'
 import type { SiteContent } from '../shared/types'
 
 /**
@@ -26,8 +27,11 @@ async function postUrls(kv: KVNamespace | undefined): Promise<Array<{ path: stri
   if (!kv) return []
   const out: Array<{ path: string; lastmod: string }> = []
   for (const lang of ['en', 'es']) {
-    const doc = (await kv.get(`content:${lang}:v1`, 'json').catch(() => null)) as Partial<SiteContent> | null
-    for (const post of doc?.posts ?? []) {
+    // Merged with the seed, exactly as the site reads it: a document written
+    // before the blog existed still lists the posts the site shows.
+    const stored = (await kv.get(`content:${lang}:v1`, 'json').catch(() => null)) as Partial<SiteContent> | null
+    const doc = mergeWithSeed(stored ?? {}, lang)
+    for (const post of doc.posts ?? []) {
       if (!post.published || !post.slug) continue
       out.push({ path: `/blog/${encodeURIComponent(post.slug)}?lang=${lang}`, lastmod: post.publishedAt })
     }

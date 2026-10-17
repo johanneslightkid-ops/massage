@@ -29,7 +29,7 @@ export function Blog() {
 
   return (
     <>
-      <PageHeader kicker={t('blog.eyebrow')} title={t('blog.page_title')} script={t('blog.script')} lead={t('blog.page_lead')}>
+      <PageHeader kicker={t('blog.eyebrow')} title={t('blog.page_title')} script={t('blog.page_script')} lead={t('blog.page_lead')}>
         {categories.length > 1 && (
           <div className="no-scrollbar -mx-5 mt-9 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:px-0">
             {[null, ...categories].map((entry) => (

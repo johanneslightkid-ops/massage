@@ -20,7 +20,8 @@ import { onRequest as uploads } from '../functions/api/uploads/[[route]]'
 import { onRequestGet as sitemap } from '../functions/sitemap.xml.ts'
 import { onRequestGet as robots } from '../functions/robots.txt.ts'
 import { readContent } from '../shared/server'
-import type { SiteContent } from '../shared/types'
+import { parseBlocks } from '../shared/markdown'
+import type { BlogPost, SiteContent } from '../shared/types'
 
 export interface Env {
   ASSETS: Fetcher
@@ -68,6 +69,48 @@ const escapeAttr = (value: string) =>
 const scriptJson = (value: unknown) =>
   JSON.stringify(value).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029')
 
+const escapeHtml = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+/** The blog's inline marks as HTML, for the crawler copy. Links stay links. */
+function inlineHtml(text: string): string {
+  return escapeHtml(text)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(((?:https?:\/\/|\/)[^)\s]*)\)/g, '<a href="$2">$1</a>')
+}
+
+/**
+ * A plain-HTML copy of an article inside <noscript>. Google renders the app,
+ * but plenty of crawlers (Bing's lighter passes, link-preview bots, AI search
+ * indexers) read only the HTML — this is what lets each post rank on its own.
+ */
+function articleHtml(post: BlogPost): string {
+  const blocks = parseBlocks(post.body)
+    .map((block) => {
+      switch (block.kind) {
+        case 'h2':
+        case 'h3':
+          return `<${block.kind}>${inlineHtml(block.text)}</${block.kind}>`
+        case 'quote':
+          return `<blockquote>${inlineHtml(block.text)}</blockquote>`
+        case 'ul':
+        case 'ol':
+          return `<${block.kind}>${block.items.map((item) => `<li>${inlineHtml(item)}</li>`).join('')}</${block.kind}>`
+        default:
+          return `<p>${inlineHtml(block.text)}</p>`
+      }
+    })
+    .join('')
+  return `<noscript><article><h1>${escapeHtml(post.title)}</h1><p>${escapeHtml(post.excerpt)}</p>${blocks}</article></noscript>`
+}
+
+function blogIndexHtml(posts: BlogPost[]): string {
+  const items = posts
+    .map((post) => `<li><a href="/blog/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a> — ${escapeHtml(post.excerpt)}</li>`)
+    .join('')
+  return `<noscript><nav><ul>${items}</ul></nav></noscript>`
+}
+
 function pageMeta(content: SiteContent, pathname: string): { title: string; description: string; image?: string } {
   const site = content.site
   const base = { title: `${site.brandName} · ${site.tagline}`.slice(0, 120), description: site.heroSubtitle }
@@ -107,6 +150,39 @@ async function renderPage(request: Request, env: Env, url: URL): Promise<Respons
 
   const meta = pageMeta(content, url.pathname)
   const image = meta.image ?? new URL('/og.jpg', url).toString()
+  const doc = content
+
+  /*
+   * hreflang: each page exists in both languages. A post has its own slug per
+   * language, so its twin (same id) is looked up in the other document.
+   */
+  const other: Lang = lang === 'en' ? 'es' : 'en'
+  const postSlug = url.pathname.match(/^\/blog\/([^/]+)\/?$/)?.[1]
+  const post = postSlug
+    ? (content.posts ?? []).find((entry) => entry.published && entry.slug === decodeURIComponent(postSlug))
+    : undefined
+  const hrefFor: Record<Lang, string> = {
+    [lang]: `${url.origin}${url.pathname}?lang=${lang}`,
+    [other]: `${url.origin}${url.pathname}?lang=${other}`,
+  } as Record<Lang, string>
+  if (post) {
+    try {
+      const twin = (await readContent(env.CONTENT, other)).posts?.find((entry) => entry.id === post.id)
+      hrefFor[other] = twin ? `${url.origin}/blog/${encodeURIComponent(twin.slug)}?lang=${other}` : ''
+    } catch {
+      hrefFor[other] = ''
+    }
+  }
+  const alternates = LANGS.filter((code) => hrefFor[code])
+    .map((code) => `<link rel="alternate" hreflang="${code}" href="${escapeAttr(hrefFor[code])}">`)
+    .concat(`<link rel="alternate" hreflang="x-default" href="${escapeAttr(hrefFor.en || hrefFor[lang])}">`)
+    .join('')
+
+  const crawlerCopy = post
+    ? articleHtml(post)
+    : /^\/blog\/?$/.test(url.pathname)
+      ? blogIndexHtml((content.posts ?? []).filter((entry) => entry.published))
+      : ''
 
   return new HTMLRewriter()
     .on('html', {
@@ -129,7 +205,13 @@ async function renderPage(request: Request, env: Env, url: URL): Promise<Respons
     .on('head', {
       element: (el) => {
         el.append(`<meta property="og:url" content="${escapeAttr(url.origin + url.pathname)}">`, { html: true })
-        el.append(`<script>window.__BOOT__=${scriptJson({ lang, content })}</script>`, { html: true })
+        el.append(alternates, { html: true })
+        el.append(`<script>window.__BOOT__=${scriptJson({ lang, content: doc })}</script>`, { html: true })
+      },
+    })
+    .on('body', {
+      element: (el) => {
+        if (crawlerCopy) el.append(crawlerCopy, { html: true })
       },
     })
     .transform(response)

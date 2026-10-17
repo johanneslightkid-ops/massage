@@ -38,7 +38,7 @@ Escríbenos por WhatsApp con tu hotel y tu hora de llegada, y te proponemos un h
     publishedAt: '2026-09-02',
     readMinutes: 3,
     published: true,
-    featured: true,
+    featured: false,
     order: 1,
   },
   {

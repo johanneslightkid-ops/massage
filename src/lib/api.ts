@@ -107,6 +107,10 @@ export const api = {
     brand?: string
     area?: string
     services?: string[]
+    occasion?: string
+    audience?: string
+    treatment?: string
+    format?: string
   }) =>
     request<{ title: string; excerpt: string; category: string; tags: string[]; body: string; model: string }>(
       '/ai/blog',

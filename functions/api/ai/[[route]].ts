@@ -160,6 +160,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         brand?: string
         area?: string
         services?: string[]
+        occasion?: string
+        audience?: string
+        treatment?: string
+        format?: string
       }
       const topic = (body.topic ?? '').trim().slice(0, 600)
       if (!topic) return fail(400, 'Tell the writer what the article is about.')
@@ -174,6 +178,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
         brand: (body.brand ?? 'the studio').slice(0, 80),
         area: (body.area ?? 'Bávaro, Punta Cana').slice(0, 120),
         services: (body.services ?? []).slice(0, 14).map((name) => String(name).slice(0, 60)),
+        occasion: (body.occasion ?? '').slice(0, 400),
+        audience: (body.audience ?? '').slice(0, 400),
+        treatment: (body.treatment ?? '').slice(0, 400),
+        format: (body.format ?? '').slice(0, 300),
       })
       if (!draft) return fail(502, 'The writer did not return a usable draft. Try again, or rephrase the topic.')
       return json(draft)
@@ -290,6 +298,10 @@ interface BlogBrief {
   brand: string
   area: string
   services: string[]
+  occasion: string
+  audience: string
+  treatment: string
+  format: string
 }
 
 export interface BlogDraft {
@@ -315,6 +327,18 @@ async function writeBlog(ai: Ai, brief: BlogBrief): Promise<BlogDraft | null> {
     `Readers are tourists on holiday, often reading on a phone. Write in ${language}.\n\n` +
     `VOICE: ${brief.tone}, plain, specific and kind. Practical advice a local therapist would really give. Never salesy, never medical claims, no invented prices, no invented reviews, no invented people.\n` +
     (brief.services.length ? `TREATMENTS WE OFFER (mention only if relevant): ${brief.services.join(', ')}.\n` : '') +
+    (brief.occasion ? `OCCASION / STAGE OF THE TRIP: ${brief.occasion}\n` : '') +
+    (brief.audience
+      ? `READERS: ${brief.audience} Reflect their real journey and season, and how people from there like to travel and celebrate — specific and warm, never stereotypes or jokes about nationality.\n`
+      : '') +
+    (brief.treatment
+      ? `TREATMENT TO FEATURE: ${brief.treatment}. Explain honestly what it does, who it suits, when in the trip it helps, and when to choose something else.\n`
+      : '') +
+    (brief.format ? `FORMAT: ${brief.format}\n` : '') +
+    `SEARCH: decide the one phrase a traveller would type into Google for this (e.g. "couples massage Punta Cana"); use it naturally in the title, the first paragraph and one subheading. ` +
+    `Phrase at least one subheading as a question. Name real local places (Bávaro, Punta Cana, Cap Cana, Los Corales, El Cortecito, Saona, Macao, Bayahíbe) only where they genuinely fit. ` +
+    `Include one or two Markdown links to our own pages where useful: [our treatments](/treatments), [find your massage](/find-your-massage) or [reserve](/book).\n` +
+    `FACTS: we are mobile — we come to hotel rooms, villas and terraces; we bring table, linens and oils; we work until 22:00. Never invent prices, reviews, awards or medical claims.\n` +
     `LENGTH: ${words} words in the body.\n\n` +
     `FORMAT — reply with exactly this, nothing before or after:\n` +
     `TITLE: <a warm, specific title, max 80 characters>\n` +
