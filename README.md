@@ -1,4 +1,4 @@
-# Ola Serena — mobile massage site for Bávaro & Punta Cana
+# Massage Playero — mobile massage site for Bávaro & Punta Cana
 
 A mobile-first website for a small, women-run massage business that travels to the guest —
 hotel room, villa or terrace anywhere in Bávaro and Punta Cana. There is no studio and no
@@ -6,8 +6,15 @@ beach service: treatments and prices, a local tourist guide to the neighbourhood
 reservations, payment options, and a password-protected admin where the owner can edit
 **every** piece of content on the site.
 
-Built on Cloudflare Pages: a React front end served as static assets, a Pages **Function**
-for the API, and a **KV namespace** as the content store.
+Built on a single Cloudflare **Worker** (`mobile-massage`): the React front end served as
+static assets, the API handlers in `functions/` routed by `worker/index.ts`, and a **KV
+namespace** as the content store. See `DEPLOYMENT.md`.
+
+The design follows the hour: a live WebGL sea in the hero and a day/night theme chosen by the
+visitor's clock before first paint (`src/lib/theme.tsx`, the inline script in `index.html`,
+and the `[data-theme='night']` token remap in `src/index.css`). There is a blog (`/blog`)
+with an AI writer in the admin, and every admin save is auto-translated into the other
+language unless the owner switches it off.
 
 ---
 

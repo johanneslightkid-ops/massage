@@ -1,5 +1,35 @@
 # Deploying Massage Playero
 
+> **Now a Worker.** The site, its API and its static assets are served by one
+> Cloudflare Worker, **`mobile-massage`**
+> (`https://mobile-massage.johannes-neugschwentner.workers.dev`), configured in
+> `wrangler.toml` with `main = "worker/index.ts"` and an `[assets]` block for
+> `dist/`. It replaces the Pages projects `ola-serena` and `massage-playero`
+> and binds the same KV namespace (`78cfcbe1fc734caea63722f90580297e`), so all
+> admin edits, bookings and the admin password carry over.
+>
+> ```bash
+> npx wrangler login                    # or export CLOUDFLARE_API_TOKEN=…
+> npm run cf:deploy                     # vite build + wrangler deploy
+> npx wrangler secret put CLOUDINARY_API_SECRET   # optional, photo uploads
+> ```
+>
+> The token needs **Workers Scripts: Edit**, **Workers KV Storage: Edit** and
+> **Workers AI: Read** (plus **Cloudflare Pages: Edit** to delete the old
+> projects: `npx wrangler pages project delete ola-serena` /
+> `massage-playero` — deleting a Pages project never deletes the KV namespace).
+>
+> What the Worker adds over Pages: each page request inlines the visitor's
+> language document from KV into the HTML (`window.__BOOT__`), rewrites the
+> title / Open Graph tags per page (blog posts included), adds hreflang
+> alternates and a plain-HTML copy of each article for crawlers. Hashed
+> assets bypass the Worker entirely (`run_worker_first` exclusions).
+>
+> The sections below describe the KV seeding, which is unchanged. Where they
+> say "Pages project settings", use the Worker's **Settings → Variables and
+> Secrets** instead.
+
+
 The site is a Vite/React front end on Cloudflare Pages, with the CMS living in a
 single KV namespace and the API in `functions/`.
 

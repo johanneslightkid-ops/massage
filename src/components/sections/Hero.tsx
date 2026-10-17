@@ -141,7 +141,7 @@ export function Hero() {
       <motion.div style={motionOr({ y: rise })} className="pointer-events-none absolute -top-24 -right-32" aria-hidden="true">
         <MonsteraLeaf mirrored className={`h-[16rem] w-52 rotate-12 lg:h-[22rem] lg:w-72 ${night ? 'text-palm-300/15' : 'text-palm-500/25'}`} />
       </motion.div>
-      <Hibiscus className="animate-wiggle pointer-events-none absolute top-[24%] left-[58%] hidden size-16 text-flamingo-500/55 lg:block" />
+      <Hibiscus className="animate-wiggle pointer-events-none absolute top-[12%] left-[38%] hidden size-14 text-flamingo-500/55 lg:block" />
 
       {/* --- the modernist: the headline in the sky */}
       <motion.div
